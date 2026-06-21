@@ -85,5 +85,22 @@
   ],
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./foundation/theme.css": "./dist/foundation/theme.css",
+    "./foundation/colors.css": "./dist/foundation/colors.css",
+    "./foundation/spacing.css": "./dist/foundation/spacing.css",
+    "./foundation/shapes.css": "./dist/foundation/shapes.css",
+    "./foundation/typography.css": "./dist/foundation/typography.css",
+    "./foundation/motion.css": "./dist/foundation/motion.css",
+    "./foundation/elevation.css": "./dist/foundation/elevation.css"
+  },
+  "sideEffects": [
+    "dist/foundation/*.css",
+    "dist/index.js"
+  ]
 }
