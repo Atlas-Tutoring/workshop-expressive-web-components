@@ -1,13 +1,13 @@
 {
   "name": "@mihaicristiancondrea/workshop-expressive-web-components",
   "private": false,
-  "version": "0.0.1",
-  "description": "Workshop design system web components",
+  "version": "0.1.0",
+  "description": "Workshop Expressive design-system web components built with Lit.",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "type": "module",
   "scripts": {
-    "build": "rimraf dist && tsc && cp -R src/foundation dist/foundation",
+    "build": "rimraf dist && tsc && node scripts/copy-foundation.cjs",
     "build:watch": "tsc --watch",
     "clean": "rimraf dist custom-elements.json docs ws-button.bundled.js index.{d.ts,d.ts.map,js,js.map} docs-entry.{d.ts,d.ts.map,js,js.map} components foundation test",
     "lint": "npm run lint:lit-analyzer && npm run lint:eslint",
@@ -26,9 +26,9 @@
     "serve": "wds --watch",
     "serve:prod": "MODE=prod npm run serve",
     "test": "npm run test:dev && npm run test:prod",
-    "test:dev": "wtr",
+    "test:dev": "node scripts/run-wtr.cjs dev",
     "test:watch": "wtr --watch",
-    "test:prod": "MODE=prod wtr",
+    "test:prod": "node scripts/run-wtr.cjs prod",
     "test:prod:watch": "MODE=prod wtr --watch",
     "checksize": "rollup -c ; cat ws-button.bundled.js | gzip -9 | wc -c ; rm ws-button.bundled.js",
     "docs:verify": "node scripts/verify-docs-structure.cjs"
@@ -39,6 +39,14 @@
     "typescript",
     "lit"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MihaiCristianCondrea/workshop-expressive-web-components.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MihaiCristianCondrea/workshop-expressive-web-components/issues"
+  },
+  "homepage": "https://github.com/MihaiCristianCondrea/workshop-expressive-web-components#readme",
   "author": "Google LLC",
   "license": "BSD-3-Clause",
   "dependencies": {
@@ -70,8 +78,10 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist",
+    "!dist/test",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "CHANGELOG.md"
   ],
   "publishConfig": {
     "access": "public"

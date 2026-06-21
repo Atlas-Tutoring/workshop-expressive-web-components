@@ -68,13 +68,10 @@ suite('ws-brand-mark', () => {
     `);
     const root = el.shadowRoot!.querySelector<HTMLElement>('.root')!;
 
-    assert.include(
-      root.getAttribute('style') ?? '',
-      '--ws-brand-mark-size: 56px'
-    );
-    assert.include(
-      root.getAttribute('style') ?? '',
-      '--ws-brand-mark-gradient: linear-gradient(135deg, #111827, #6c5cff)'
+    assert.equal(root.style.getPropertyValue('--ws-brand-mark-size'), '56px');
+    assert.equal(
+      root.style.getPropertyValue('--ws-brand-mark-gradient'),
+      'linear-gradient(135deg, #111827, #6c5cff)'
     );
   });
 });

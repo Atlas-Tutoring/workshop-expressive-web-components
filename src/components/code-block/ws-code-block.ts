@@ -207,7 +207,7 @@ export class WsCodeBlock extends LitElement {
         return '';
       })
       .join('')
-      .replace(/^\n|\n$/g, '');
+      .trim();
 
     if (this.slottedCode !== code) {
       this.slottedCode = code;

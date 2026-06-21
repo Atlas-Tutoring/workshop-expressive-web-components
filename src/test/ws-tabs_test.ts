@@ -1,4 +1,4 @@
-import {fixture, assert} from '@open-wc/testing';
+import {fixture, assert, waitUntil} from '@open-wc/testing';
 import {html} from 'lit/static-html.js';
 
 import '../components/tabs/ws-tab.js';
@@ -10,6 +10,13 @@ const nextFrame = () =>
   new Promise<void>((resolve) => {
     requestAnimationFrame(() => resolve());
   });
+
+const waitForMeasuredIndicator = (el: WsTabs) =>
+  waitUntil(
+    () => el.style.getPropertyValue('--ws-tabs-indicator-opacity') === '1',
+    'indicator was not measured',
+    {timeout: 5000}
+  );
 
 suite('ws-tabs', () => {
   test('renders slotted tabs inside the tablist', async () => {
@@ -94,10 +101,11 @@ suite('ws-tabs', () => {
     const settingsAnchor =
       settings.shadowRoot!.querySelector<HTMLAnchorElement>('a')!;
 
+    await waitForMeasuredIndicator(el);
     assert.isFalse(el.hasAttribute('indicator-animated'));
 
     settingsAnchor.click();
-    await nextFrame();
+    await waitUntil(() => el.hasAttribute('indicator-animated'));
 
     assert.isTrue(el.hasAttribute('indicator-animated'));
   });
@@ -113,14 +121,14 @@ suite('ws-tabs', () => {
       el.querySelectorAll<WsTab>('ws-tab')
     );
 
-    await nextFrame();
+    await waitForMeasuredIndicator(el);
     assert.isFalse(el.hasAttribute('indicator-animated'));
 
     overview.selected = false;
     settings.selected = true;
     await overview.updateComplete;
     await settings.updateComplete;
-    await nextFrame();
+    await waitUntil(() => el.hasAttribute('indicator-animated'));
 
     assert.isTrue(el.hasAttribute('indicator-animated'));
   });

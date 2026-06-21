@@ -57,7 +57,6 @@ suite('ws-code-block', () => {
     );
   });
 
-
   test('adds syntax token spans for supported languages', async () => {
     const el = await fixture<WsCodeBlock>(
       html`<ws-code-block language="html" code="<ws-button variant='primary'>Create</ws-button>"></ws-code-block>`
@@ -89,14 +88,16 @@ suite('ws-code-block', () => {
 
     const eventPromise = oneEvent(el, 'ws-code-copy');
 
-    // Mock clipboard API
     const originalClipboard = navigator.clipboard;
     let copiedText = '';
-    (navigator as any).clipboard = {
-      writeText: async (text: string) => {
-        copiedText = text;
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: {
+        writeText: async (text: string) => {
+          copiedText = text;
+        },
       },
-    };
+    });
 
     copyButton.click();
 
@@ -105,7 +106,9 @@ suite('ws-code-block', () => {
     assert.equal(copiedText, code);
     assert.equal(copyLabel.textContent?.trim(), 'Copied');
 
-    // Restore clipboard
-    (navigator as any).clipboard = originalClipboard;
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: originalClipboard,
+    });
   });
 });

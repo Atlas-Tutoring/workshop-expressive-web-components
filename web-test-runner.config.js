@@ -53,7 +53,12 @@ if (!['dev', 'prod'].includes(mode)) {
 const browsers = {
   // Local browser testing via Puppeteer/Chrome.
   // ===========
-  chromium: chromeLauncher(),
+  chromium: chromeLauncher({
+    concurrency: 1,
+    launchOptions: {
+      args: ['--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage'],
+    },
+  }),
 
   // Uncomment example launchers for running on Sauce Labs
   // ===========
@@ -86,6 +91,7 @@ try {
 export default {
   rootDir: '.',
   files: ['./dist/test/**/*_test.js'],
+  browserStartTimeout: 60000,
   nodeResolve: {exportConditions: mode === 'dev' ? ['development'] : []},
   preserveSymlinks: true,
   browsers: commandLineBrowsers ?? Object.values(browsers),
