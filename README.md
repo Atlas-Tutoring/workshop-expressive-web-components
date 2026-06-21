@@ -1,18 +1,44 @@
 # Workshop Expressive Web Components
 
-Milestone 1 ports the Workshop Kotlin design-system mental model to Lit web components:
+Workshop Expressive Web Components is a Lit-based design-system package that ships custom elements, TypeScript declarations, and reusable foundation CSS tokens for websites and web apps.
 
-- `WorkshopTheme` → CSS custom properties in `src/foundation/`
-- `WsColors` → color tokens
-- `WsShapes` → radius tokens
-- `WsSpacing` → spacing tokens
-- `WsTypography` → font and typography tokens
-- `WsButton` → `<ws-button>`
-- `WsDrawer` and `WsDrawerItem` → `<ws-drawer>` and `<ws-drawer-item>`
+## What is included
 
-## Current scope
+The package includes these custom elements:
 
-This package currently includes foundation theme tokens, `<ws-button>`, `<ws-drawer>`, and `<ws-drawer-item>`. Button sizing and radii mirror the original Compose primitives: small/medium/large buttons are 36/44/52 px tall and use the medium 8 px radius token.
+- `<ws-app-bar>`
+- `<ws-brand-mark>`
+- `<ws-breadcrumbs>`
+- `<ws-button>`
+- `<ws-card>`
+- `<ws-code-block>`
+- `<ws-docs-shell>`
+- `<ws-drawer>` and `<ws-drawer-item>`
+- `<ws-footer>`
+- `<ws-hero>`
+- `<ws-page>`
+- `<ws-switch>`
+- `<ws-tabs>` and `<ws-tab>`
+
+It also includes foundation design tokens for color, elevation, motion, shape, spacing, typography, and the aggregate theme stylesheet.
+
+## Install
+
+```bash
+npm install @mihaicristiancondrea/workshop-expressive-web-components
+```
+
+`lit` is installed as a package dependency, so consuming websites only need to install this package.
+
+## Use in a bundled website
+
+Import the component registry once in your app entry file. This defines all Workshop Expressive custom elements and loads the default foundation theme CSS through the package entrypoint.
+
+```ts
+import '@mihaicristiancondrea/workshop-expressive-web-components';
+```
+
+Then use the elements in HTML, Lit templates, React JSX, Vue templates, or any framework that can render standards-based custom elements.
 
 ```html
 <ws-button variant="primary" size="medium">Continue</ws-button>
@@ -20,12 +46,7 @@ This package currently includes foundation theme tokens, `<ws-button>`, `<ws-dra
 <ws-button variant="outlined" size="small">Cancel</ws-button>
 <ws-button variant="ghost">Learn more</ws-button>
 
-<ws-button loading>Saving</ws-button>
-
-<ws-button variant="primary">
-  <span slot="icon" class="material-symbols-outlined">add</span>
-  Create
-</ws-button>
+<ws-switch checked>Enable notifications</ws-switch>
 
 <ws-drawer selected-item-id="home">
   <div slot="header">Workshop</div>
@@ -52,6 +73,85 @@ This package currently includes foundation theme tokens, `<ws-button>`, `<ws-dra
 </ws-drawer>
 ```
 
+## Use in a plain HTML page without a build step
+
+Use an ESM CDN such as jsDelivr. Pin the version in production so updates are intentional.
+
+```html
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/@mihaicristiancondrea/workshop-expressive-web-components@0.1.0/dist/foundation/theme.css"
+/>
+<script
+  type="module"
+  src="https://cdn.jsdelivr.net/npm/@mihaicristiancondrea/workshop-expressive-web-components@0.1.0/dist/index.js"
+></script>
+
+<ws-button variant="primary">Continue</ws-button>
+```
+
+## Foundation CSS tokens
+
+The package exports the aggregate theme stylesheet and each token stylesheet. Most websites should use the aggregate theme:
+
+```ts
+import '@mihaicristiancondrea/workshop-expressive-web-components/foundation/theme.css';
+```
+
+Available stylesheet exports:
+
+- `@mihaicristiancondrea/workshop-expressive-web-components/foundation/theme.css`
+- `@mihaicristiancondrea/workshop-expressive-web-components/foundation/colors.css`
+- `@mihaicristiancondrea/workshop-expressive-web-components/foundation/spacing.css`
+- `@mihaicristiancondrea/workshop-expressive-web-components/foundation/shapes.css`
+- `@mihaicristiancondrea/workshop-expressive-web-components/foundation/typography.css`
+- `@mihaicristiancondrea/workshop-expressive-web-components/foundation/motion.css`
+- `@mihaicristiancondrea/workshop-expressive-web-components/foundation/elevation.css`
+
+You can override tokens globally in your site CSS:
+
+```css
+:root {
+  --ws-color-primary: #2563eb;
+  --ws-shape-medium: 10px;
+}
+```
+
+## Themes
+
+Set `data-ws-theme` on `html`, `body`, or a subtree to force the light or dark token set. Without an explicit value, the theme follows `prefers-color-scheme`.
+
+```html
+<html data-ws-theme="dark">
+  <!-- app -->
+</html>
+```
+
+## TypeScript
+
+Types are published from `dist/index.d.ts` and are exposed through the package root export.
+
+```ts
+import type {
+  WsButtonSize,
+  WsButtonVariant,
+} from '@mihaicristiancondrea/workshop-expressive-web-components';
+
+const size: WsButtonSize = 'medium';
+const variant: WsButtonVariant = 'primary';
+```
+
+## Build output and package entrypoints
+
+After `npm run build`, the package contains:
+
+- `dist/index.js` — ESM component registry and named exports
+- `dist/index.d.ts` — TypeScript declarations
+- `dist/components/**` — compiled component modules
+- `dist/foundation/*.css` — copied foundation stylesheets for website consumption
+
+The `package.json` `exports` map exposes the package root and foundation CSS files for bundlers that enforce package exports.
+
 ## Development
 
 Install dependencies:
@@ -60,7 +160,7 @@ Install dependencies:
 npm i
 ```
 
-Build generated JavaScript and declaration files:
+Build generated JavaScript, declaration files, and distributable foundation CSS:
 
 ```bash
 npm run build
