@@ -190,7 +190,10 @@ export class WsTextField extends LitElement {
     const isDisabled = this.isEffectivelyDisabled;
     const isInvalid = this.isVisuallyInvalid;
     const supportingText = isInvalid
-      ? this.errorText || this.validationMessage
+      ? this.errorText ||
+        this.customValidationMessage ||
+        this.validationMessage ||
+        'Invalid value.'
       : this.helperText;
     const supportingId = supportingText
       ? isInvalid
@@ -315,7 +318,6 @@ export class WsTextField extends LitElement {
   /** Applies a custom validity message. Pass an empty string to clear it. */
   setCustomValidity(message: string) {
     this.customValidationMessage = message;
-    this.inputElement?.setCustomValidity(message);
     this.syncFormAndValidity();
   }
 
@@ -446,9 +448,7 @@ export class WsTextField extends LitElement {
 
     if (!input) return;
 
-    if (input.value !== this.value) {
-      input.value = this.value;
-    }
+    this.syncNativeInput(input);
     input.setCustomValidity(this.customValidationMessage);
 
     if (this.invalid) {
@@ -462,6 +462,37 @@ export class WsTextField extends LitElement {
 
     const flags = this.toValidityFlags(input.validity);
     this.internals.setValidity(flags, input.validationMessage, input);
+  }
+
+  private syncNativeInput(input: HTMLInputElement) {
+    input.value = this.value;
+    input.type = this.type;
+    input.placeholder = this.placeholder;
+    input.required = this.required;
+    input.disabled = this.isEffectivelyDisabled;
+    input.readOnly = this.readOnly;
+    input.autocomplete = this.autocomplete ?? '';
+    input.inputMode = this.inputMode ?? '';
+
+    this.syncOptionalInputAttribute(input, 'minlength', this.minLength);
+    this.syncOptionalInputAttribute(input, 'maxlength', this.maxLength);
+    this.syncOptionalInputAttribute(input, 'min', this.min);
+    this.syncOptionalInputAttribute(input, 'max', this.max);
+    this.syncOptionalInputAttribute(input, 'step', this.step);
+    this.syncOptionalInputAttribute(input, 'pattern', this.pattern);
+  }
+
+  private syncOptionalInputAttribute(
+    input: HTMLInputElement,
+    name: string,
+    value: string | number | undefined
+  ) {
+    if (value === undefined) {
+      input.removeAttribute(name);
+      return;
+    }
+
+    input.setAttribute(name, String(value));
   }
 
   private toValidityFlags(validity: ValidityState): ValidityStateFlags {
