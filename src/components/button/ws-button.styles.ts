@@ -26,7 +26,14 @@ export const wsButtonStyles = css`
     box-sizing: border-box;
     cursor: pointer;
     display: inline-flex;
-    font: var(--ws-button-font, var(--ws-typography-label-large));
+    font: var(
+      --ws-button-font,
+      var(
+        --ws-typography-label-large,
+        600 14px / 20px
+          var(--ws-font-family, 'Google Sans Flex', system-ui, sans-serif)
+      )
+    );
     gap: var(--ws-button-icon-spacing, var(--ws-spacing-sm, 8px));
     justify-content: center;
     min-inline-size: var(--ws-button-min-width, 64px);
@@ -47,7 +54,7 @@ export const wsButtonStyles = css`
       transform var(--ws-motion-duration-fast, 120ms)
         var(--ws-motion-easing-emphasized, ease);
     user-select: none;
-    width: 100%;
+    inline-size: 100%;
   }
 
   .button:focus-visible {
@@ -129,7 +136,11 @@ export const wsButtonStyles = css`
       var(--ws-spacing-xs, 4px)
     );
     block-size: var(--ws-button-small-height, 36px);
-    font: var(--ws-typography-label-small);
+    font: var(
+      --ws-typography-label-small,
+      500 11px / 16px
+        var(--ws-font-family, 'Google Sans Flex', system-ui, sans-serif)
+    );
     padding: 0 var(--ws-button-small-padding-inline, var(--ws-spacing-md, 12px));
   }
 
@@ -138,7 +149,11 @@ export const wsButtonStyles = css`
     --ws-button-icon-size: var(--ws-button-medium-icon-size, 18px);
     --ws-button-icon-spacing: var(--ws-spacing-sm, 8px);
     block-size: var(--ws-button-medium-height, 44px);
-    font: var(--ws-typography-label-medium);
+    font: var(
+      --ws-typography-label-medium,
+      600 12px / 16px
+        var(--ws-font-family, 'Google Sans Flex', system-ui, sans-serif)
+    );
     padding: 0
       var(--ws-button-medium-padding-inline, var(--ws-spacing-lg, 16px));
   }
@@ -150,7 +165,11 @@ export const wsButtonStyles = css`
       var(--ws-spacing-md, 12px)
     );
     block-size: var(--ws-button-large-height, 52px);
-    font: var(--ws-typography-label-large);
+    font: var(
+      --ws-typography-label-large,
+      600 14px / 20px
+        var(--ws-font-family, 'Google Sans Flex', system-ui, sans-serif)
+    );
     padding: 0 var(--ws-spacing-xl, 24px);
   }
 

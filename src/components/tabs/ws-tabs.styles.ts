@@ -24,6 +24,12 @@ export const wsTabsStyles = css`
     position: relative;
   }
 
+  /* Flatten the slot so assigned tabs participate in the flex layout. Without
+     this, the slot itself is the only flex item and vertical tabs run together. */
+  slot {
+    display: contents;
+  }
+
   .indicator {
     background: var(--ws-color-primary, #6c5cff);
     block-size: var(--ws-tabs-indicator-block-size);
