@@ -22,6 +22,7 @@ export const wsChipStyles = css`
   .container {
     align-items: stretch;
     display: inline-flex;
+    max-inline-size: 100%;
     position: relative;
   }
 
@@ -37,11 +38,13 @@ export const wsChipStyles = css`
 
   .chip {
     background: var(--ws-chip-background, var(--ws-color-surface, #fff));
-    border: 1px solid var(--ws-chip-border-color, var(--ws-color-outline, #e2e8f0));
+    border: 1px solid
+      var(--ws-chip-border-color, var(--ws-color-outline, #e2e8f0));
     border-radius: var(--ws-shape-full, 999px);
     color: var(--ws-chip-color, var(--ws-color-on-surface, #0f172a));
     gap: var(--ws-chip-gap, var(--ws-spacing-xs, 4px));
     max-inline-size: 100%;
+    min-inline-size: 0;
     padding: 0 var(--ws-chip-padding-inline, var(--ws-spacing-md, 12px));
     transition: background-color var(--ws-motion-duration-medium, 180ms)
         var(--ws-motion-easing-standard, ease),
@@ -118,16 +121,16 @@ export const wsChipStyles = css`
     --ws-chip-color: var(--ws-color-primary, #6c5cff);
   }
 
+  :host([removable]) .chip,
   :host([variant='input']) .chip {
-    --ws-chip-background: var(--ws-color-surface-variant, #f1f5f9);
+    border-end-end-radius: 0;
     border-inline-end: 0;
-    border-radius: var(--ws-shape-full, 999px) 0 0
-      var(--ws-shape-full, 999px);
+    border-start-end-radius: 0;
     padding-inline-end: var(--ws-spacing-sm, 8px);
   }
 
-  :host([variant='input']:not([removable])) .chip {
-    border-inline-end: 0;
+  :host([variant='input']) .chip {
+    --ws-chip-background: var(--ws-color-surface-variant, #f1f5f9);
   }
 
   :host([variant='status']) .chip {
@@ -215,6 +218,7 @@ export const wsChipStyles = css`
   }
 
   .label {
+    min-inline-size: 0;
     overflow: hidden;
     text-overflow: ellipsis;
   }
@@ -246,9 +250,10 @@ export const wsChipStyles = css`
     align-self: stretch;
     background: var(--ws-color-surface-variant, #f1f5f9);
     border: 1px solid var(--ws-color-outline, #e2e8f0);
+    border-end-start-radius: 0;
     border-inline-start: 0;
-    border-radius: 0 var(--ws-shape-full, 999px)
-      var(--ws-shape-full, 999px) 0;
+    border-radius: var(--ws-shape-full, 999px);
+    border-start-start-radius: 0;
     color: var(--ws-color-on-surface-variant, #64748b);
     cursor: pointer;
     inline-size: var(--ws-chip-remove-width, 30px);
