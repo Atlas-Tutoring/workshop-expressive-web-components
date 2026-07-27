@@ -1,4 +1,4 @@
-import {LitElement, html, nothing, type PropertyValues} from 'lit';
+import {LitElement, html, nothing} from 'lit';
 import {customElement, property, state} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
 
@@ -182,25 +182,8 @@ export class WsTextField extends LitElement {
     this.syncFormAndValidity();
   }
 
-  protected override updated(changedProperties: PropertyValues<this>) {
-    if (
-      changedProperties.has('value') ||
-      changedProperties.has('disabled') ||
-      changedProperties.has('formDisabled') ||
-      changedProperties.has('required') ||
-      changedProperties.has('readOnly') ||
-      changedProperties.has('type') ||
-      changedProperties.has('minLength') ||
-      changedProperties.has('maxLength') ||
-      changedProperties.has('min') ||
-      changedProperties.has('max') ||
-      changedProperties.has('step') ||
-      changedProperties.has('pattern') ||
-      changedProperties.has('invalid') ||
-      changedProperties.has('errorText')
-    ) {
-      this.syncFormAndValidity();
-    }
+  protected override updated() {
+    this.syncFormAndValidity();
   }
 
   override render() {
@@ -434,7 +417,11 @@ export class WsTextField extends LitElement {
     this.touched = true;
     this.syncFormAndValidity();
     this.dispatchEvent(
-      new InputEvent('input', {bubbles: true, composed: true, inputType: 'deleteContent'})
+      new InputEvent('input', {
+        bubbles: true,
+        composed: true,
+        inputType: 'deleteContent',
+      })
     );
     this.dispatchEvent(new Event('change', {bubbles: true, composed: true}));
     this.updateComplete.then(() => this.focus());
