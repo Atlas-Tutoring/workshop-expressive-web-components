@@ -16,7 +16,7 @@ suite('ws-chip', () => {
     const button = el.shadowRoot!.querySelector('button.chip')!;
 
     assert.equal(el.variant, 'assist');
-    assert.equal(button.textContent!.trim(), 'Open');
+    assert.equal(el.textContent!.trim(), 'Open');
     assert.isNull(button.getAttribute('aria-pressed'));
   });
 
