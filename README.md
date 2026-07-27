@@ -11,6 +11,7 @@ The package includes these custom elements:
 - `<ws-breadcrumbs>`
 - `<ws-button>`
 - `<ws-card>`
+- `<ws-chip>`
 - `<ws-code-block>`
 - `<ws-docs-shell>`
 - `<ws-drawer>` and `<ws-drawer-item>`
@@ -19,6 +20,7 @@ The package includes these custom elements:
 - `<ws-page>`
 - `<ws-switch>`
 - `<ws-tabs>` and `<ws-tab>`
+- `<ws-text-field>`
 
 It also includes foundation design tokens for color, elevation, motion, shape, spacing, typography, and the aggregate theme stylesheet.
 
@@ -46,6 +48,27 @@ Then use the elements in HTML, Lit templates, React JSX, Vue templates, or any f
 <ws-button variant="outlined" size="small">Cancel</ws-button>
 <ws-button variant="ghost">Learn more</ws-button>
 
+<ws-text-field
+  label="Project name"
+  name="projectName"
+  placeholder="Atlas"
+  helper-text="Use a short recognizable name."
+  required
+></ws-text-field>
+
+<ws-text-field
+  type="search"
+  aria-label="Search components"
+  placeholder="Search components"
+  clearable
+></ws-text-field>
+
+<ws-chip variant="filter" selected>Web</ws-chip>
+<ws-chip variant="input" value="kotlin" remove-label="Remove Kotlin">
+  Kotlin
+</ws-chip>
+<ws-chip variant="status" tone="success">Published</ws-chip>
+
 <ws-switch checked>Enable notifications</ws-switch>
 
 <ws-drawer selected-item-id="home">
@@ -72,6 +95,10 @@ Then use the elements in HTML, Lit templates, React JSX, Vue templates, or any f
   <div slot="footer">Version 0.1.0</div>
 </ws-drawer>
 ```
+
+Search text fields use the circular shape automatically. Set `shape="default"` to override that behavior, or use `shape="circle"` on another supported text-field type.
+
+`<ws-text-field>` is form-associated. Its `name` and `value` participate in `FormData`, and native validation, form reset, disabled fieldsets, and state restoration are forwarded through `ElementInternals`.
 
 ## Use in a plain HTML page without a build step
 
@@ -135,10 +162,18 @@ Types are published from `dist/index.d.ts` and are exposed through the package r
 import type {
   WsButtonSize,
   WsButtonVariant,
+  WsChipTone,
+  WsChipVariant,
+  WsTextFieldShape,
+  WsTextFieldType,
 } from '@mihaicristiancondrea/workshop-expressive-web-components';
 
 const size: WsButtonSize = 'medium';
 const variant: WsButtonVariant = 'primary';
+const fieldType: WsTextFieldType = 'search';
+const fieldShape: WsTextFieldShape = 'circle';
+const chipVariant: WsChipVariant = 'status';
+const chipTone: WsChipTone = 'success';
 ```
 
 ## Build output and package entrypoints
