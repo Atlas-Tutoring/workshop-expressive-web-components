@@ -11,6 +11,8 @@ import './components/card/ws-card.js';
 import './components/page/ws-page.js';
 import './components/code-block/ws-code-block.js';
 import './components/switch/ws-switch.js';
+import './components/text-field/ws-text-field.js';
+import './components/chip/ws-chip.js';
 import './components/docs-shell/ws-docs-shell.js';
 import './components/docs-shell/ws-hero.js';
 import './components/docs-shell/ws-footer.js';
@@ -34,4 +36,20 @@ export {WsCard} from './components/card/index.js';
 export {WsPage} from './components/page/index.js';
 export {WsCodeBlock} from './components/code-block/index.js';
 export {WsSwitch} from './components/switch/index.js';
+
+export {WsTextField} from './components/text-field/index.js';
+export type {
+  WsTextFieldShape,
+  WsTextFieldSize,
+  WsTextFieldType,
+} from './components/text-field/index.js';
+
+export {WsChip} from './components/chip/index.js';
+export type {
+  WsChipRemoveDetail,
+  WsChipSize,
+  WsChipTone,
+  WsChipVariant,
+} from './components/chip/index.js';
+
 export {WsDocsShell, WsHero, WsFooter} from './components/docs-shell/index.js';
