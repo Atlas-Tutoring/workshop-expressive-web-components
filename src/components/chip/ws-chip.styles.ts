@@ -250,9 +250,9 @@ export const wsChipStyles = css`
     align-self: stretch;
     background: var(--ws-color-surface-variant, #f1f5f9);
     border: 1px solid var(--ws-color-outline, #e2e8f0);
+    border-radius: var(--ws-shape-full, 999px);
     border-end-start-radius: 0;
     border-inline-start: 0;
-    border-radius: var(--ws-shape-full, 999px);
     border-start-start-radius: 0;
     color: var(--ws-color-on-surface-variant, #64748b);
     cursor: pointer;
