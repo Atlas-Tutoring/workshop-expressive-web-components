@@ -19,7 +19,7 @@
     "docs:gen": "eleventy --config=.eleventy.cjs",
     "docs:gen:watch": "eleventy --config=.eleventy.cjs --watch",
     "docs:build": "rollup -c --file docs/ws-button.bundled.js",
-    "docs:assets": "cp node_modules/prismjs/themes/prism-okaidia.css docs/ && if [ -d node_modules/remixicon/fonts ]; then mkdir -p docs/remixicon && cp -R node_modules/remixicon/fonts docs/remixicon/; else echo \"Skipping Remix Icon asset copy; run npm install to fetch remixicon.\"; fi",
+    "docs:assets": "cp node_modules/prismjs/themes/prism-okaidia.css docs/ && cp -R dist/foundation docs/foundation && if [ -d node_modules/remixicon/fonts ]; then mkdir -p docs/remixicon && cp -R node_modules/remixicon/fonts docs/remixicon/; else echo \"Skipping Remix Icon asset copy; run npm install to fetch remixicon.\"; fi",
     "docs:serve": "wds --root-dir=docs --node-resolve --watch",
     "analyze": "cem analyze --litelement --globs \"src/**/*.ts\"",
     "analyze:watch": "cem analyze --litelement --globs \"src/**/*.ts\" --watch",
@@ -101,6 +101,7 @@
   },
   "sideEffects": [
     "dist/foundation/*.css",
+    "dist/components/**/*.js",
     "dist/index.js"
   ]
 }

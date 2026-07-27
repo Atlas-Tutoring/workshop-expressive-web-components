@@ -158,6 +158,38 @@ for (const snippet of requiredGeneratedExamplesIndex) {
   );
 }
 
+const requiredBundledElements = [
+  'ws-app-bar',
+  'ws-brand-mark',
+  'ws-breadcrumbs',
+  'ws-button',
+  'ws-card',
+  'ws-code-block',
+  'ws-docs-shell',
+  'ws-drawer',
+  'ws-drawer-item',
+  'ws-footer',
+  'ws-hero',
+  'ws-page',
+  'ws-switch',
+  'ws-tab',
+  'ws-tabs',
+];
+
+for (const elementName of requiredBundledElements) {
+  addCheck(
+    'docs/ws-button.bundled.js',
+    `docs bundle registers ${elementName}`,
+    elementName
+  );
+}
+
+addCheck(
+  'docs/foundation/theme.css',
+  'generated docs include the imported foundation theme',
+  "@import url('./colors.css')"
+);
+
 const exampleFiles = fs
   .readdirSync(path.join(root, 'docs-src/examples'))
   .filter((file) => file.endsWith('.md'))
