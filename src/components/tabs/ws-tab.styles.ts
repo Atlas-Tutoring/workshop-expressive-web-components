@@ -23,7 +23,11 @@ export const wsTabStyles = css`
     color: inherit;
     display: inline-flex;
     gap: var(--ws-spacing-sm, 8px);
-    font: var(--ws-typography-label-medium);
+    font: var(
+      --ws-typography-label-medium,
+      600 12px / 16px
+        var(--ws-font-family, 'Google Sans Flex', system-ui, sans-serif)
+    );
     min-block-size: var(--ws-tab-height, 48px);
     padding: 0 var(--ws-spacing-lg, 16px);
     position: relative;
