@@ -98,11 +98,11 @@ export class WsTextField extends LitElement {
 
   /** Browser autofill hint. */
   @property()
-  autocomplete?: string;
+  autocomplete: HTMLInputElement['autocomplete'] = '';
 
   /** Virtual keyboard hint. */
   @property({attribute: 'inputmode'})
-  inputMode?: string;
+  override inputMode = '';
 
   /** Minimum accepted text length. */
   @property({type: Number, attribute: 'minlength'})
@@ -234,8 +234,8 @@ export class WsTextField extends LitElement {
           .value=${this.value}
           type=${this.type}
           placeholder=${this.placeholder}
-          autocomplete=${ifDefined(this.autocomplete)}
-          inputmode=${ifDefined(this.inputMode)}
+          autocomplete=${ifDefined(this.autocomplete || undefined)}
+          inputmode=${ifDefined(this.inputMode || undefined)}
           minlength=${ifDefined(this.minLength)}
           maxlength=${ifDefined(this.maxLength)}
           min=${ifDefined(this.min)}
@@ -471,8 +471,8 @@ export class WsTextField extends LitElement {
     input.required = this.required;
     input.disabled = this.isEffectivelyDisabled;
     input.readOnly = this.readOnly;
-    input.autocomplete = this.autocomplete ?? '';
-    input.inputMode = this.inputMode ?? '';
+    input.autocomplete = this.autocomplete;
+    input.inputMode = this.inputMode;
 
     this.syncOptionalInputAttribute(input, 'minlength', this.minLength);
     this.syncOptionalInputAttribute(input, 'maxlength', this.maxLength);
