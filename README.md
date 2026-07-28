@@ -103,7 +103,7 @@ Then use the elements in HTML, Lit templates, React JSX, Vue templates, or any f
       progress="0.8"
     ></ws-drawer-item>
   </ws-drawer-item>
-  <div slot="footer">Version 0.1.0</div>
+  <div slot="footer">Version 0.2.0</div>
 </ws-drawer>
 ```
 
@@ -120,11 +120,11 @@ Use an ESM CDN such as jsDelivr. Pin the version in production so updates are in
 ```html
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/@mihaicristiancondrea/workshop-expressive-web-components@0.1.0/dist/foundation/theme.css"
+  href="https://cdn.jsdelivr.net/npm/@mihaicristiancondrea/workshop-expressive-web-components@0.2.0/dist/foundation/theme.css"
 />
 <script
   type="module"
-  src="https://cdn.jsdelivr.net/npm/@mihaicristiancondrea/workshop-expressive-web-components@0.1.0/dist/index.js"
+  src="https://cdn.jsdelivr.net/npm/@mihaicristiancondrea/workshop-expressive-web-components@0.2.0/dist/index.js"
 ></script>
 
 <ws-button variant="primary">Continue</ws-button>
@@ -195,10 +195,10 @@ const chipTone: WsChipTone = 'success';
 
 After `npm run build`, the package contains:
 
-- `dist/index.js` — ESM component registry and named exports
-- `dist/index.d.ts` — TypeScript declarations
-- `dist/components/**` — compiled component modules
-- `dist/foundation/*.css` — copied foundation stylesheets for website consumption
+- `dist/index.js`: ESM component registry and named exports
+- `dist/index.d.ts`: TypeScript declarations
+- `dist/components/**`: compiled component modules
+- `dist/foundation/*.css`: copied foundation stylesheets for website consumption
 
 The `package.json` `exports` map exposes the package root and foundation CSS files for bundlers that enforce package exports.
 
@@ -207,19 +207,23 @@ The `package.json` `exports` map exposes the package root and foundation CSS fil
 Install dependencies:
 
 ```bash
-npm i
+npm ci
 ```
 
-Build generated JavaScript, declaration files, and distributable foundation CSS:
+Run the complete CI validation locally:
+
+```bash
+npm run ci
+```
+
+Run individual tasks:
 
 ```bash
 npm run build
-```
-
-Run unit tests:
-
-```bash
 npm test
+npm run docs
+npm run docs:verify
+npm run pack:check
 ```
 
 Run the demo:
@@ -230,3 +234,20 @@ npm run serve
 ```
 
 Then open <http://localhost:8000/dev/index.html>.
+
+## Releasing
+
+The npm workflow publishes only after a GitHub Release is published. The release tag must match the version in `package.json`.
+
+For version `0.2.0`:
+
+```bash
+git checkout main
+git pull
+npm ci
+npm run ci
+git tag v0.2.0
+git push origin v0.2.0
+```
+
+Create and publish a GitHub Release using tag `v0.2.0`. GitHub Actions validates the package again and publishes it to npm with provenance using the repository secret named `npm_token`.
