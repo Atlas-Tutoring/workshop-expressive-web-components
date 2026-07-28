@@ -12,7 +12,7 @@ suite('ws-drawer', () => {
       <ws-drawer>
         <div slot="header">Atlas</div>
         <ws-drawer-item item-id="home" title="Home"></ws-drawer-item>
-        <div slot="footer">Version 0.1.0</div>
+        <div slot="footer">Version 0.2.0</div>
       </ws-drawer>
     `);
 
@@ -28,7 +28,7 @@ suite('ws-drawer', () => {
 
     assert.equal(headerSlot.assignedElements()[0].textContent, 'Atlas');
     assert.equal(defaultSlot.assignedElements()[0].localName, 'ws-drawer-item');
-    assert.equal(footerSlot.assignedElements()[0].textContent, 'Version 0.1.0');
+    assert.equal(footerSlot.assignedElements()[0].textContent, 'Version 0.2.0');
   });
 
   test('syncs selected-item-id to nested drawer items', async () => {
