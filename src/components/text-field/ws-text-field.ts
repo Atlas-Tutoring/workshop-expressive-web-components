@@ -234,13 +234,13 @@ export class WsTextField extends LitElement {
           .value=${this.value}
           type=${this.type}
           placeholder=${this.placeholder}
-          autocomplete=${ifDefined(this.autocomplete || undefined)}
+          .autocomplete=${this.autocomplete}
           inputmode=${ifDefined(this.inputMode || undefined)}
           minlength=${ifDefined(this.minLength)}
           maxlength=${ifDefined(this.maxLength)}
           min=${ifDefined(this.min)}
           max=${ifDefined(this.max)}
-          step=${ifDefined(this.step)}
+          .step=${this.step ?? ''}
           pattern=${ifDefined(this.pattern)}
           ?required=${this.required}
           ?disabled=${isDisabled}

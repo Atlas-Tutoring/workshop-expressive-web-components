@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate package
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Lit analyzer
+        shell: bash
+        run: |
+          set -o pipefail
+          npm run lint:lit-analyzer 2>&1 | tee lit-analyzer.log
+
+      - name: Upload Lit analyzer diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lit-analyzer-diagnostics
+          path: lit-analyzer.log
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Run ESLint
+        run: npm run lint:eslint
+
+      - name: Build library
+        run: npm run build
+
+      - name: Test development build
+        run: npm run test:dev
+
+      - name: Test production build
+        run: npm run test:prod
+
+      - name: Build documentation
+        run: npm run docs
+
+      - name: Verify documentation
+        run: npm run docs:verify
+
+      - name: Verify npm package contents
+        run: npm run pack:check

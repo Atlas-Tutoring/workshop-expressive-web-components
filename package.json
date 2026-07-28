@@ -1,7 +1,7 @@
 {
   "name": "@mihaicristiancondrea/workshop-expressive-web-components",
   "private": false,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Workshop Expressive design-system web components built with Lit.",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -13,7 +13,7 @@
     "lint": "npm run lint:lit-analyzer && npm run lint:eslint",
     "lint:eslint": "eslint 'src/**/*.ts'",
     "lint:lit-analyzer": "lit-analyzer",
-    "format": "prettier \"**/*.{cjs,html,js,json,md,ts}\" --ignore-path ./.eslintignore --write",
+    "format": "prettier \"**/*.{cjs,html,js,json,md,ts,yml}\" --ignore-path ./.eslintignore --write",
     "docs": "npm run docs:clean && npm run build && npm run analyze && npm run docs:build && npm run docs:assets && npm run docs:gen",
     "docs:clean": "rimraf docs",
     "docs:gen": "eleventy --config=.eleventy.cjs",
@@ -31,7 +31,9 @@
     "test:prod": "node scripts/run-wtr.cjs prod",
     "test:prod:watch": "MODE=prod wtr --watch",
     "checksize": "rollup -c ; cat ws-button.bundled.js | gzip -9 | wc -c ; rm ws-button.bundled.js",
-    "docs:verify": "node scripts/verify-docs-structure.cjs"
+    "docs:verify": "node scripts/verify-docs-structure.cjs",
+    "pack:check": "npm pack --dry-run",
+    "ci": "npm run lint && npm run build && npm test && npm run docs && npm run docs:verify && npm run pack:check"
   },
   "keywords": [
     "web-components",
@@ -75,6 +77,9 @@
     "rollup-plugin-summary": "^2.0.1",
     "typescript": "~5.9.0"
   },
+  "engines": {
+    "node": ">=20"
+  },
   "types": "dist/index.d.ts",
   "files": [
     "dist",
@@ -84,7 +89,8 @@
     "CHANGELOG.md"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "exports": {
     ".": {
