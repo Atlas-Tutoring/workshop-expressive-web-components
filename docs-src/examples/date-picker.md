@@ -12,7 +12,7 @@ order: 6
 ## Live demo
 
 <div class="demo-panel component-demo">
-  <div class="field-stack">
+  <div style="display: grid; gap: 16px; max-width: 560px;">
     <ws-date-picker
       label="Release date"
       name="releaseDate"
@@ -44,7 +44,7 @@ order: 6
   </div>
 
   <h3>Sizes</h3>
-  <div class="field-stack">
+  <div style="display: grid; gap: 16px; max-width: 560px;">
     <ws-date-picker size="small" label="Small" value="2026-07-28"></ws-date-picker>
     <ws-date-picker size="medium" label="Medium" value="2026-07-28"></ws-date-picker>
     <ws-date-picker size="large" label="Large" value="2026-07-28"></ws-date-picker>
@@ -106,6 +106,10 @@ picker.showPicker();
 | `checkValidity()` | Runs constraint validation. |
 | `reportValidity()` | Runs validation and reveals the invalid state. |
 
+## Slots
+
+The date picker does not expose slots. Its calendar and clear icons are built in so their alignment and accessible labels remain consistent.
+
 ## Events
 
 | Event | Description |
@@ -117,6 +121,10 @@ picker.showPicker();
 
 `label`, `control`, `input`, `clear-button`, `picker-button`, and `supporting-text` are exposed for focused customization.
 
-## Forms and accessibility
+## Accessibility notes
 
 The component uses `ElementInternals`, so `name`, `value`, reset, disabled fieldsets, restored state, and native date constraints behave like a regular form control. The platform calendar keeps browser localization and familiar keyboard and assistive-technology behavior instead of rebuilding calendar semantics in JavaScript.
+
+## Design notes
+
+The component intentionally uses the browser calendar rather than a custom JavaScript calendar. This keeps date formatting locale-aware, reduces interaction surprises, and lets the Workshop surface focus on consistent shape, motion, validation, and action placement.
