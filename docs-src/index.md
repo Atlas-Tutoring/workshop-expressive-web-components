@@ -10,7 +10,7 @@ hideBreadcrumbs: true
   <span class="home-title-components">Web Components</span>
 </h1>
 
-Lit implementations of the WorkShop Expressive primitives. The package includes foundation tokens, navigation surfaces, controls, and documentation helpers for building expressive web interfaces.
+Lit implementations of the WorkShop Expressive primitives. The package includes foundation tokens, navigation surfaces, form controls, compact data controls, and documentation helpers for building expressive web interfaces.
 
 <div class="demo-panel intro-panel">
   <h2>Install</h2>
@@ -24,6 +24,8 @@ npm run build
 ```ts
 import '@workshop/expressive-web-components/foundation/theme.css';
 import '@workshop/expressive-web-components/components/button/ws-button.js';
+import '@workshop/expressive-web-components/components/text-field/ws-text-field.js';
+import '@workshop/expressive-web-components/components/chip/ws-chip.js';
 import '@workshop/expressive-web-components/components/switch/ws-switch.js';
 ```
 
@@ -42,7 +44,8 @@ import 'remixicon/fonts/remixicon.css';
 ## What is included
 
 - Foundation color, spacing, shape, elevation, motion, and typography tokens.
-- Components for buttons, switches, drawers, breadcrumbs, tabs, cards, and code blocks.
+- Components for buttons, text fields, chips, switches, drawers, breadcrumbs, tabs, cards, and code blocks.
+- Form-associated text fields with native submission, reset, validation, and state restoration.
 - Documentation shell components used by this site.
 
 ## Local documentation workflow

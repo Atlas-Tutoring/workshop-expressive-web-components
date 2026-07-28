@@ -164,6 +164,7 @@ const requiredBundledElements = [
   'ws-breadcrumbs',
   'ws-button',
   'ws-card',
+  'ws-chip',
   'ws-code-block',
   'ws-docs-shell',
   'ws-drawer',
@@ -174,6 +175,7 @@ const requiredBundledElements = [
   'ws-switch',
   'ws-tab',
   'ws-tabs',
+  'ws-text-field',
 ];
 
 for (const elementName of requiredBundledElements) {

@@ -51,6 +51,7 @@
 
       h1,
       h2,
+      h3,
       p {
         margin-block-start: 0;
       }
@@ -65,6 +66,16 @@
         margin-block-end: var(--ws-spacing-lg);
       }
 
+      h3 {
+        font: var(--ws-typography-title-medium);
+        margin-block-end: var(--ws-spacing-md);
+        margin-block-start: var(--ws-spacing-xl);
+      }
+
+      section > h3:first-of-type {
+        margin-block-start: 0;
+      }
+
       p {
         color: var(--ws-color-on-surface-variant);
         margin-block-end: 0;
@@ -75,6 +86,12 @@
         display: flex;
         flex-wrap: wrap;
         gap: var(--ws-spacing-md);
+      }
+
+      .field-grid {
+        display: grid;
+        gap: var(--ws-spacing-lg);
+        max-width: 620px;
       }
 
       .theme-panel {
@@ -88,6 +105,10 @@
         border: 1px solid var(--ws-color-outline);
         border-radius: var(--ws-shape-large);
         padding: var(--ws-spacing-lg);
+      }
+
+      .theme-card ws-text-field {
+        margin-block-end: var(--ws-spacing-md);
       }
 
       .drawer-demo {
@@ -121,6 +142,10 @@
       }
 
       @media (max-width: 760px) {
+        main {
+          padding: var(--ws-spacing-lg);
+        }
+
         .drawer-demo {
           grid-template-columns: 1fr;
         }
@@ -132,13 +157,13 @@
       <header>
         <h1>Workshop Web Components</h1>
         <p>
-          Theme tokens, button component, drawer navigation, and state-focused
-          demos.
+          Theme tokens, actions, form controls, chips, navigation, and
+          state-focused demos.
         </p>
       </header>
 
       <section>
-        <h2>Variants</h2>
+        <h2>Button variants</h2>
         <div class="demo-grid">
           <ws-button variant="primary" size="medium">Continue</ws-button>
           <ws-button variant="secondary" size="medium">Save changes</ws-button>
@@ -148,7 +173,7 @@
       </section>
 
       <section>
-        <h2>Sizes</h2>
+        <h2>Button sizes</h2>
         <div class="demo-grid">
           <ws-button size="small">Small</ws-button>
           <ws-button size="medium">Medium</ws-button>
@@ -157,7 +182,7 @@
       </section>
 
       <section>
-        <h2>Icons</h2>
+        <h2>Button icons</h2>
         <div class="demo-grid">
           <ws-button variant="primary">
             <i slot="icon" class="ri-add-line"></i>
@@ -182,6 +207,88 @@
           <ws-button variant="ghost" size="large" disabled
             >Disabled ghost</ws-button
           >
+        </div>
+      </section>
+
+      <section>
+        <h2>Text fields</h2>
+        <div class="field-grid">
+          <ws-text-field
+            label="Project name"
+            name="projectName"
+            placeholder="Atlas"
+            helper-text="Use a short name people will recognize."
+            required
+          ></ws-text-field>
+          <ws-text-field
+            label="Contact email"
+            type="email"
+            placeholder="developer@example.com"
+            error-text="Enter a valid email address."
+            required
+          >
+            <i slot="leading-icon" class="ri-mail-line" aria-hidden="true"></i>
+          </ws-text-field>
+          <ws-text-field
+            type="search"
+            aria-label="Search components"
+            placeholder="Search components"
+            value="Text field"
+            clearable
+          >
+            <i slot="leading-icon" class="ri-search-line" aria-hidden="true"></i>
+          </ws-text-field>
+          <ws-text-field
+            type="search"
+            shape="default"
+            aria-label="Search with default shape"
+            placeholder="Search with default shape"
+          ></ws-text-field>
+          <ws-text-field
+            shape="circle"
+            label="Explicit circle"
+            placeholder="Circle on a text field"
+          ></ws-text-field>
+          <ws-text-field
+            label="Read-only identifier"
+            value="atlas-production"
+            readonly
+          ></ws-text-field>
+          <ws-text-field
+            label="Disabled field"
+            value="Unavailable"
+            disabled
+          ></ws-text-field>
+        </div>
+      </section>
+
+      <section>
+        <h2>Chips</h2>
+        <h3>Assist and filter</h3>
+        <div class="demo-grid">
+          <ws-chip>
+            <i slot="leading-icon" class="ri-add-line" aria-hidden="true"></i>
+            Add category
+          </ws-chip>
+          <ws-chip variant="filter">Android</ws-chip>
+          <ws-chip variant="filter" selected>Web</ws-chip>
+          <ws-chip variant="filter" disabled>Archived</ws-chip>
+        </div>
+
+        <h3>Input and status</h3>
+        <div class="demo-grid">
+          <ws-chip variant="input" value="kotlin" remove-label="Remove Kotlin"
+            >Kotlin</ws-chip
+          >
+          <ws-chip variant="input" value="cloudflare" remove-label="Remove Cloudflare">
+            <i slot="leading-icon" class="ri-cloud-line" aria-hidden="true"></i>
+            Cloudflare
+          </ws-chip>
+          <ws-chip variant="status">Draft</ws-chip>
+          <ws-chip variant="status" tone="info">Syncing</ws-chip>
+          <ws-chip variant="status" tone="success">Published</ws-chip>
+          <ws-chip variant="status" tone="warning">Review</ws-chip>
+          <ws-chip variant="status" tone="error">Failed</ws-chip>
         </div>
       </section>
 
@@ -246,20 +353,30 @@
       <section class="theme-panel">
         <div class="theme-card">
           <h2>Light theme</h2>
+          <ws-text-field
+            type="search"
+            aria-label="Light theme search"
+            placeholder="Search"
+          ></ws-text-field>
           <div class="demo-grid">
             <ws-button>Primary</ws-button>
             <ws-button variant="secondary">Secondary</ws-button>
-            <ws-button variant="outlined">Outlined</ws-button>
-            <ws-button variant="ghost">Ghost</ws-button>
+            <ws-chip variant="filter" selected>Selected</ws-chip>
+            <ws-chip variant="status" tone="success">Ready</ws-chip>
           </div>
         </div>
         <div class="theme-card" data-ws-theme="dark">
           <h2>Dark theme</h2>
+          <ws-text-field
+            type="search"
+            aria-label="Dark theme search"
+            placeholder="Search"
+          ></ws-text-field>
           <div class="demo-grid">
             <ws-button>Primary</ws-button>
             <ws-button variant="secondary">Secondary</ws-button>
-            <ws-button variant="outlined">Outlined</ws-button>
-            <ws-button variant="ghost">Ghost</ws-button>
+            <ws-chip variant="filter" selected>Selected</ws-chip>
+            <ws-chip variant="status" tone="success">Ready</ws-chip>
           </div>
         </div>
       </section>
