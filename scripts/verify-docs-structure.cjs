@@ -166,6 +166,7 @@ const requiredBundledElements = [
   'ws-card',
   'ws-chip',
   'ws-code-block',
+  'ws-date-picker',
   'ws-docs-shell',
   'ws-drawer',
   'ws-drawer-item',

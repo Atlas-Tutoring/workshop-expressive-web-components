@@ -13,6 +13,7 @@ The package includes these custom elements:
 - `<ws-card>`
 - `<ws-chip>`
 - `<ws-code-block>`
+- `<ws-date-picker>`
 - `<ws-docs-shell>`
 - `<ws-drawer>` and `<ws-drawer-item>`
 - `<ws-footer>`
@@ -63,6 +64,16 @@ Then use the elements in HTML, Lit templates, React JSX, Vue templates, or any f
   clearable
 ></ws-text-field>
 
+<ws-date-picker
+  label="Release date"
+  name="releaseDate"
+  min="2026-08-01"
+  max="2026-08-31"
+  helper-text="Choose the planned production release."
+  clearable
+  required
+></ws-date-picker>
+
 <ws-chip variant="filter" selected>Web</ws-chip>
 <ws-chip variant="input" value="kotlin" remove-label="Remove Kotlin">
   Kotlin
@@ -98,7 +109,9 @@ Then use the elements in HTML, Lit templates, React JSX, Vue templates, or any f
 
 Search text fields use the circular shape automatically. Set `shape="default"` to override that behavior, or use `shape="circle"` on another supported text-field type.
 
-`<ws-text-field>` is form-associated. Its `name` and `value` participate in `FormData`, and native validation, form reset, disabled fieldsets, and state restoration are forwarded through `ElementInternals`.
+`<ws-text-field>` and `<ws-date-picker>` are form-associated. Their `name` and `value` participate in `FormData`, while native validation, form reset, disabled fieldsets, and state restoration are forwarded through `ElementInternals`.
+
+`<ws-date-picker>` keeps the browser’s localized platform calendar and wraps it with Workshop labels, sizes, validation, clear behavior, and a consistent calendar action.
 
 ## Use in a plain HTML page without a build step
 
@@ -164,6 +177,7 @@ import type {
   WsButtonVariant,
   WsChipTone,
   WsChipVariant,
+  WsDatePickerSize,
   WsTextFieldShape,
   WsTextFieldType,
 } from '@mihaicristiancondrea/workshop-expressive-web-components';
@@ -172,6 +186,7 @@ const size: WsButtonSize = 'medium';
 const variant: WsButtonVariant = 'primary';
 const fieldType: WsTextFieldType = 'search';
 const fieldShape: WsTextFieldShape = 'circle';
+const datePickerSize: WsDatePickerSize = 'large';
 const chipVariant: WsChipVariant = 'status';
 const chipTone: WsChipTone = 'success';
 ```

@@ -48,15 +48,28 @@ export const wsChipStyles = css`
     padding: 0 var(--ws-chip-padding-inline, var(--ws-spacing-md, 12px));
     transition: background-color var(--ws-motion-duration-medium, 180ms)
         var(--ws-motion-easing-standard, ease),
+      block-size var(--ws-motion-duration-medium, 180ms)
+        var(--ws-motion-easing-emphasized, ease),
       border-color var(--ws-motion-duration-medium, 180ms)
         var(--ws-motion-easing-standard, ease),
       box-shadow var(--ws-motion-duration-medium, 180ms)
         var(--ws-motion-easing-standard, ease),
       color var(--ws-motion-duration-medium, 180ms)
         var(--ws-motion-easing-standard, ease),
-      transform var(--ws-motion-duration-fast, 120ms)
+      font-size var(--ws-motion-duration-medium, 180ms)
+        var(--ws-motion-easing-emphasized, ease),
+      font-weight var(--ws-motion-duration-medium, 180ms)
+        var(--ws-motion-easing-emphasized, ease),
+      gap var(--ws-motion-duration-medium, 180ms)
+        var(--ws-motion-easing-emphasized, ease),
+      line-height var(--ws-motion-duration-medium, 180ms)
+        var(--ws-motion-easing-emphasized, ease),
+      padding-inline var(--ws-motion-duration-medium, 180ms)
+        var(--ws-motion-easing-emphasized, ease),
+      transform var(--ws-motion-duration-medium, 180ms)
         var(--ws-motion-easing-emphasized, ease);
     white-space: nowrap;
+    will-change: transform;
   }
 
   button.chip {
@@ -97,10 +110,11 @@ export const wsChipStyles = css`
       var(--ws-color-primary, #6c5cff) 36%,
       var(--ws-color-outline, #e2e8f0)
     );
+    transform: translateY(-1px) scale(1.02);
   }
 
   button.chip:not(:disabled):active {
-    transform: scale(0.97);
+    transform: translateY(0) scale(0.97);
   }
 
   button.chip:focus-visible,
@@ -230,6 +244,13 @@ export const wsChipStyles = css`
     flex: 0 0 var(--ws-chip-icon-size, 18px);
     inline-size: var(--ws-chip-icon-size, 18px);
     justify-content: center;
+    line-height: 0;
+    transition: block-size var(--ws-motion-duration-medium, 180ms)
+        var(--ws-motion-easing-emphasized, ease),
+      flex-basis var(--ws-motion-duration-medium, 180ms)
+        var(--ws-motion-easing-emphasized, ease),
+      inline-size var(--ws-motion-duration-medium, 180ms)
+        var(--ws-motion-easing-emphasized, ease);
   }
 
   :host([size='small']) .icon {
@@ -238,12 +259,16 @@ export const wsChipStyles = css`
 
   .icon ::slotted(*),
   .icon svg {
+    align-items: center;
     block-size: 100%;
     display: inline-flex;
     fill: currentcolor;
     font-size: inherit;
     inline-size: 100%;
+    justify-content: center;
     line-height: 1;
+    margin: 0;
+    vertical-align: middle;
   }
 
   .remove-button {
@@ -262,7 +287,11 @@ export const wsChipStyles = css`
     transition: background-color var(--ws-motion-duration-fast, 120ms)
         var(--ws-motion-easing-standard, ease),
       color var(--ws-motion-duration-fast, 120ms)
-        var(--ws-motion-easing-standard, ease);
+        var(--ws-motion-easing-standard, ease),
+      inline-size var(--ws-motion-duration-medium, 180ms)
+        var(--ws-motion-easing-emphasized, ease),
+      padding var(--ws-motion-duration-medium, 180ms)
+        var(--ws-motion-easing-emphasized, ease);
   }
 
   :host([size='small']) .remove-button {
@@ -288,6 +317,7 @@ export const wsChipStyles = css`
 
   @media (prefers-reduced-motion: reduce) {
     .chip,
+    .icon,
     .remove-button {
       transition-duration: 0.01ms;
     }
