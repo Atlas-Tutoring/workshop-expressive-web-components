@@ -1,0 +1,64 @@
+name: Apply analyzer compatibility fixes
+
+on:
+  push:
+    branches: [agent/release-0.2.0-ci-publish]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Apply focused source replacements
+        shell: python
+        run: |
+          from pathlib import Path
+
+          replacements = {
+              Path('src/components/chip/ws-chip.ts'): [
+                  (
+                      "this.variant === 'filter' ? String(this.selected) : undefined",
+                      "this.variant === 'filter'\n                  ? this.selected\n                    ? 'true'\n                    : 'false'\n                  : undefined",
+                  ),
+              ],
+              Path('src/components/text-field/ws-text-field.ts'): [
+                  (
+                      "autocomplete=${ifDefined(this.autocomplete || undefined)}",
+                      ".autocomplete=${this.autocomplete}",
+                  ),
+                  (
+                      "step=${ifDefined(this.step)}",
+                      ".step=${this.step ?? ''}",
+                  ),
+              ],
+              Path('src/components/date-picker/ws-date-picker.styles.ts'): [
+                  ("    color-scheme: light dark;\n", ""),
+              ],
+          }
+
+          for path, path_replacements in replacements.items():
+              content = path.read_text(encoding='utf-8')
+              for old, new in path_replacements:
+                  if old not in content:
+                      raise SystemExit(f'Expected source fragment not found in {path}: {old!r}')
+                  content = content.replace(old, new, 1)
+              path.write_text(content, encoding='utf-8')
+
+      - name: Commit fixes
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            src/components/chip/ws-chip.ts \
+            src/components/text-field/ws-text-field.ts \
+            src/components/date-picker/ws-date-picker.styles.ts
+          git commit -m "Fix Lit analyzer compatibility"
+          git push
