@@ -12,6 +12,7 @@ import './components/page/ws-page.js';
 import './components/code-block/ws-code-block.js';
 import './components/switch/ws-switch.js';
 import './components/text-field/ws-text-field.js';
+import './components/date-picker/ws-date-picker.js';
 import './components/chip/ws-chip.js';
 import './components/docs-shell/ws-docs-shell.js';
 import './components/docs-shell/ws-hero.js';
@@ -43,6 +44,9 @@ export type {
   WsTextFieldSize,
   WsTextFieldType,
 } from './components/text-field/index.js';
+
+export {WsDatePicker} from './components/date-picker/index.js';
+export type {WsDatePickerSize} from './components/date-picker/index.js';
 
 export {WsChip} from './components/chip/index.js';
 export type {
