@@ -25,6 +25,7 @@ npm run build
 import '@workshop/expressive-web-components/foundation/theme.css';
 import '@workshop/expressive-web-components/components/button/ws-button.js';
 import '@workshop/expressive-web-components/components/text-field/ws-text-field.js';
+import '@workshop/expressive-web-components/components/date-picker/ws-date-picker.js';
 import '@workshop/expressive-web-components/components/chip/ws-chip.js';
 import '@workshop/expressive-web-components/components/switch/ws-switch.js';
 ```
@@ -44,8 +45,8 @@ import 'remixicon/fonts/remixicon.css';
 ## What is included
 
 - Foundation color, spacing, shape, elevation, motion, and typography tokens.
-- Components for buttons, text fields, chips, switches, drawers, breadcrumbs, tabs, cards, and code blocks.
-- Form-associated text fields with native submission, reset, validation, and state restoration.
+- Components for buttons, text fields, date pickers, chips, switches, drawers, breadcrumbs, tabs, cards, and code blocks.
+- Form-associated text fields and date pickers with native submission, reset, validation, and state restoration.
 - Documentation shell components used by this site.
 
 ## Local documentation workflow
