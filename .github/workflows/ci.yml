@@ -33,7 +33,19 @@ jobs:
         run: npm ci
 
       - name: Run Lit analyzer
-        run: npm run lint:lit-analyzer
+        shell: bash
+        run: |
+          set -o pipefail
+          npm run lint:lit-analyzer 2>&1 | tee lit-analyzer.log
+
+      - name: Upload Lit analyzer diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lit-analyzer-diagnostics
+          path: lit-analyzer.log
+          if-no-files-found: ignore
+          retention-days: 7
 
       - name: Run ESLint
         run: npm run lint:eslint
