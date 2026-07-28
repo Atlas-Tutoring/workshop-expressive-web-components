@@ -112,7 +112,11 @@ export class WsChip extends LitElement {
               ?disabled=${this.disabled}
               aria-label=${ifDefined(this.accessibleLabel)}
               aria-pressed=${ifDefined(
-                this.variant === 'filter' ? String(this.selected) : undefined
+                this.variant === 'filter'
+                  ? this.selected
+                    ? 'true'
+                    : 'false'
+                  : undefined
               )}
               @click=${this.handleChipClick}
             >

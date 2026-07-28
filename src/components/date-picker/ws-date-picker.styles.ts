@@ -133,7 +133,6 @@ export const wsDatePickerStyles = css`
     border: 0;
     box-sizing: border-box;
     color: var(--ws-color-on-surface, #0f172a);
-    color-scheme: light dark;
     flex: 1 1 auto;
     font: var(
       --ws-date-picker-font,
