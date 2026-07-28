@@ -11,6 +11,8 @@ import './components/code-block/ws-code-block.js';
 import './components/switch/ws-switch.js';
 import './components/card/ws-card.js';
 import './components/page/ws-page.js';
+import './components/text-field/ws-text-field.js';
+import './components/chip/ws-chip.js';
 import './components/docs-shell/ws-docs-shell.js';
 import './components/docs-shell/ws-hero.js';
 import './components/docs-shell/ws-footer.js';
