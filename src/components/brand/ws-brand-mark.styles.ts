@@ -136,17 +136,17 @@ export const wsBrandMarkStyles = css`
     }
 
     12% {
-      transform: translateY(14px) scale(0.8, 1.2);
+      transform: translateY(7px) scale(0.92, 1.08);
       animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
     15% {
-      transform: translateY(17px) scale(1.6, 0.4);
+      transform: translateY(8px) scale(1.18, 0.82);
       animation-timing-function: cubic-bezier(0.2, 0.8, 0.4, 1);
     }
 
     22% {
-      transform: translateY(-8px) scale(0.9, 1.1);
+      transform: translateY(-3px) scale(0.97, 1.03);
       animation-timing-function: ease-in-out;
     }
 
@@ -186,7 +186,7 @@ export const wsBrandMarkStyles = css`
 
     22% {
       stroke-dashoffset: 0;
-      transform: scale(1.05);
+      transform: scale(1.02);
       animation-timing-function: ease-in-out;
     }
 
