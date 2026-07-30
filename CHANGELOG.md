@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- **Breaking:** Renamed the `ws-button` `ghost` variant to `text`. Replace
+  `variant="ghost"` with `variant="text"` when upgrading.
+
 All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components` are documented in this file.
 
 ## 0.2.0

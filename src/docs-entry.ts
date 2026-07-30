@@ -27,25 +27,7 @@ const contentSelector = '.docs-content';
 
 let activeTocObserver: IntersectionObserver | null = null;
 let activeController: AbortController | null = null;
-let pendingNavigationTimer = 0;
-let pendingNavigationUrl = '';
 let currentPageUrl = new URL(window.location.href);
-
-const toMilliseconds = (value: string) => {
-  const trimmed = value.trim();
-  if (!trimmed) return 240;
-  if (trimmed.endsWith('ms')) return Number.parseFloat(trimmed);
-  if (trimmed.endsWith('s')) return Number.parseFloat(trimmed) * 1000;
-  return Number.parseFloat(trimmed) || 240;
-};
-
-const getTabsMotionDuration = (tabs: Element) => {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return 0;
-
-  return toMilliseconds(
-    getComputedStyle(tabs).getPropertyValue('--ws-motion-duration-slow')
-  );
-};
 
 const getElementUrl = (element: Element) => {
   const href = element.getAttribute('href');
@@ -117,11 +99,27 @@ const updateSiteTabs = (url: URL) => {
     const isHomeTab = tab.textContent?.trim() === 'Home';
     const selected = Boolean(
       tabUrl &&
-      (isHomeTab
-        ? sameDocument(tabUrl, url)
-        : tabUrl.pathname === url.pathname ||
-          url.pathname.startsWith(tabUrl.pathname))
+        (isHomeTab
+          ? sameDocument(tabUrl, url)
+          : tabUrl.pathname === url.pathname ||
+            url.pathname.startsWith(tabUrl.pathname))
     );
+
+    tab.toggleAttribute('selected', selected);
+    if (selected) {
+      tab.setAttribute('aria-current', 'page');
+    } else {
+      tab.removeAttribute('aria-current');
+    }
+  }
+};
+
+const updateCollectionTabs = (url: URL) => {
+  for (const tab of document.querySelectorAll(
+    'ws-tabs.collection-tabs ws-tab'
+  )) {
+    const tabUrl = getElementUrl(tab);
+    const selected = Boolean(tabUrl && sameDocument(tabUrl, url));
 
     tab.toggleAttribute('selected', selected);
     if (selected) {
@@ -218,12 +216,37 @@ const replacePageContent = (html: string, url: URL) => {
 
   if (!currentContent || !nextContent) return false;
 
-  const importedContent = document.importNode(nextContent, true);
-
   document.title = nextDocument.title;
   currentPageUrl = new URL(url.href);
-  currentContent.replaceWith(importedContent);
-  runContentScripts(importedContent);
+
+  const currentExampleContent =
+    currentContent.querySelector('.example-content');
+  const currentExampleToc = currentContent.querySelector('.example-toc');
+  const nextExampleContent = nextContent.querySelector('.example-content');
+  const nextExampleToc = nextContent.querySelector('.example-toc');
+
+  if (
+    currentExampleContent &&
+    currentExampleToc &&
+    nextExampleContent &&
+    nextExampleToc
+  ) {
+    const importedExampleContent = document.importNode(
+      nextExampleContent,
+      true
+    );
+    const importedExampleToc = document.importNode(nextExampleToc, true);
+    currentExampleContent.replaceWith(importedExampleContent);
+    currentExampleToc.replaceWith(importedExampleToc);
+    runContentScripts(importedExampleContent);
+    runContentScripts(importedExampleToc);
+    updateCollectionTabs(url);
+  } else {
+    const importedContent = document.importNode(nextContent, true);
+    currentContent.replaceWith(importedContent);
+    runContentScripts(importedContent);
+  }
+
   updateSiteTabs(url);
   enhanceExampleToc();
   return true;
@@ -315,17 +338,9 @@ const enhanceDocsNavigation = () => {
 
     event.preventDefault();
 
-    const tabs = element.closest('ws-tabs');
-    const delay = tabs ? getTabsMotionDuration(tabs) : 0;
-    if (pendingNavigationUrl === url.href) return;
-
-    window.clearTimeout(pendingNavigationTimer);
-    pendingNavigationUrl = url.href;
-    pendingNavigationTimer = window.setTimeout(async () => {
-      pendingNavigationUrl = '';
-      const handled = await navigateTo(url);
+    void navigateTo(url).then((handled) => {
       if (!handled) window.location.href = url.href;
-    }, delay);
+    });
   });
 
   window.addEventListener('popstate', async () => {

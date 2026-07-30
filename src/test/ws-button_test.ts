@@ -36,6 +36,15 @@ suite('ws-button', () => {
     assert.equal(el.getAttribute('size'), 'small');
   });
 
+  test('supports the text button variant', async () => {
+    const el = await fixture<WsButton>(
+      html`<ws-button variant="text">Learn more</ws-button>`
+    );
+
+    assert.equal(el.variant, 'text');
+    assert.equal(el.getAttribute('variant'), 'text');
+  });
+
   test('disables the native button when disabled', async () => {
     const el = await fixture<WsButton>(
       html`<ws-button disabled>Disabled</ws-button>`

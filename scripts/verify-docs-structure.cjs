@@ -60,7 +60,7 @@ const requiredHomeSource = [
   '<h1 class="home-title">',
   '<span class="home-title-shop">Shop</span>',
   '<span class="home-title-components">Web Components</span>',
-  '<div class="demo-panel intro-panel">',
+  '## Install',
   '## What is included',
   '> **Configuration:** Import the foundation theme stylesheet',
   '## Local documentation workflow',

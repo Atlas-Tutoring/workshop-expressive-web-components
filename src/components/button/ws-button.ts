@@ -4,7 +4,7 @@ import {ifDefined} from 'lit/directives/if-defined.js';
 
 import {wsButtonStyles} from './ws-button.styles.js';
 
-export type WsButtonVariant = 'primary' | 'secondary' | 'outlined' | 'ghost';
+export type WsButtonVariant = 'primary' | 'secondary' | 'outlined' | 'text';
 export type WsButtonSize = 'small' | 'medium' | 'large';
 
 /**
