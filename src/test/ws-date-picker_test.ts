@@ -27,10 +27,11 @@ suite('ws-date-picker', () => {
     el.showPicker();
     await el.updateComplete;
     assert.exists(el.shadowRoot!.querySelector('[role="dialog"]'));
-    assert.isTrue(
-      el.shadowRoot!.querySelector<HTMLButtonElement>(
-        '.day[aria-selected="true"]'
-      )!.textContent === '28'
+    assert.equal(
+      el.shadowRoot!
+        .querySelector<HTMLButtonElement>('.day[aria-selected="true"]')!
+        .textContent!.trim(),
+      '28'
     );
   });
 
@@ -130,7 +131,7 @@ suite('ws-date-picker', () => {
     const changed = oneEvent(el, 'change');
     const day = [
       ...el.shadowRoot!.querySelectorAll<HTMLButtonElement>('.day'),
-    ].find((button) => button.textContent === '30')!;
+    ].find((button) => button.textContent?.trim() === '30')!;
     day.click();
     await changed;
     assert.equal(el.value, '2026-07-30');
