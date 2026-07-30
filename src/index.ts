@@ -3,6 +3,7 @@ import './components/button/ws-button.js';
 import './components/app-bar/ws-app-bar.js';
 import './components/drawer/ws-drawer.js';
 import './components/drawer/ws-drawer-item.js';
+import './components/drawer/ws-drawer-category.js';
 import './components/brand/ws-brand-mark.js';
 import './components/tabs/ws-tabs.js';
 import './components/tabs/ws-tab.js';
@@ -14,6 +15,8 @@ import './components/switch/ws-switch.js';
 import './components/text-field/ws-text-field.js';
 import './components/date-picker/ws-date-picker.js';
 import './components/chip/ws-chip.js';
+import './components/dropdown/ws-dropdown.js';
+import './components/badge/ws-badge.js';
 import './components/docs-shell/ws-docs-shell.js';
 import './components/docs-shell/ws-hero.js';
 import './components/docs-shell/ws-footer.js';
@@ -23,7 +26,11 @@ export {WsAppBar} from './components/app-bar/index.js';
 export {WsButton} from './components/button/index.js';
 export type {WsButtonSize, WsButtonVariant} from './components/button/index.js';
 
-export {WsDrawer, WsDrawerItem} from './components/drawer/index.js';
+export {
+  WsDrawer,
+  WsDrawerCategory,
+  WsDrawerItem,
+} from './components/drawer/index.js';
 export type {WsDrawerItemClickDetail} from './components/drawer/index.js';
 
 export {WsBrandMark} from './components/brand/index.js';
@@ -55,5 +62,11 @@ export type {
   WsChipTone,
   WsChipVariant,
 } from './components/chip/index.js';
+
+export {WsDropdown} from './components/dropdown/index.js';
+export type {WsDropdownSize} from './components/dropdown/index.js';
+
+export {WsBadge} from './components/badge/index.js';
+export type {WsBadgeTone} from './components/badge/index.js';
 
 export {WsDocsShell, WsHero, WsFooter} from './components/docs-shell/index.js';

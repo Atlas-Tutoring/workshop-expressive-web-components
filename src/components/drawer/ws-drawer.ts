@@ -3,6 +3,7 @@ import {customElement, property} from 'lit/decorators.js';
 
 import {wsDrawerStyles} from './ws-drawer.styles.js';
 import './ws-drawer-item.js';
+import './ws-drawer-category.js';
 
 export interface WsDrawerItemClickDetail {
   itemId: string;
@@ -12,7 +13,7 @@ export interface WsDrawerItemClickDetail {
  * Workshop tree navigation drawer container.
  *
  * @slot header - Optional drawer header content.
- * @slot - Drawer items, usually `ws-drawer-item` elements.
+ * @slot - Drawer items or optional `ws-drawer-category` groups.
  * @slot footer - Optional drawer footer content.
  * @fires ws-drawer-item-click - Fired when a leaf drawer item is activated.
  */

@@ -18,6 +18,7 @@ order: 4
       <span>4 lessons · 2 complete</span>
     </div>
 
+    <ws-drawer-category category="Content">
     <ws-drawer-item item-id="learn" title="Design systems - Learn" expanded>
       <i slot="icon" class="ri-graduation-cap-line" aria-hidden="true"></i>
       <ws-drawer-item item-id="chapter-1" title="Chapter 1: Foundations" expanded>
@@ -37,6 +38,7 @@ order: 4
     <ws-drawer-item item-id="locked" title="Assessment" subtitle="Complete chapter 1 first" disabled>
       <i slot="icon" class="ri-lock-line" aria-hidden="true"></i>
     </ws-drawer-item>
+    </ws-drawer-category>
 
     <div slot="footer" class="drawer-footer-note">Course progress updates as lessons are selected.</div>
 
@@ -109,27 +111,29 @@ order: 4
 
 ## API
 
-| Element          | Property           | Type      | Default | Description                                                |
-| ---------------- | ------------------ | --------- | ------- | ---------------------------------------------------------- |
-| `ws-drawer`      | `selected-item-id` | `string`  | —       | Selected leaf item id.                                     |
-| `ws-drawer-item` | `item-id`          | `string`  | —       | Stable item identifier returned in events.                 |
-| `ws-drawer-item` | `title`            | `string`  | —       | Primary label.                                             |
-| `ws-drawer-item` | `subtitle`         | `string`  | —       | Optional supporting label.                                 |
-| `ws-drawer-item` | `badge`            | `string`  | —       | Optional count or short status.                            |
-| `ws-drawer-item` | `progress`         | `number`  | —       | Progress value from 0 to 1; `1` shows a completion check.  |
-| `ws-drawer-item` | `expanded`         | `boolean` | `false` | Shows nested drawer items.                                 |
-| `ws-drawer-item` | `selected`         | `boolean` | `false` | Reflects selected state. Usually controlled by the drawer. |
-| `ws-drawer-item` | `disabled`         | `boolean` | `false` | Prevents activation.                                       |
+| Element              | Property           | Type      | Default | Description                                                |
+| -------------------- | ------------------ | --------- | ------- | ---------------------------------------------------------- |
+| `ws-drawer`          | `selected-item-id` | `string`  | —       | Selected leaf item id.                                     |
+| `ws-drawer-category` | `category`         | `string`  | —       | Optional heading for the items placed in the group.        |
+| `ws-drawer-item`     | `item-id`          | `string`  | —       | Stable item identifier returned in events.                 |
+| `ws-drawer-item`     | `title`            | `string`  | —       | Primary label.                                             |
+| `ws-drawer-item`     | `subtitle`         | `string`  | —       | Optional supporting label.                                 |
+| `ws-drawer-item`     | `badge`            | `string`  | —       | Optional count or short status.                            |
+| `ws-drawer-item`     | `progress`         | `number`  | —       | Progress value from 0 to 1; `1` shows a completion check.  |
+| `ws-drawer-item`     | `expanded`         | `boolean` | `false` | Shows nested drawer items.                                 |
+| `ws-drawer-item`     | `selected`         | `boolean` | `false` | Reflects selected state. Usually controlled by the drawer. |
+| `ws-drawer-item`     | `disabled`         | `boolean` | `false` | Prevents activation.                                       |
 
 ## Slots
 
-| Element          | Slot     | Description              |
-| ---------------- | -------- | ------------------------ |
-| `ws-drawer`      | `header` | Optional top content.    |
-| `ws-drawer`      | default  | Drawer items.            |
-| `ws-drawer`      | `footer` | Optional bottom content. |
-| `ws-drawer-item` | `icon`   | Optional leading icon.   |
-| `ws-drawer-item` | default  | Nested drawer items.     |
+| Element              | Slot     | Description                    |
+| -------------------- | -------- | ------------------------------ |
+| `ws-drawer`          | `header` | Optional top content.          |
+| `ws-drawer`          | default  | Drawer items.                  |
+| `ws-drawer-category` | default  | Drawer items in this category. |
+| `ws-drawer`          | `footer` | Optional bottom content.       |
+| `ws-drawer-item`     | `icon`   | Optional leading icon.         |
+| `ws-drawer-item`     | default  | Nested drawer items.           |
 
 ## Events
 

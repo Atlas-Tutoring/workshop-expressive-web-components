@@ -3,10 +3,33 @@ import {html} from 'lit/static-html.js';
 
 import '../components/drawer/ws-drawer.js';
 import '../components/drawer/ws-drawer-item.js';
+import '../components/drawer/ws-drawer-category.js';
 import type {WsDrawer} from '../components/drawer/ws-drawer.js';
 import type {WsDrawerItem} from '../components/drawer/ws-drawer-item.js';
 
 suite('ws-drawer', () => {
+  test('groups items under an optional category heading', async () => {
+    const el = await fixture<WsDrawer>(html`
+      <ws-drawer
+        ><ws-drawer-category category="Content">
+          <ws-drawer-item
+            item-id="courses"
+            title="Courses"
+          ></ws-drawer-item> </ws-drawer-category
+      ></ws-drawer>
+    `);
+    const category = el.querySelector('ws-drawer-category')!;
+    assert.equal(
+      category.shadowRoot!.querySelector('h2')!.textContent,
+      'Content'
+    );
+    assert.equal(
+      category.shadowRoot!.querySelector('slot')!.assignedElements()[0]
+        .localName,
+      'ws-drawer-item'
+    );
+  });
+
   test('renders header, nav content, and footer slots', async () => {
     const el = await fixture<WsDrawer>(html`
       <ws-drawer>
