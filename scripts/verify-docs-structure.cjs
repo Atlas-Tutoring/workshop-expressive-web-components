@@ -62,6 +62,7 @@ const requiredHomeSource = [
   '<span class="home-title-components">Web Components</span>',
   '<div class="demo-panel intro-panel">',
   '## What is included',
+  '> **Configuration:** Import the foundation theme stylesheet',
   '## Local documentation workflow',
   '```bash',
   '```ts',
@@ -109,6 +110,7 @@ for (const snippet of requiredNavTemplate) {
 }
 
 const requiredExampleTemplate = [
+  'const deploymentUrl = (route)',
   '<section class="examples">',
   '<nav class="collection"',
   '<div class="example-content">',
@@ -183,6 +185,23 @@ addCheck(
   'nested examples page selects the Examples tab',
   `<ws-tab selected href="${examplesUrl}" aria-current="page">`
 );
+
+for (const filePath of [
+  'docs/examples/index.html',
+  'docs/examples/text-field/index.html',
+  'docs/examples/breadcrumbs/index.html',
+]) {
+  addCheck(
+    filePath,
+    'component navigation has a stable Text field URL',
+    `href="${new URL('examples/text-field/', siteUrl).href}"`
+  );
+  addCheck(
+    filePath,
+    'component navigation has a stable Breadcrumbs URL',
+    `href="${new URL('examples/breadcrumbs/', siteUrl).href}"`
+  );
+}
 
 const requiredBundledElements = [
   'ws-app-bar',

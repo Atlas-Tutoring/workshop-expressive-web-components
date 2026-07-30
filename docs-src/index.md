@@ -49,6 +49,8 @@ import 'remixicon/fonts/remixicon.css';
 - Form-associated text fields and date pickers with native submission, reset, validation, and state restoration.
 - Documentation shell components used by this site.
 
+> **Configuration:** Import the foundation theme stylesheet before your component modules so every component receives the expected colors, spacing, typography, shape, elevation, and motion tokens. Import Remix Icon separately only when you use the icon classes shown in these examples.
+
 ## Local documentation workflow
 
 Generate the GitHub Pages demo locally when you want to preview the full documentation site:

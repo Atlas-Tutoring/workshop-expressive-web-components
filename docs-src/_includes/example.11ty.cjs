@@ -1,5 +1,10 @@
 const page = require('./page.11ty.cjs');
-const relative = require('./relative-path.cjs');
+
+const siteUrl =
+  'https://mihaicristiancondrea.github.io/workshop-expressive-web-components/';
+
+const deploymentUrl = (route) =>
+  new URL(String(route).replace(/^\//, ''), siteUrl).href;
 
 /**
  * This template extends the page template and adds an examples list.
@@ -104,7 +109,7 @@ const renderExample = ({name, content, collections, page}) => {
               (post) => `
                 <ws-tab${
                   post.url === page.url ? ' selected' : ''
-                } href="${relative(page.url, post.url)}">${(
+                } href="${deploymentUrl(post.url)}">${(
                 post.data.name ?? post.data.description
               ).replace(/</g, '&lt;')}</ws-tab>
               `
