@@ -2,10 +2,21 @@
 
 ## Unreleased
 
+All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components` are documented in this file.
+
+## 0.2.2
+
+### Changed
+
 - **Breaking:** Renamed the `ws-button` `ghost` variant to `text`. Replace
   `variant="ghost"` with `variant="text"` when upgrading.
+- Updated CI, documentation, and npm publishing jobs to Node.js 24.
+- Retired the legacy-browser development-server plugin and its obsolete polyfills.
+- Replaced the deprecated Rimraf dependency with the platform cleanup command.
 
-All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components` are documented in this file.
+### Fixed
+
+- Advanced the package version so the corrected release can be published to npm.
 
 ## 0.2.1
 
