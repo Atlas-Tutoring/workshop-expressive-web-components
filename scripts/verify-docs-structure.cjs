@@ -96,8 +96,8 @@ const requiredNavTemplate = [
   '<ws-brand-mark mark-only size="40px"',
   '<ws-switch slot="trailing" class="theme-switch"',
   'https://mihaicristiancondrea.github.io/workshop-expressive-web-components/',
-  "{url: homeUrl, label: 'Home'",
-  "{url: '/examples/', label: 'Examples'",
+  "{url: siteUrl, route: '/', label: 'Home'",
+  "url: new URL('examples/', siteUrl).href",
 ];
 
 for (const snippet of requiredNavTemplate) {
@@ -157,6 +157,32 @@ for (const snippet of requiredGeneratedExamplesIndex) {
     snippet
   );
 }
+
+const siteUrl =
+  'https://mihaicristiancondrea.github.io/workshop-expressive-web-components/';
+const examplesUrl = new URL('examples/', siteUrl).href;
+for (const filePath of [
+  'docs/index.html',
+  'docs/examples/index.html',
+  'docs/examples/drawer/index.html',
+]) {
+  addCheck(
+    filePath,
+    'top navigation has a stable Home URL',
+    `href="${siteUrl}"`
+  );
+  addCheck(
+    filePath,
+    'top navigation has a stable Examples URL',
+    `href="${examplesUrl}"`
+  );
+}
+
+addCheck(
+  'docs/examples/drawer/index.html',
+  'nested examples page selects the Examples tab',
+  `<ws-tab selected href="${examplesUrl}" aria-current="page">`
+);
 
 const requiredBundledElements = [
   'ws-app-bar',
