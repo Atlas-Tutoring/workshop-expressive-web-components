@@ -7,6 +7,14 @@
 
 All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components` are documented in this file.
 
+## 0.2.1
+
+### Changed
+
+- Added consistent spacing between documentation code blocks.
+- Made the brand-mark bounce more subtle.
+- Kept chips level on hover and smoothed their size-change animation.
+
 ## 0.2.0
 
 ### Added

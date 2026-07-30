@@ -49,7 +49,7 @@ export const wsChipStyles = css`
     transition: background-color var(--ws-motion-duration-medium, 180ms)
         var(--ws-motion-easing-standard, ease),
       block-size var(--ws-motion-duration-medium, 180ms)
-        var(--ws-motion-easing-emphasized, ease),
+        var(--ws-motion-easing-standard, ease),
       border-color var(--ws-motion-duration-medium, 180ms)
         var(--ws-motion-easing-standard, ease),
       box-shadow var(--ws-motion-duration-medium, 180ms)
@@ -57,15 +57,15 @@ export const wsChipStyles = css`
       color var(--ws-motion-duration-medium, 180ms)
         var(--ws-motion-easing-standard, ease),
       font-size var(--ws-motion-duration-medium, 180ms)
-        var(--ws-motion-easing-emphasized, ease),
+        var(--ws-motion-easing-standard, ease),
       font-weight var(--ws-motion-duration-medium, 180ms)
-        var(--ws-motion-easing-emphasized, ease),
+        var(--ws-motion-easing-standard, ease),
       gap var(--ws-motion-duration-medium, 180ms)
-        var(--ws-motion-easing-emphasized, ease),
+        var(--ws-motion-easing-standard, ease),
       line-height var(--ws-motion-duration-medium, 180ms)
-        var(--ws-motion-easing-emphasized, ease),
+        var(--ws-motion-easing-standard, ease),
       padding-inline var(--ws-motion-duration-medium, 180ms)
-        var(--ws-motion-easing-emphasized, ease),
+        var(--ws-motion-easing-standard, ease),
       transform var(--ws-motion-duration-medium, 180ms)
         var(--ws-motion-easing-emphasized, ease);
     white-space: nowrap;
@@ -110,7 +110,6 @@ export const wsChipStyles = css`
       var(--ws-color-primary, #6c5cff) 36%,
       var(--ws-color-outline, #e2e8f0)
     );
-    transform: translateY(-1px) scale(1.02);
   }
 
   button.chip:not(:disabled):active {

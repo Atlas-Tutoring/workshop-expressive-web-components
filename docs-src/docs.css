@@ -140,6 +140,10 @@ li {
   margin: 24px 0;
 }
 
+.docs-content ws-code-block {
+  margin-block: 24px;
+}
+
 .demo-panel {
   background: linear-gradient(
     135deg,
