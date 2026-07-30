@@ -56,7 +56,17 @@ jobs:
       - name: Run release checks
         run: npm run ci
 
+      - name: Verify npm publishing token
+        shell: bash
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [[ -z "$NODE_AUTH_TOKEN" ]]; then
+            echo "The NPM_TOKEN repository secret is not configured."
+            exit 1
+          fi
+
       - name: Publish to npm
         run: npm publish --access public --provenance
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
