@@ -16,6 +16,7 @@ export const wsDatePickerStyles = css`
     gap: var(--ws-date-picker-label-gap, var(--ws-spacing-xs, 4px));
     inline-size: 100%;
     min-inline-size: 0;
+    position: relative;
     vertical-align: middle;
     -webkit-tap-highlight-color: transparent;
   }
@@ -46,10 +47,7 @@ export const wsDatePickerStyles = css`
     background: var(--ws-date-picker-background, var(--ws-color-surface, #fff));
     border: var(--ws-date-picker-border-width, 1px) solid
       var(--ws-date-picker-border-color, var(--ws-color-outline, #e2e8f0));
-    border-radius: var(
-      --ws-date-picker-radius,
-      var(--ws-shape-medium, 8px)
-    );
+    border-radius: var(--ws-date-picker-radius, var(--ws-shape-medium, 8px));
     box-sizing: border-box;
     display: flex;
     gap: var(--ws-date-picker-action-gap, var(--ws-spacing-xs, 4px));
@@ -178,6 +176,94 @@ export const wsDatePickerStyles = css`
 
   .input::-webkit-date-and-time-value {
     text-align: start;
+  }
+
+  .calendar {
+    background: var(--ws-color-surface, #fff);
+    border: 1px solid var(--ws-color-outline, #d1d5db);
+    border-radius: var(--ws-shape-large, 12px);
+    box-shadow: var(--ws-elevation-lg, 0 16px 40px rgb(15 23 42 / 18%));
+    box-sizing: border-box;
+    inline-size: min(100%, 340px);
+    inset-block-start: calc(var(--ws-date-picker-medium-height, 44px) + 26px);
+    inset-inline-start: 0;
+    padding: var(--ws-spacing-md, 12px);
+    position: absolute;
+    z-index: 30;
+  }
+
+  .calendar-header {
+    align-items: center;
+    display: grid;
+    font: var(
+      --ws-typography-title-small,
+      650 14px / 20px var(--ws-font-family, sans-serif)
+    );
+    grid-template-columns: 36px 1fr 36px;
+    margin-block-end: 8px;
+    text-align: center;
+  }
+
+  .month-button,
+  .day {
+    background: transparent;
+    border: 0;
+    color: var(--ws-color-on-surface, #0f172a);
+    cursor: pointer;
+    font: inherit;
+    outline: none;
+  }
+
+  .month-button {
+    border-radius: var(--ws-shape-small, 6px);
+    block-size: 36px;
+    font-size: 24px;
+  }
+
+  .calendar-grid {
+    display: grid;
+    gap: 3px;
+    grid-template-columns: repeat(7, 1fr);
+  }
+
+  .weekday {
+    color: var(--ws-color-on-surface-variant, #64748b);
+    font: var(
+      --ws-typography-label-small,
+      600 10px / 16px var(--ws-font-family, sans-serif)
+    );
+    padding-block: 4px;
+    text-align: center;
+  }
+
+  .day {
+    aspect-ratio: 1;
+    border-radius: var(--ws-shape-small, 6px);
+    font: var(
+      --ws-typography-body-small,
+      500 12px / 16px var(--ws-font-family, sans-serif)
+    );
+  }
+
+  .month-button:hover,
+  .month-button:focus-visible,
+  .day:hover:not(:disabled),
+  .day:focus-visible {
+    background: var(--ws-color-primary-container, #f5f3ff);
+    color: var(--ws-color-primary, #6c5cff);
+  }
+
+  .day.today {
+    box-shadow: inset 0 0 0 1px var(--ws-color-primary, #6c5cff);
+  }
+  .day[aria-selected='true'] {
+    background: var(--ws-color-primary, #6c5cff);
+    color: var(--ws-color-on-primary, #fff);
+    font-weight: 700;
+  }
+  .day:disabled {
+    cursor: not-allowed;
+    opacity: 0.3;
   }
 
   .clear-button,

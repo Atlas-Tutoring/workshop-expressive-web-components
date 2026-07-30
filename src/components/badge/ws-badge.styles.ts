@@ -22,7 +22,7 @@ export const wsBadgeStyles = css`
       --ws-badge-background,
       var(--ws-color-surface-variant, #f1f5f9)
     );
-    border-radius: var(--ws-shape-full, 999px);
+    border-radius: var(--ws-badge-radius, var(--ws-shape-small, 6px));
     box-sizing: border-box;
     color: var(--ws-badge-color, var(--ws-color-on-surface-variant, #64748b));
     display: inline-flex;
