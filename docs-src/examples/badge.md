@@ -32,3 +32,25 @@ order: 14
 | `tone`   | `'neutral' \| 'info' \| 'success' \| 'warning' \| 'error'` | `'neutral'` | Semantic color treatment. |
 
 The default slot contains the badge text. Keep it short and do not use a badge as an interactive control.
+
+## Slots
+
+| Slot    | Description                        |
+| ------- | ---------------------------------- |
+| default | Concise badge text or count value. |
+
+## Events
+
+`ws-badge` is non-interactive and does not emit component-specific events.
+
+## Accessibility notes
+
+- Use text that communicates the status without relying on color alone.
+- Keep the label concise, but do not abbreviate it so heavily that its meaning becomes unclear.
+- Use surrounding content or an appropriate live region when a changing status must be announced immediately.
+
+## Design notes
+
+- Use `success` for positive states such as “Healthy,” not as decoration.
+- Use a badge for metadata; use a button or chip when the element must be interactive.
+- Keep badge labels to a short word, phrase, or count so they remain easy to scan.

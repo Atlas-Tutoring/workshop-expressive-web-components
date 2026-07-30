@@ -214,7 +214,9 @@ const requiredBundledElements = [
   'ws-date-picker',
   'ws-docs-shell',
   'ws-drawer',
+  'ws-drawer-category',
   'ws-drawer-item',
+  'ws-dropdown',
   'ws-footer',
   'ws-hero',
   'ws-page',
@@ -222,6 +224,7 @@ const requiredBundledElements = [
   'ws-tab',
   'ws-tabs',
   'ws-text-field',
+  'ws-badge',
 ];
 
 for (const elementName of requiredBundledElements) {
