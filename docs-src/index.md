@@ -12,9 +12,9 @@ hideBreadcrumbs: true
 
 Lit implementations of the WorkShop Expressive primitives. The package includes foundation tokens, navigation surfaces, form controls, compact data controls, and documentation helpers for building expressive web interfaces.
 
-<div class="demo-panel intro-panel">
-  <h2>Install</h2>
-  <p>Install dependencies, build the component library, and import the theme plus the components you need.</p>
+## Install
+
+Install dependencies, build the component library, and import the theme plus the components you need.
 
 ```bash
 npm install
@@ -30,7 +30,7 @@ import '@workshop/expressive-web-components/components/chip/ws-chip.js';
 import '@workshop/expressive-web-components/components/switch/ws-switch.js';
 ```
 
-  <p>The library exposes icon slots and does not inject an icon font into consuming apps. Install Remix Icon when you want to use the icon classes shown in these docs.</p>
+The library exposes icon slots and does not inject an icon font into consuming apps. Install Remix Icon when you want to use the icon classes shown in these docs.
 
 ```bash
 npm install remixicon
@@ -39,8 +39,6 @@ npm install remixicon
 ```ts
 import 'remixicon/fonts/remixicon.css';
 ```
-
-</div>
 
 ## What is included
 

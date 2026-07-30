@@ -17,7 +17,7 @@ order: 2
     <ws-button variant="primary">Primary</ws-button>
     <ws-button variant="secondary">Secondary</ws-button>
     <ws-button variant="outlined">Outlined</ws-button>
-    <ws-button variant="ghost">Ghost</ws-button>
+    <ws-button variant="text">Text</ws-button>
   </div>
 
   <h3>Sizes by variant</h3>
@@ -28,7 +28,7 @@ order: 2
         <ws-button size="large" variant="primary">Primary</ws-button>
         <ws-button size="large" variant="secondary">Secondary</ws-button>
         <ws-button size="large" variant="outlined">Outlined</ws-button>
-        <ws-button size="large" variant="ghost">Ghost</ws-button>
+        <ws-button size="large" variant="text">Text</ws-button>
       </div>
     </section>
     <section>
@@ -37,7 +37,7 @@ order: 2
         <ws-button size="medium" variant="primary">Primary</ws-button>
         <ws-button size="medium" variant="secondary">Secondary</ws-button>
         <ws-button size="medium" variant="outlined">Outlined</ws-button>
-        <ws-button size="medium" variant="ghost">Ghost</ws-button>
+        <ws-button size="medium" variant="text">Text</ws-button>
       </div>
     </section>
     <section>
@@ -46,7 +46,7 @@ order: 2
         <ws-button size="small" variant="primary">Primary</ws-button>
         <ws-button size="small" variant="secondary">Secondary</ws-button>
         <ws-button size="small" variant="outlined">Outlined</ws-button>
-        <ws-button size="small" variant="ghost">Ghost</ws-button>
+        <ws-button size="small" variant="text">Text</ws-button>
       </div>
     </section>
   </div>
@@ -71,22 +71,22 @@ order: 2
 <ws-button variant="primary">Primary</ws-button>
 <ws-button variant="secondary">Secondary</ws-button>
 <ws-button variant="outlined">Outlined</ws-button>
-<ws-button variant="ghost">Ghost</ws-button>
+<ws-button variant="text">Text</ws-button>
 
 <ws-button size="large" variant="primary">Primary</ws-button>
 <ws-button size="large" variant="secondary">Secondary</ws-button>
 <ws-button size="large" variant="outlined">Outlined</ws-button>
-<ws-button size="large" variant="ghost">Ghost</ws-button>
+<ws-button size="large" variant="text">Text</ws-button>
 
 <ws-button size="medium" variant="primary">Primary</ws-button>
 <ws-button size="medium" variant="secondary">Secondary</ws-button>
 <ws-button size="medium" variant="outlined">Outlined</ws-button>
-<ws-button size="medium" variant="ghost">Ghost</ws-button>
+<ws-button size="medium" variant="text">Text</ws-button>
 
 <ws-button size="small" variant="primary">Primary</ws-button>
 <ws-button size="small" variant="secondary">Secondary</ws-button>
 <ws-button size="small" variant="outlined">Outlined</ws-button>
-<ws-button size="small" variant="ghost">Ghost</ws-button>
+<ws-button size="small" variant="text">Text</ws-button>
 
 <ws-button variant="primary" disabled>Disabled</ws-button>
 <ws-button variant="secondary" loading aria-label="Loading">Loading</ws-button>
@@ -101,13 +101,13 @@ order: 2
 
 ## API
 
-| Property     | Type                                                | Default     | Description                                                                |
-| ------------ | --------------------------------------------------- | ----------- | -------------------------------------------------------------------------- |
-| `variant`    | `'primary' \| 'secondary' \| 'outlined' \| 'ghost'` | `'primary'` | Sets the visual emphasis.                                                  |
-| `size`       | `'small' \| 'medium' \| 'large'`                    | `'medium'`  | Controls height and horizontal padding.                                    |
-| `disabled`   | `boolean`                                           | `false`     | Prevents interaction and removes the button from normal action flow.       |
-| `loading`    | `boolean`                                           | `false`     | Shows the loading treatment while preserving the label for assistive tech. |
-| `aria-label` | `string`                                            | —           | Provides an accessible name when icon-only or ambiguous.                   |
+| Property     | Type                                               | Default     | Description                                                                |
+| ------------ | -------------------------------------------------- | ----------- | -------------------------------------------------------------------------- |
+| `variant`    | `'primary' \| 'secondary' \| 'outlined' \| 'text'` | `'primary'` | Sets the visual emphasis.                                                  |
+| `size`       | `'small' \| 'medium' \| 'large'`                   | `'medium'`  | Controls height and horizontal padding.                                    |
+| `disabled`   | `boolean`                                          | `false`     | Prevents interaction and removes the button from normal action flow.       |
+| `loading`    | `boolean`                                          | `false`     | Shows the loading treatment while preserving the label for assistive tech. |
+| `aria-label` | `string`                                           | —           | Provides an accessible name when icon-only or ambiguous.                   |
 
 ## Slots
 
@@ -131,4 +131,4 @@ order: 2
 ## Design notes
 
 - Use `primary` for the single highest-priority action in a region.
-- Use `outlined` or `ghost` when the action should not compete with the primary path.
+- Use `outlined` or `text` when the action should not compete with the primary path.

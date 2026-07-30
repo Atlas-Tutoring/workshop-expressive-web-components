@@ -336,14 +336,6 @@ th {
   line-height: 1.05;
 }
 
-.intro-panel h2:first-child {
-  margin-top: 0;
-}
-
-.intro-panel ws-code-block + ws-code-block {
-  margin-top: 16px;
-}
-
 .examples {
   display: grid;
   grid-template-columns: minmax(180px, 240px) minmax(0, 1fr) minmax(

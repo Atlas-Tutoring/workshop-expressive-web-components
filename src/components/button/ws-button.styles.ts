@@ -119,13 +119,13 @@ export const wsButtonStyles = css`
     border-color: var(--ws-color-primary, #6c5cff);
   }
 
-  :host([variant='ghost']) .button {
+  :host([variant='text']) .button {
     --ws-button-focus-color: var(--ws-color-primary, #6c5cff);
     background: transparent;
     color: var(--ws-color-primary, #6c5cff);
   }
 
-  :host([variant='ghost']) .button:not(:disabled):hover {
+  :host([variant='text']) .button:not(:disabled):hover {
     background: var(--ws-color-primary-container, #f5f3ff);
   }
 

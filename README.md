@@ -47,7 +47,7 @@ Then use the elements in HTML, Lit templates, React JSX, Vue templates, or any f
 <ws-button variant="primary" size="medium">Continue</ws-button>
 <ws-button variant="secondary" size="large">Save changes</ws-button>
 <ws-button variant="outlined" size="small">Cancel</ws-button>
-<ws-button variant="ghost">Learn more</ws-button>
+<ws-button variant="text">Learn more</ws-button>
 
 <ws-text-field
   label="Project name"

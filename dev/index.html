@@ -168,7 +168,7 @@
           <ws-button variant="primary" size="medium">Continue</ws-button>
           <ws-button variant="secondary" size="medium">Save changes</ws-button>
           <ws-button variant="outlined" size="medium">Cancel</ws-button>
-          <ws-button variant="ghost" size="medium">Learn more</ws-button>
+          <ws-button variant="text" size="medium">Learn more</ws-button>
         </div>
       </section>
 
@@ -192,7 +192,7 @@
             <i slot="icon" class="ri-edit-line"></i>
             Edit
           </ws-button>
-          <ws-button variant="ghost" aria-label="Favorite">
+          <ws-button variant="text" aria-label="Favorite">
             <i slot="icon" class="ri-heart-line"></i>
           </ws-button>
         </div>
@@ -204,8 +204,8 @@
           <ws-button loading>Saving</ws-button>
           <ws-button variant="secondary" loading>Syncing</ws-button>
           <ws-button variant="outlined" disabled>Disabled</ws-button>
-          <ws-button variant="ghost" size="large" disabled
-            >Disabled ghost</ws-button
+          <ws-button variant="text" size="large" disabled
+            >Disabled text</ws-button
           >
         </div>
       </section>
@@ -236,7 +236,11 @@
             value="Text field"
             clearable
           >
-            <i slot="leading-icon" class="ri-search-line" aria-hidden="true"></i>
+            <i
+              slot="leading-icon"
+              class="ri-search-line"
+              aria-hidden="true"
+            ></i>
           </ws-text-field>
           <ws-text-field
             type="search"
@@ -280,7 +284,11 @@
           <ws-chip variant="input" value="kotlin" remove-label="Remove Kotlin"
             >Kotlin</ws-chip
           >
-          <ws-chip variant="input" value="cloudflare" remove-label="Remove Cloudflare">
+          <ws-chip
+            variant="input"
+            value="cloudflare"
+            remove-label="Remove Cloudflare"
+          >
             <i slot="leading-icon" class="ri-cloud-line" aria-hidden="true"></i>
             Cloudflare
           </ws-chip>
