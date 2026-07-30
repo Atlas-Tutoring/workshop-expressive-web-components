@@ -27,6 +27,8 @@ const contentSelector = '.docs-content';
 
 let activeTocObserver: IntersectionObserver | null = null;
 let activeController: AbortController | null = null;
+let pendingNavigationTimer = 0;
+let pendingNavigationUrl = '';
 let currentPageUrl = new URL(window.location.href);
 
 const toMilliseconds = (value: string) => {
@@ -115,10 +117,10 @@ const updateSiteTabs = (url: URL) => {
     const isHomeTab = tab.textContent?.trim() === 'Home';
     const selected = Boolean(
       tabUrl &&
-        (isHomeTab
-          ? sameDocument(tabUrl, url)
-          : tabUrl.pathname === url.pathname ||
-            url.pathname.startsWith(tabUrl.pathname))
+      (isHomeTab
+        ? sameDocument(tabUrl, url)
+        : tabUrl.pathname === url.pathname ||
+          url.pathname.startsWith(tabUrl.pathname))
     );
 
     tab.toggleAttribute('selected', selected);
@@ -315,7 +317,12 @@ const enhanceDocsNavigation = () => {
 
     const tabs = element.closest('ws-tabs');
     const delay = tabs ? getTabsMotionDuration(tabs) : 0;
-    window.setTimeout(async () => {
+    if (pendingNavigationUrl === url.href) return;
+
+    window.clearTimeout(pendingNavigationTimer);
+    pendingNavigationUrl = url.href;
+    pendingNavigationTimer = window.setTimeout(async () => {
+      pendingNavigationUrl = '';
       const handled = await navigateTo(url);
       if (!handled) window.location.href = url.href;
     }, delay);
