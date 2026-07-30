@@ -3,7 +3,7 @@ layout: example.11ty.cjs
 title: Workshop Expressive Web Components ⌲ Examples ⌲ Dropdown
 tags: example
 name: Dropdown
-description: Native, accessible ws-dropdown selection controls
+description: Expressive, accessible ws-dropdown selection controls
 order: 13
 ---
 
@@ -40,7 +40,7 @@ order: 13
 | `disabled` | `boolean`                        | `false`    | Disables selection.        |
 | `required` | `boolean`                        | `false`    | Requires a value in forms. |
 
-The default slot accepts native `option` elements. The component emits a composed `change` event when the selection changes.
+The default slot accepts `option` elements as a familiar data source. The component renders them in a Workshop Expressive listbox and emits a composed `change` event when the selection changes.
 
 ## Slots
 

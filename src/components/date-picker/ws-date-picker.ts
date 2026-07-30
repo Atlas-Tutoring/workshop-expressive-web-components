@@ -7,7 +7,7 @@ import {wsDatePickerStyles} from './ws-date-picker.styles.js';
 export type WsDatePickerSize = 'small' | 'medium' | 'large';
 
 /**
- * Workshop form-associated date picker backed by the platform calendar.
+ * Workshop form-associated date picker with an expressive calendar surface.
  *
  * @fires input - Dispatched when the selected date changes while editing.
  * @fires change - Dispatched when the selected date is committed.
@@ -93,6 +93,12 @@ export class WsDatePicker extends LitElement {
   @state()
   private formDisabled = false;
 
+  @state()
+  private calendarOpen = false;
+
+  @state()
+  private visibleMonth = this.startOfMonth(new Date());
+
   private readonly internals = this.attachInternals();
   private readonly fieldId = `ws-date-picker-${WsDatePicker.nextId++}`;
   private readonly helperId = `${this.fieldId}-helper`;
@@ -110,6 +116,14 @@ export class WsDatePicker extends LitElement {
       this.defaultValue = this.getAttribute('value') ?? this.value;
       this.capturedDefaultValue = true;
     }
+    const selectedDate = this.parseDate(this.value);
+    if (selectedDate) this.visibleMonth = this.startOfMonth(selectedDate);
+    document.addEventListener('pointerdown', this.handleDocumentPointerDown);
+  }
+
+  override disconnectedCallback() {
+    document.removeEventListener('pointerdown', this.handleDocumentPointerDown);
+    super.disconnectedCallback();
   }
 
   protected override firstUpdated() {
@@ -156,9 +170,9 @@ export class WsDatePicker extends LitElement {
           class="input"
           part="input"
           .value=${this.value}
-          type="date"
-          min=${ifDefined(this.min)}
-          max=${ifDefined(this.max)}
+          type="text"
+          inputmode="numeric"
+          placeholder="YYYY-MM-DD"
           ?required=${this.required}
           ?disabled=${isDisabled}
           ?readonly=${this.readOnly}
@@ -181,10 +195,13 @@ export class WsDatePicker extends LitElement {
           @click=${this.handlePickerClick}
         >
           <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M7 2h2v2h6V2h2v2h1a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2Zm11 8H6v9a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-9ZM7 6a1 1 0 0 0-1 1v1h12V7a1 1 0 0 0-1-1H7Zm1 6h3v3H8v-3Z"></path>
+            <path
+              d="M7 2h2v2h6V2h2v2h1a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V2Zm11 8H6v9a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-9ZM7 6a1 1 0 0 0-1 1v1h12V7a1 1 0 0 0-1-1H7Zm1 6h3v3H8v-3Z"
+            ></path>
           </svg>
         </button>
       </div>
+      ${this.calendarOpen ? this.renderCalendar() : nothing}
       ${supportingText
         ? html`<div
             id=${supportingId!}
@@ -227,19 +244,13 @@ export class WsDatePicker extends LitElement {
     this.inputElement?.focus(options);
   }
 
-  /** Opens the platform date picker when supported. */
+  /** Opens the Workshop Expressive calendar. */
   showPicker() {
     if (this.isEffectivelyDisabled || this.readOnly) return;
-
-    const input = this.inputElement;
-    if (!input) return;
-
-    input.focus();
-    try {
-      input.showPicker();
-    } catch {
-      input.click();
-    }
+    const selectedDate = this.parseDate(this.value);
+    if (selectedDate) this.visibleMonth = this.startOfMonth(selectedDate);
+    this.calendarOpen = true;
+    this.inputElement?.focus();
   }
 
   /** Applies a custom validity message. Pass an empty string to clear it. */
@@ -298,10 +309,76 @@ export class WsDatePicker extends LitElement {
         @click=${this.clearValue}
       >
         <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M7.4 6 12 10.6 16.6 6 18 7.4 13.4 12l4.6 4.6-1.4 1.4-4.6-4.6L7.4 18 6 16.6l4.6-4.6L6 7.4 7.4 6Z"></path>
+          <path
+            d="M7.4 6 12 10.6 16.6 6 18 7.4 13.4 12l4.6 4.6-1.4 1.4-4.6-4.6L7.4 18 6 16.6l4.6-4.6L6 7.4 7.4 6Z"
+          ></path>
         </svg>
       </button>
     `;
+  }
+
+  private renderCalendar() {
+    const year = this.visibleMonth.getFullYear();
+    const month = this.visibleMonth.getMonth();
+    const firstWeekday = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const days = Array.from({length: firstWeekday + daysInMonth}, (_, index) =>
+      index < firstWeekday ? 0 : index - firstWeekday + 1
+    );
+    const monthLabel = new Intl.DateTimeFormat(undefined, {
+      month: 'long',
+      year: 'numeric',
+    }).format(this.visibleMonth);
+    return html` <section
+      class="calendar"
+      role="dialog"
+      aria-label="Choose date"
+    >
+      <header class="calendar-header">
+        <button
+          class="month-button"
+          type="button"
+          aria-label="Previous month"
+          @click=${() => this.changeMonth(-1)}
+        >
+          ‹
+        </button>
+        <strong aria-live="polite">${monthLabel}</strong>
+        <button
+          class="month-button"
+          type="button"
+          aria-label="Next month"
+          @click=${() => this.changeMonth(1)}
+        >
+          ›
+        </button>
+      </header>
+      <div class="calendar-grid" role="grid">
+        ${['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(
+          (day) => html`<span class="weekday" role="columnheader">${day}</span>`
+        )}
+        ${days.map((day) => {
+          if (!day) return html`<span></span>`;
+          const date = new Date(year, month, day);
+          const value = this.formatDate(date);
+          const unavailable =
+            (this.min ? value < this.min : false) ||
+            (this.max ? value > this.max : false);
+          const isSelected = value === this.value;
+          const isToday = value === this.formatDate(new Date());
+          return html`<button
+            class="day ${isToday ? 'today' : ''}"
+            type="button"
+            role="gridcell"
+            ?disabled=${unavailable}
+            aria-selected=${isSelected ? 'true' : 'false'}
+            @click=${() => this.selectDate(value)}
+          >
+            ${day}
+          </button>`;
+        })}
+      </div>
+    </section>`;
   }
 
   private handleInput(event: InputEvent) {
@@ -337,7 +414,58 @@ export class WsDatePicker extends LitElement {
   }
 
   private handlePickerClick() {
-    this.showPicker();
+    if (this.calendarOpen) this.calendarOpen = false;
+    else this.showPicker();
+  }
+
+  private changeMonth(offset: number) {
+    this.visibleMonth = new Date(
+      this.visibleMonth.getFullYear(),
+      this.visibleMonth.getMonth() + offset,
+      1
+    );
+  }
+
+  private selectDate(value: string) {
+    this.value = value;
+    this.calendarOpen = false;
+    this.touched = true;
+    this.syncFormAndValidity();
+    this.dispatchEvent(
+      new InputEvent('input', {
+        bubbles: true,
+        composed: true,
+        inputType: 'insertReplacementText',
+      })
+    );
+    this.dispatchEvent(new Event('change', {bubbles: true, composed: true}));
+    this.updateComplete.then(() => this.focus());
+  }
+
+  private handleDocumentPointerDown = (event: PointerEvent) => {
+    if (!event.composedPath().includes(this)) this.calendarOpen = false;
+  };
+
+  private parseDate(value: string): Date | null {
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+    if (!match) return null;
+    const date = new Date(
+      Number(match[1]),
+      Number(match[2]) - 1,
+      Number(match[3])
+    );
+    return this.formatDate(date) === value ? date : null;
+  }
+
+  private formatDate(date: Date): string {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+      2,
+      '0'
+    )}-${String(date.getDate()).padStart(2, '0')}`;
+  }
+
+  private startOfMonth(date: Date): Date {
+    return new Date(date.getFullYear(), date.getMonth(), 1);
   }
 
   private clearValue() {
@@ -382,21 +510,12 @@ export class WsDatePicker extends LitElement {
     input.required = this.required;
     input.disabled = this.isEffectivelyDisabled;
     input.readOnly = this.readOnly;
-    this.syncOptionalInputAttribute(input, 'min', this.min);
-    this.syncOptionalInputAttribute(input, 'max', this.max);
-  }
-
-  private syncOptionalInputAttribute(
-    input: HTMLInputElement,
-    name: string,
-    value: string | undefined
-  ) {
-    if (value === undefined) {
-      input.removeAttribute(name);
-      return;
-    }
-
-    input.setAttribute(name, value);
+    const parsed = this.value ? this.parseDate(this.value) : null;
+    const invalidFormat = Boolean(this.value && !parsed);
+    input.setCustomValidity(
+      this.customValidationMessage ||
+        (invalidFormat ? 'Enter a date in YYYY-MM-DD format.' : '')
+    );
   }
 
   private toValidityFlags(validity: ValidityState): ValidityStateFlags {
