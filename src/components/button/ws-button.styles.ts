@@ -40,7 +40,8 @@ export const wsButtonStyles = css`
     outline: none;
     position: relative;
     text-decoration: none;
-    transform: translateY(0) scale(1);
+    transform: scale(1);
+    transform-origin: center;
     transition: background-color var(--ws-motion-duration-medium, 180ms)
         var(--ws-motion-easing-standard, ease),
       border-color var(--ws-motion-duration-medium, 180ms)
@@ -51,8 +52,8 @@ export const wsButtonStyles = css`
         var(--ws-motion-easing-standard, ease),
       opacity var(--ws-motion-duration-medium, 180ms)
         var(--ws-motion-easing-standard, ease),
-      transform var(--ws-motion-duration-fast, 120ms)
-        var(--ws-motion-easing-emphasized, ease);
+      transform var(--ws-button-press-duration, 140ms)
+        var(--ws-motion-easing-standard, ease);
     user-select: none;
     inline-size: 100%;
   }
@@ -69,8 +70,7 @@ export const wsButtonStyles = css`
   }
 
   .button:not(:disabled):active {
-    transform: translateY(var(--ws-button-pressed-offset, 1px))
-      scale(var(--ws-button-pressed-scale, 0.98));
+    transform: scale(var(--ws-button-pressed-scale, 0.985));
   }
 
   :host([variant='primary']) .button,
