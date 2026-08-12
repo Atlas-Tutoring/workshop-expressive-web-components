@@ -1,0 +1,87 @@
+:root {
+  --ws-purple: #7c5cff;
+  --ws-purple-dark: #6547f5;
+  --ws-blue: #2f80ff;
+  --ws-green: #19c98b;
+  --ws-orange: #ffa62b;
+  --ws-red: #ff4d5e;
+
+  --ws-color-background: #f8f9fc;
+  --ws-color-surface: #ffffff;
+  --ws-color-surface-variant: #f0f2f7;
+  --ws-color-primary: #7c5cff;
+  --ws-color-secondary: #2f80ff;
+  --ws-color-tertiary: #19c98b;
+  --ws-color-primary-container: #f0ecff;
+  --ws-color-secondary-container: #f0f2f7;
+  --ws-color-outline: #dde1ea;
+  --ws-color-outline-variant: #e3e6ed;
+  --ws-color-error: #ff4d5e;
+  --ws-color-on-primary: #f7f7fa;
+  --ws-color-on-background: #17171c;
+  --ws-color-on-surface: #17171c;
+  --ws-color-on-surface-variant: #626875;
+  --ws-color-on-secondary-container: #17171c;
+}
+
+:root[data-ws-theme='dark'] {
+  --ws-color-background: #000000;
+  --ws-color-surface: #0a0a0c;
+  --ws-color-surface-variant: #151519;
+  --ws-color-primary-container: #21184a;
+  --ws-color-secondary-container: #151519;
+  --ws-color-outline: #29292f;
+  --ws-color-outline-variant: #242429;
+  --ws-color-on-primary: #f7f7fa;
+  --ws-color-on-background: #f7f7fa;
+  --ws-color-on-surface: #f7f7fa;
+  --ws-color-on-surface-variant: #a4a4af;
+  --ws-color-on-secondary-container: #f7f7fa;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ws-theme='light']) {
+    --ws-color-background: #000000;
+    --ws-color-surface: #0a0a0c;
+    --ws-color-surface-variant: #151519;
+    --ws-color-primary-container: #21184a;
+    --ws-color-secondary-container: #151519;
+    --ws-color-outline: #29292f;
+    --ws-color-outline-variant: #242429;
+    --ws-color-on-primary: #f7f7fa;
+    --ws-color-on-background: #f7f7fa;
+    --ws-color-on-surface: #f7f7fa;
+    --ws-color-on-surface-variant: #a4a4af;
+    --ws-color-on-secondary-container: #f7f7fa;
+  }
+}
+
+:root[data-ws-theme='dark'] .docs-content {
+  --ws-color-code-background: #08080a;
+  --ws-color-code-on-background: #f7f7fa;
+  --ws-color-code-border: #242429;
+  --ws-color-code-token-comment: #8f8f9b;
+  --ws-color-code-token-keyword: #c6b8ff;
+  --ws-color-code-token-string: #72e0b1;
+  --ws-color-code-token-number: #ffbd73;
+  --ws-color-code-token-tag: #82baff;
+  --ws-color-code-token-attr: #ff9daa;
+  --ws-color-code-token-punctuation: #b8b8c2;
+  --ws-color-code-token-operator: #e7a8ff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ws-theme='light']) .docs-content {
+    --ws-color-code-background: #08080a;
+    --ws-color-code-on-background: #f7f7fa;
+    --ws-color-code-border: #242429;
+    --ws-color-code-token-comment: #8f8f9b;
+    --ws-color-code-token-keyword: #c6b8ff;
+    --ws-color-code-token-string: #72e0b1;
+    --ws-color-code-token-number: #ffbd73;
+    --ws-color-code-token-tag: #82baff;
+    --ws-color-code-token-attr: #ff9daa;
+    --ws-color-code-token-punctuation: #b8b8c2;
+    --ws-color-code-token-operator: #e7a8ff;
+  }
+}
