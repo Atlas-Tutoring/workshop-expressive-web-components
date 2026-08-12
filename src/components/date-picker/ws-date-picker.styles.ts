@@ -179,6 +179,8 @@ export const wsDatePickerStyles = css`
   }
 
   .calendar {
+    animation: ws-date-picker-enter var(--ws-motion-duration-medium, 180ms)
+      var(--ws-motion-easing-standard, ease) both;
     background: var(--ws-color-surface, #fff);
     border: 1px solid var(--ws-color-outline, #d1d5db);
     border-radius: var(--ws-shape-large, 12px);
@@ -189,7 +191,20 @@ export const wsDatePickerStyles = css`
     inset-inline-start: 0;
     padding: var(--ws-spacing-md, 12px);
     position: absolute;
+    transform-origin: top left;
     z-index: 30;
+  }
+
+  @keyframes ws-date-picker-enter {
+    from {
+      opacity: 0;
+      transform: translateY(-4px) scale(0.985);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   }
 
   .calendar-header {
@@ -204,7 +219,21 @@ export const wsDatePickerStyles = css`
     text-align: center;
   }
 
-  .month-button,
+  .month-button {
+    --ws-button-min-width: 36px;
+    --ws-button-small-height: 36px;
+    --ws-button-small-padding-inline: 0;
+    --ws-button-small-icon-size: 18px;
+    inline-size: 36px;
+  }
+
+  .month-button svg {
+    block-size: 18px;
+    display: block;
+    fill: currentcolor;
+    inline-size: 18px;
+  }
+
   .day {
     background: transparent;
     border: 0;
@@ -212,12 +241,6 @@ export const wsDatePickerStyles = css`
     cursor: pointer;
     font: inherit;
     outline: none;
-  }
-
-  .month-button {
-    border-radius: var(--ws-shape-small, 6px);
-    block-size: 36px;
-    font-size: 24px;
   }
 
   .calendar-grid {
@@ -245,8 +268,6 @@ export const wsDatePickerStyles = css`
     );
   }
 
-  .month-button:hover,
-  .month-button:focus-visible,
   .day:hover:not(:disabled),
   .day:focus-visible {
     background: var(--ws-color-primary-container, #f5f3ff);
@@ -346,6 +367,10 @@ export const wsDatePickerStyles = css`
     .clear-button,
     .picker-button {
       transition-duration: 0.01ms;
+    }
+
+    .calendar {
+      animation-duration: 0.01ms;
     }
   }
 `;
