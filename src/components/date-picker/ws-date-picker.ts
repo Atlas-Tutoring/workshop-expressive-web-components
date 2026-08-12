@@ -107,6 +107,7 @@ export class WsDatePicker extends LitElement {
   private defaultValue = '';
   private capturedDefaultValue = false;
   private customValidationMessage = '';
+  private monthTransitioning = false;
 
   private static nextId = 1;
 
@@ -323,9 +324,10 @@ export class WsDatePicker extends LitElement {
     const month = this.visibleMonth.getMonth();
     const firstWeekday = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const days = Array.from({length: firstWeekday + daysInMonth}, (_, index) =>
-      index < firstWeekday ? 0 : index - firstWeekday + 1
-    );
+    const days = Array.from({length: 42}, (_, index) => {
+      const day = index - firstWeekday + 1;
+      return day < 1 || day > daysInMonth ? 0 : day;
+    });
     const monthLabel = new Intl.DateTimeFormat(undefined, {
       month: 'long',
       year: 'numeric',
@@ -426,12 +428,83 @@ export class WsDatePicker extends LitElement {
     else this.showPicker();
   }
 
-  private changeMonth(offset: number) {
-    this.visibleMonth = new Date(
-      this.visibleMonth.getFullYear(),
-      this.visibleMonth.getMonth() + offset,
-      1
-    );
+  private async changeMonth(offset: number) {
+    if (this.monthTransitioning) return;
+
+    this.monthTransitioning = true;
+    const direction = offset > 0 ? 1 : -1;
+    const reducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+
+    try {
+      const currentGrid = this.shadowRoot?.querySelector<HTMLElement>(
+        '.calendar-grid'
+      );
+      const currentLabel = this.shadowRoot?.querySelector<HTMLElement>(
+        '.calendar-header strong'
+      );
+
+      if (!reducedMotion) {
+        const exitAnimations = [currentGrid, currentLabel]
+          .filter((element): element is HTMLElement => Boolean(element))
+          .map((element) =>
+            element.animate(
+              [
+                {opacity: 1, transform: 'translateX(0)'},
+                {
+                  opacity: 0,
+                  transform: `translateX(${direction * -14}px)`,
+                },
+              ],
+              {
+                duration: 100,
+                easing: 'cubic-bezier(0.4, 0, 1, 1)',
+                fill: 'forwards',
+              }
+            ).finished.catch(() => undefined)
+          );
+
+        await Promise.all(exitAnimations);
+      }
+
+      this.visibleMonth = new Date(
+        this.visibleMonth.getFullYear(),
+        this.visibleMonth.getMonth() + offset,
+        1
+      );
+      await this.updateComplete;
+
+      if (!reducedMotion) {
+        const nextGrid = this.shadowRoot?.querySelector<HTMLElement>(
+          '.calendar-grid'
+        );
+        const nextLabel = this.shadowRoot?.querySelector<HTMLElement>(
+          '.calendar-header strong'
+        );
+
+        [nextGrid, nextLabel]
+          .filter((element): element is HTMLElement => Boolean(element))
+          .forEach((element) => {
+            element.animate(
+              [
+                {
+                  opacity: 0,
+                  transform: `translateX(${direction * 18}px)`,
+                },
+                {opacity: 1, transform: 'translateX(0)'},
+              ],
+              {
+                duration: 190,
+                easing: 'cubic-bezier(0.2, 0, 0, 1)',
+                fill: 'both',
+              }
+            );
+          });
+      }
+    } finally {
+      this.monthTransitioning = false;
+    }
   }
 
   private selectDate(value: string) {
