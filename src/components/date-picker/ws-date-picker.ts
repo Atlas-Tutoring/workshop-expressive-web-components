@@ -2,6 +2,7 @@ import {LitElement, html, nothing} from 'lit';
 import {customElement, property, state} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
 
+import '../button/ws-button.js';
 import {wsDatePickerStyles} from './ws-date-picker.styles.js';
 
 export type WsDatePickerSize = 'small' | 'medium' | 'large';
@@ -335,23 +336,9 @@ export class WsDatePicker extends LitElement {
       aria-label="Choose date"
     >
       <header class="calendar-header">
-        <button
-          class="month-button"
-          type="button"
-          aria-label="Previous month"
-          @click=${() => this.changeMonth(-1)}
-        >
-          ‹
-        </button>
+        ${this.renderMonthButton('previous')}
         <strong aria-live="polite">${monthLabel}</strong>
-        <button
-          class="month-button"
-          type="button"
-          aria-label="Next month"
-          @click=${() => this.changeMonth(1)}
-        >
-          ›
-        </button>
+        ${this.renderMonthButton('next')}
       </header>
       <div class="calendar-grid" role="grid">
         ${['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(
@@ -379,6 +366,27 @@ export class WsDatePicker extends LitElement {
         })}
       </div>
     </section>`;
+  }
+
+  private renderMonthButton(direction: 'previous' | 'next') {
+    const isPrevious = direction === 'previous';
+    return html`
+      <ws-button
+        class="month-button"
+        variant="text"
+        size="small"
+        aria-label=${isPrevious ? 'Previous month' : 'Next month'}
+        @click=${() => this.changeMonth(isPrevious ? -1 : 1)}
+      >
+        <svg slot="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d=${isPrevious
+              ? 'M14.7 6.3 9 12l5.7 5.7-1.4 1.4L6.2 12l7.1-7.1 1.4 1.4Z'
+              : 'm9.3 17.7 5.7-5.7-5.7-5.7 1.4-1.4 7.1 7.1-7.1 7.1-1.4-1.4Z'}
+          ></path>
+        </svg>
+      </ws-button>
+    `;
   }
 
   private handleInput(event: InputEvent) {
@@ -484,48 +492,34 @@ export class WsDatePicker extends LitElement {
   }
 
   private syncFormAndValidity() {
-    const input = this.inputElement;
-    this.internals.setFormValue(this.isEffectivelyDisabled ? null : this.value);
-
-    if (!input) return;
-
-    this.syncNativeInput(input);
-    input.setCustomValidity(this.customValidationMessage);
-
-    if (this.invalid) {
-      this.internals.setValidity(
-        {customError: true},
-        this.errorText || this.customValidationMessage || 'Invalid date.',
-        input
-      );
-      return;
-    }
-
-    const flags = this.toValidityFlags(input.validity);
-    this.internals.setValidity(flags, input.validationMessage, input);
-  }
-
-  private syncNativeInput(input: HTMLInputElement) {
-    input.value = this.value;
-    input.required = this.required;
-    input.disabled = this.isEffectivelyDisabled;
-    input.readOnly = this.readOnly;
-    const parsed = this.value ? this.parseDate(this.value) : null;
-    const invalidFormat = Boolean(this.value && !parsed);
-    input.setCustomValidity(
-      this.customValidationMessage ||
-        (invalidFormat ? 'Enter a date in YYYY-MM-DD format.' : '')
-    );
-  }
-
-  private toValidityFlags(validity: ValidityState): ValidityStateFlags {
+    const isDisabled = this.isEffectivelyDisabled;
+    const parsedValue = this.parseDate(this.value);
+    const valueMissing = this.required && !this.value;
+    const typeMismatch = Boolean(this.value) && !parsedValue;
+    const rangeUnderflow = Boolean(this.value && this.min && this.value < this.min);
+    const rangeOverflow = Boolean(this.value && this.max && this.value > this.max);
     const flags: ValidityStateFlags = {};
-    if (validity.badInput) flags.badInput = true;
-    if (validity.customError) flags.customError = true;
-    if (validity.rangeOverflow) flags.rangeOverflow = true;
-    if (validity.rangeUnderflow) flags.rangeUnderflow = true;
-    if (validity.valueMissing) flags.valueMissing = true;
-    return flags;
+
+    if (valueMissing) flags.valueMissing = true;
+    if (typeMismatch) flags.typeMismatch = true;
+    if (rangeUnderflow) flags.rangeUnderflow = true;
+    if (rangeOverflow) flags.rangeOverflow = true;
+    if (this.customValidationMessage) flags.customError = true;
+
+    const message = this.customValidationMessage
+      ? this.customValidationMessage
+      : valueMissing
+        ? 'Please select a date.'
+        : typeMismatch
+          ? 'Enter a valid date in YYYY-MM-DD format.'
+          : rangeUnderflow
+            ? `Date must be on or after ${this.min}.`
+            : rangeOverflow
+              ? `Date must be on or before ${this.max}.`
+              : '';
+
+    this.internals.setFormValue(isDisabled ? null : this.value || null);
+    this.internals.setValidity(flags, message, this.inputElement ?? undefined);
   }
 }
 
