@@ -27,20 +27,20 @@ export const wsCodeBlockStyles = css`
 
   :host-context(:root[data-ws-theme='dark']),
   :host-context([data-ws-theme='dark']) {
-    --ws-color-code-background: #0f172a;
-    --ws-color-code-on-background: #f8fafc;
-    --ws-color-code-border: rgb(255 255 255 / 12%);
-    --ws-color-code-muted: rgb(255 255 255 / 68%);
-    --ws-color-code-button: rgb(255 255 255 / 10%);
-    --ws-color-code-button-hover: rgb(255 255 255 / 16%);
-    --ws-color-code-token-comment: #94a3b8;
-    --ws-color-code-token-keyword: #c4b5fd;
-    --ws-color-code-token-string: #86efac;
-    --ws-color-code-token-number: #fdba74;
-    --ws-color-code-token-tag: #93c5fd;
-    --ws-color-code-token-attr: #fda4af;
-    --ws-color-code-token-punctuation: #cbd5e1;
-    --ws-color-code-token-operator: #f0abfc;
+    --ws-color-code-background: #030304;
+    --ws-color-code-on-background: #f7f7fa;
+    --ws-color-code-border: #1c1c20;
+    --ws-color-code-muted: #8f8f9b;
+    --ws-color-code-button: #101014;
+    --ws-color-code-button-hover: #18181d;
+    --ws-color-code-token-comment: #8f8f9b;
+    --ws-color-code-token-keyword: #c6b8ff;
+    --ws-color-code-token-string: #72e0b1;
+    --ws-color-code-token-number: #ffbd73;
+    --ws-color-code-token-tag: #82baff;
+    --ws-color-code-token-attr: #ff9daa;
+    --ws-color-code-token-punctuation: #b8b8c2;
+    --ws-color-code-token-operator: #e7a8ff;
   }
 
   :host([hidden]) {
@@ -139,6 +139,6 @@ export const wsCodeBlockStyles = css`
   }
 
   .copy-button:active {
-    transform: scale(0.96);
+    transform: scale(0.985);
   }
 `;
