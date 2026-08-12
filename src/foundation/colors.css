@@ -1,30 +1,30 @@
 :root {
-  --ws-purple: #6c5cff;
-  --ws-purple-dark: #4f46e5;
-  --ws-blue: #3b82f6;
-  --ws-green: #10b981;
-  --ws-orange: #f59e0b;
-  --ws-red: #ef4444;
+  --ws-purple: #7c5cff;
+  --ws-purple-dark: #6547f5;
+  --ws-blue: #2f80ff;
+  --ws-green: #19c98b;
+  --ws-orange: #ffa62b;
+  --ws-red: #ff4d5e;
 
-  --ws-color-background: #f8fafc;
+  --ws-color-background: #f8f9fc;
   --ws-color-surface: #ffffff;
-  --ws-color-surface-variant: #f1f5f9;
+  --ws-color-surface-variant: #f0f2f7;
 
-  --ws-color-primary: #6c5cff;
-  --ws-color-secondary: #3b82f6;
-  --ws-color-tertiary: #10b981;
+  --ws-color-primary: #7c5cff;
+  --ws-color-secondary: #2f80ff;
+  --ws-color-tertiary: #19c98b;
 
-  --ws-color-primary-container: #f5f3ff;
-  --ws-color-secondary-container: #f1f5f9;
+  --ws-color-primary-container: #f0ecff;
+  --ws-color-secondary-container: #f0f2f7;
 
-  --ws-color-outline: #e2e8f0;
-  --ws-color-outline-variant: #e2e8f0;
+  --ws-color-outline: #dde1ea;
+  --ws-color-outline-variant: #e3e6ed;
 
-  --ws-color-error: #ef4444;
+  --ws-color-error: #ff4d5e;
 
-  --ws-color-on-primary: #f8fafc;
-  --ws-color-on-background: #0f172a;
-  --ws-color-on-surface: #0f172a;
-  --ws-color-on-surface-variant: #64748b;
-  --ws-color-on-secondary-container: #0f172a;
+  --ws-color-on-primary: #f7f7fa;
+  --ws-color-on-background: #17171c;
+  --ws-color-on-surface: #17171c;
+  --ws-color-on-surface-variant: #626875;
+  --ws-color-on-secondary-container: #17171c;
 }
