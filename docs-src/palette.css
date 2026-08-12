@@ -57,9 +57,9 @@
 }
 
 :root[data-ws-theme='dark'] .docs-content {
-  --ws-color-code-background: #08080a;
+  --ws-color-code-background: #030304;
   --ws-color-code-on-background: #f7f7fa;
-  --ws-color-code-border: #242429;
+  --ws-color-code-border: #1c1c20;
   --ws-color-code-token-comment: #8f8f9b;
   --ws-color-code-token-keyword: #c6b8ff;
   --ws-color-code-token-string: #72e0b1;
@@ -72,9 +72,9 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-ws-theme='light']) .docs-content {
-    --ws-color-code-background: #08080a;
+    --ws-color-code-background: #030304;
     --ws-color-code-on-background: #f7f7fa;
-    --ws-color-code-border: #242429;
+    --ws-color-code-border: #1c1c20;
     --ws-color-code-token-comment: #8f8f9b;
     --ws-color-code-token-keyword: #c6b8ff;
     --ws-color-code-token-string: #72e0b1;
