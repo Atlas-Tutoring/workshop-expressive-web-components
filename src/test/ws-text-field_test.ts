@@ -24,6 +24,23 @@ suite('ws-text-field', () => {
     assert.equal(el.shadowRoot!.querySelector('label')!.textContent!.trim(), 'Project name');
   });
 
+  test('renders a vertically resizable textarea with requested rows', async () => {
+    const el = await fixture<WsTextField>(html`
+      <ws-text-field
+        type="textarea"
+        label="Description"
+        rows="4"
+        placeholder="Describe the project"
+      ></ws-text-field>
+    `);
+    const textarea = el.shadowRoot!.querySelector<HTMLTextAreaElement>('textarea')!;
+
+    assert.isNull(el.shadowRoot!.querySelector('input'));
+    assert.equal(textarea.rows, 4);
+    assert.equal(textarea.placeholder, 'Describe the project');
+    assert.equal(getComputedStyle(textarea).resize, 'vertical');
+  });
+
   test('uses the circular shape for search unless explicitly overridden', async () => {
     const search = await fixture<WsTextField>(html`
       <ws-text-field type="search" aria-label="Search"></ws-text-field>
@@ -55,6 +72,25 @@ suite('ws-text-field', () => {
 
     assert.equal(el.value, 'Expressive');
     assert.isTrue(event.composed);
+  });
+
+  test('textarea updates value and participates in form submission', async () => {
+    const form = await fixture<HTMLFormElement>(html`
+      <form>
+        <ws-text-field type="textarea" name="description"></ws-text-field>
+      </form>
+    `);
+    const el = form.querySelector<WsTextField>('ws-text-field')!;
+    const textarea = el.shadowRoot!.querySelector<HTMLTextAreaElement>('textarea')!;
+    const eventPromise = oneEvent(el, 'input');
+
+    textarea.value = 'First line\nSecond line';
+    textarea.dispatchEvent(new InputEvent('input', {bubbles: true}));
+    const event = await eventPromise;
+
+    assert.isTrue(event.composed);
+    assert.equal(el.value, 'First line\nSecond line');
+    assert.equal(new FormData(form).get('description'), 'First line\nSecond line');
   });
 
   test('participates in form submission and reset', async () => {
@@ -92,6 +128,26 @@ suite('ws-text-field', () => {
     assert.equal(
       el.shadowRoot!.querySelector('.supporting-text')!.textContent!.trim(),
       'Enter a valid email'
+    );
+  });
+
+  test('forwards required validation to textarea fields', async () => {
+    const el = await fixture<WsTextField>(html`
+      <ws-text-field
+        label="Description"
+        type="textarea"
+        required
+        error-text="Enter a description"
+      ></ws-text-field>
+    `);
+
+    assert.isFalse(el.checkValidity());
+    assert.isFalse(el.reportValidity());
+    await el.updateComplete;
+
+    assert.equal(
+      el.shadowRoot!.querySelector('.supporting-text')!.textContent!.trim(),
+      'Enter a description'
     );
   });
 
