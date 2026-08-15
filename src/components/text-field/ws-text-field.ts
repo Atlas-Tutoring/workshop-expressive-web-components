@@ -11,16 +11,20 @@ export type WsTextFieldType =
   | 'number'
   | 'url'
   | 'tel'
-  | 'search';
+  | 'search'
+  | 'textarea';
 export type WsTextFieldSize = 'small' | 'medium' | 'large';
 export type WsTextFieldShape = 'default' | 'circle';
+
+type WsTextFieldControl = HTMLInputElement | HTMLTextAreaElement;
 
 let nextTextFieldId = 0;
 
 /**
- * Workshop form-associated single-line text field.
+ * Workshop form-associated text field.
  *
- * Search fields use the circular shape unless `shape="default"` is set.
+ * Use `type="textarea"` for multiline values. Search fields use the circular
+ * shape unless `shape="default"` is set.
  *
  * @fires input - Dispatched when the value changes while editing.
  * @fires change - Dispatched when the edited value is committed.
@@ -28,7 +32,7 @@ let nextTextFieldId = 0;
  * @slot trailing-icon - Optional icon rendered after the input.
  * @csspart label - The visible field label.
  * @csspart control - The field container.
- * @csspart input - The native input element.
+ * @csspart input - The native input or textarea element.
  * @csspart supporting-text - Helper or error text.
  * @csspart clear-button - The optional clear action.
  */
@@ -45,9 +49,13 @@ export class WsTextField extends LitElement {
   @property({reflect: true})
   name = '';
 
-  /** Native input type. */
+  /** Native control type. Use `textarea` for multiline text. */
   @property({reflect: true})
   type: WsTextFieldType = 'text';
+
+  /** Number of visible text rows when `type="textarea"`. */
+  @property({type: Number, reflect: true})
+  rows = 3;
 
   /** Control height and density. */
   @property({reflect: true})
@@ -64,7 +72,7 @@ export class WsTextField extends LitElement {
   @property()
   label = '';
 
-  /** Placeholder forwarded to the native input. */
+  /** Placeholder forwarded to the native control. */
   @property()
   placeholder = '';
 
@@ -227,33 +235,7 @@ export class WsTextField extends LitElement {
               class="hidden-slot"
               @slotchange=${this.syncSlottedState}
             ></slot>`}
-        <input
-          id=${this.fieldId}
-          class="input"
-          part="input"
-          .value=${this.value}
-          type=${this.type}
-          placeholder=${this.placeholder}
-          .autocomplete=${this.autocomplete}
-          inputmode=${ifDefined(this.inputMode || undefined)}
-          minlength=${ifDefined(this.minLength)}
-          maxlength=${ifDefined(this.maxLength)}
-          min=${ifDefined(this.min)}
-          max=${ifDefined(this.max)}
-          .step=${this.step ?? ''}
-          pattern=${ifDefined(this.pattern)}
-          ?required=${this.required}
-          ?disabled=${isDisabled}
-          ?readonly=${this.readOnly}
-          aria-label=${ifDefined(this.label ? undefined : this.accessibleLabel)}
-          aria-describedby=${ifDefined(supportingId)}
-          aria-errormessage=${ifDefined(isInvalid ? this.errorId : undefined)}
-          aria-invalid=${isInvalid ? 'true' : 'false'}
-          @input=${this.handleInput}
-          @change=${this.handleChange}
-          @blur=${this.handleBlur}
-          @invalid=${this.handleInvalid}
-        />
+        ${this.renderNativeControl(isDisabled, isInvalid, supportingId)}
         ${this.hasTrailingIcon
           ? html`<span class="icon trailing-icon" aria-hidden="true"
               ><slot
@@ -349,8 +331,8 @@ export class WsTextField extends LitElement {
     }
   }
 
-  private get inputElement(): HTMLInputElement | null {
-    return this.shadowRoot?.querySelector<HTMLInputElement>('input') ?? null;
+  private get inputElement(): WsTextFieldControl | null {
+    return this.shadowRoot?.querySelector<WsTextFieldControl>('.input') ?? null;
   }
 
   private get effectiveShape(): WsTextFieldShape {
@@ -363,6 +345,76 @@ export class WsTextField extends LitElement {
 
   private get isVisuallyInvalid(): boolean {
     return this.invalid || (this.touched && !this.validity.valid);
+  }
+
+  private renderNativeControl(
+    isDisabled: boolean,
+    isInvalid: boolean,
+    supportingId: string | undefined
+  ) {
+    const sharedAria = {
+      label: this.label ? undefined : this.accessibleLabel,
+      describedBy: supportingId,
+      errorMessage: isInvalid ? this.errorId : undefined,
+    };
+
+    if (this.type === 'textarea') {
+      return html`
+        <textarea
+          id=${this.fieldId}
+          class="input textarea"
+          part="input"
+          .value=${this.value}
+          rows=${this.rows}
+          placeholder=${this.placeholder}
+          .autocomplete=${this.autocomplete}
+          inputmode=${ifDefined(this.inputMode || undefined)}
+          minlength=${ifDefined(this.minLength)}
+          maxlength=${ifDefined(this.maxLength)}
+          ?required=${this.required}
+          ?disabled=${isDisabled}
+          ?readonly=${this.readOnly}
+          aria-label=${ifDefined(sharedAria.label)}
+          aria-describedby=${ifDefined(sharedAria.describedBy)}
+          aria-errormessage=${ifDefined(sharedAria.errorMessage)}
+          aria-invalid=${isInvalid ? 'true' : 'false'}
+          @input=${this.handleInput}
+          @change=${this.handleChange}
+          @blur=${this.handleBlur}
+          @invalid=${this.handleInvalid}
+        ></textarea>
+      `;
+    }
+
+    return html`
+      <input
+        id=${this.fieldId}
+        class="input"
+        part="input"
+        .value=${this.value}
+        type=${this.type}
+        placeholder=${this.placeholder}
+        .autocomplete=${this.autocomplete}
+        inputmode=${ifDefined(this.inputMode || undefined)}
+        minlength=${ifDefined(this.minLength)}
+        maxlength=${ifDefined(this.maxLength)}
+        min=${ifDefined(this.min)}
+        max=${ifDefined(this.max)}
+        .step=${this.step ?? ''}
+        pattern=${ifDefined(this.pattern)}
+        ?required=${this.required}
+        ?disabled=${isDisabled}
+        ?readonly=${this.readOnly}
+        aria-label=${ifDefined(sharedAria.label)}
+        aria-describedby=${ifDefined(sharedAria.describedBy)}
+        aria-errormessage=${ifDefined(sharedAria.errorMessage)}
+        aria-invalid=${isInvalid ? 'true' : 'false'}
+        @input=${this.handleInput}
+        @change=${this.handleChange}
+        @blur=${this.handleBlur}
+        @invalid=${this.handleInvalid}
+      />
+    `;
   }
 
   private renderClearButton() {
@@ -384,7 +436,7 @@ export class WsTextField extends LitElement {
 
   private handleInput(event: InputEvent) {
     event.stopPropagation();
-    const input = event.currentTarget as HTMLInputElement;
+    const input = event.currentTarget as WsTextFieldControl;
     this.value = input.value;
     this.syncFormAndValidity();
     this.dispatchEvent(
@@ -464,9 +516,8 @@ export class WsTextField extends LitElement {
     this.internals.setValidity(flags, input.validationMessage, input);
   }
 
-  private syncNativeInput(input: HTMLInputElement) {
+  private syncNativeInput(input: WsTextFieldControl) {
     input.value = this.value;
-    input.type = this.type;
     input.placeholder = this.placeholder;
     input.required = this.required;
     input.disabled = this.isEffectivelyDisabled;
@@ -476,6 +527,13 @@ export class WsTextField extends LitElement {
 
     this.syncOptionalInputAttribute(input, 'minlength', this.minLength);
     this.syncOptionalInputAttribute(input, 'maxlength', this.maxLength);
+
+    if (input instanceof HTMLTextAreaElement) {
+      input.rows = this.rows;
+      return;
+    }
+
+    input.type = this.type;
     this.syncOptionalInputAttribute(input, 'min', this.min);
     this.syncOptionalInputAttribute(input, 'max', this.max);
     this.syncOptionalInputAttribute(input, 'step', this.step);
@@ -483,7 +541,7 @@ export class WsTextField extends LitElement {
   }
 
   private syncOptionalInputAttribute(
-    input: HTMLInputElement,
+    input: WsTextFieldControl,
     name: string,
     value: string | number | undefined
   ) {
