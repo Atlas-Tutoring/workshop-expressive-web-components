@@ -1,7 +1,7 @@
 {
   "name": "@mihaicristiancondrea/workshop-expressive-web-components",
   "private": false,
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Workshop Expressive design-system web components built with Lit.",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -61,7 +61,7 @@
     "@custom-elements-manifest/analyzer": "^0.6.3",
     "@open-wc/testing": "^4.0.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-replace": "^5.0.7",
+    "@rollup/plugin-replace": "^15.2.3",
     "@rollup/plugin-terser": "^1.0.0",
     "@typescript-eslint/eslint-plugin": "^5.25.0",
     "@typescript-eslint/parser": "^5.25.0",
