@@ -58,6 +58,14 @@ Then use the elements in HTML, Lit templates, React JSX, Vue templates, or any f
 ></ws-text-field>
 
 <ws-text-field
+  type="textarea"
+  label="Description"
+  name="description"
+  rows="3"
+  helper-text="Drag the lower edge to make the field taller."
+></ws-text-field>
+
+<ws-text-field
   type="search"
   aria-label="Search components"
   placeholder="Search components"
@@ -108,6 +116,8 @@ Then use the elements in HTML, Lit templates, React JSX, Vue templates, or any f
 ```
 
 Search text fields use the circular shape automatically. Set `shape="default"` to override that behavior, or use `shape="circle"` on another supported text-field type.
+
+Textarea fields use `type="textarea"` and `rows` for multiline content. They resize vertically by default; set `--ws-text-field-resize: none` to keep a fixed height or another valid CSS `resize` value when a layout needs different behavior.
 
 `<ws-text-field>` and `<ws-date-picker>` are form-associated. Their `name` and `value` participate in `FormData`, while native validation, form reset, disabled fieldsets, and state restoration are forwarded through `ElementInternals`.
 
@@ -184,7 +194,7 @@ import type {
 
 const size: WsButtonSize = 'medium';
 const variant: WsButtonVariant = 'primary';
-const fieldType: WsTextFieldType = 'search';
+const fieldType: WsTextFieldType = 'textarea';
 const fieldShape: WsTextFieldShape = 'circle';
 const datePickerSize: WsDatePickerSize = 'large';
 const chipVariant: WsChipVariant = 'status';
