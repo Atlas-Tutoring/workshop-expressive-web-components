@@ -1,0 +1,50 @@
+name: Sync package version metadata
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/sync-package-version.yml
+
+permissions:
+  contents: write
+
+jobs:
+  sync-package-lock:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Sync package-lock version
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+          const lockPath = 'package-lock.json';
+          let lock = fs.readFileSync(lockPath, 'utf8');
+          let replacements = 0;
+          lock = lock.replace(/"version": "0\.2\.3"/g, (match) => {
+            if (replacements >= 2) return match;
+            replacements += 1;
+            return `"version": "${packageJson.version}"`;
+          });
+          if (replacements !== 2) {
+            throw new Error(`Expected to update 2 package-lock version fields, updated ${replacements}`);
+          }
+          fs.writeFileSync(lockPath, lock);
+          NODE
+
+      - name: Commit package-lock version
+        shell: bash
+        run: |
+          if git diff --quiet -- package-lock.json; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package-lock.json
+          git commit -m "Sync package lock version to 0.3.0"
+          git push
