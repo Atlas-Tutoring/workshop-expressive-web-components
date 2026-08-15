@@ -92,6 +92,24 @@ export const wsTextFieldStyles = css`
     padding-inline: var(--ws-text-field-large-padding-inline, 16px);
   }
 
+  :host([type='textarea']) .control {
+    align-items: flex-start;
+    block-size: auto;
+    min-block-size: var(--ws-text-field-medium-height, 44px);
+    padding-block: var(
+      --ws-text-field-textarea-padding-block,
+      var(--ws-spacing-md, 12px)
+    );
+  }
+
+  :host([type='textarea'][size='small']) .control {
+    min-block-size: var(--ws-text-field-small-height, 36px);
+  }
+
+  :host([type='textarea'][size='large']) .control {
+    min-block-size: var(--ws-text-field-large-height, 52px);
+  }
+
   .control:hover:not(.disabled) {
     background: var(
       --ws-text-field-hover-background,
@@ -154,6 +172,12 @@ export const wsTextFieldStyles = css`
     min-inline-size: 0;
     outline: none;
     padding: 0;
+  }
+
+  :host([type='textarea']) .input {
+    min-block-size: 0;
+    overflow: auto;
+    resize: var(--ws-text-field-resize, vertical);
   }
 
   :host([size='small']) .input {
