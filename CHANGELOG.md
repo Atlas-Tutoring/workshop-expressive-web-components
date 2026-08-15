@@ -4,6 +4,11 @@
 
 All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components` are documented in this file.
 
+### Added
+
+- Added multiline `type="textarea"` support to `<ws-text-field>` with configurable rows, native form and validation behavior, and vertical resizing by default.
+- Added `--ws-text-field-resize` and `--ws-text-field-textarea-padding-block` customization hooks for multiline fields.
+
 ## 0.2.2
 
 ### Changed
