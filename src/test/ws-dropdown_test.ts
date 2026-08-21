@@ -75,6 +75,40 @@ suite('ws-dropdown', () => {
     assert.equal(control.getAttribute('aria-expanded'), 'false');
   });
 
+  test('keeps the listbox mounted so open and close can both animate', async () => {
+    const el = await fixture<WsDropdown>(html`
+      <ws-dropdown aria-label="Period">
+        <option value="1">1 day</option>
+        <option value="7">7 days</option>
+      </ws-dropdown>
+    `);
+    await el.updateComplete;
+
+    const control =
+      el.shadowRoot!.querySelector<HTMLButtonElement>('.control')!;
+    const listbox = el.shadowRoot!.querySelector<HTMLElement>('.listbox')!;
+
+    assert.isFalse(listbox.classList.contains('open'));
+    assert.isTrue(listbox.hasAttribute('inert'));
+    assert.equal(listbox.getAttribute('aria-hidden'), 'true');
+
+    control.click();
+    await el.updateComplete;
+
+    assert.strictEqual(el.shadowRoot!.querySelector('.listbox'), listbox);
+    assert.isTrue(listbox.classList.contains('open'));
+    assert.isFalse(listbox.hasAttribute('inert'));
+    assert.isNull(listbox.getAttribute('aria-hidden'));
+
+    control.click();
+    await el.updateComplete;
+
+    assert.strictEqual(el.shadowRoot!.querySelector('.listbox'), listbox);
+    assert.isFalse(listbox.classList.contains('open'));
+    assert.isTrue(listbox.hasAttribute('inert'));
+    assert.equal(listbox.getAttribute('aria-hidden'), 'true');
+  });
+
   test('supports a custom indicator icon', async () => {
     const el = await fixture<WsDropdown>(html`
       <ws-dropdown aria-label="Sort order">
