@@ -1,9 +1,11 @@
-import {fixture, assert, waitUntil} from '@open-wc/testing';
+import {fixture, assert, oneEvent, waitUntil} from '@open-wc/testing';
 import {html} from 'lit/static-html.js';
 
 import '../components/tabs/ws-tab.js';
+import '../components/tabs/ws-tab-panel.js';
 import '../components/tabs/ws-tabs.js';
 import type {WsTab} from '../components/tabs/ws-tab.js';
+import type {WsTabPanel} from '../components/tabs/ws-tab-panel.js';
 import type {WsTabs} from '../components/tabs/ws-tabs.js';
 
 const nextFrame = () =>
@@ -46,7 +48,7 @@ suite('ws-tabs', () => {
     assert.equal(anchor.getAttribute('role'), 'tab');
   });
 
-  test('omits current semantics when a tab is not selected', async () => {
+  test('omits current semantics when a navigation tab is not selected', async () => {
     const el = await fixture<WsTab>(html`
       <ws-tab href="/examples/">Examples</ws-tab>
     `);
@@ -55,6 +57,104 @@ suite('ws-tabs', () => {
     assert.equal(anchor.getAttribute('href'), '/examples/');
     assert.equal(anchor.getAttribute('aria-selected'), 'false');
     assert.isFalse(anchor.hasAttribute('aria-current'));
+  });
+
+  test('renders value-driven tabs as buttons', async () => {
+    const el = await fixture<WsTab>(html`
+      <ws-tab value="preview" selected>Preview</ws-tab>
+    `);
+    const button = el.shadowRoot!.querySelector<HTMLButtonElement>('button')!;
+
+    assert.exists(button);
+    assert.equal(button.getAttribute('role'), 'tab');
+    assert.equal(button.getAttribute('aria-selected'), 'true');
+    assert.equal(button.tabIndex, 0);
+    assert.notExists(el.shadowRoot!.querySelector('a'));
+  });
+
+  test('supports contained view tabs and synchronizes panels', async () => {
+    const el = await fixture<WsTabs>(html`
+      <ws-tabs variant="contained" value="edit" aria-label="Markdown mode">
+        <ws-tab value="edit">Edit</ws-tab>
+        <ws-tab value="preview">Preview</ws-tab>
+        <ws-tab-panel value="edit">Editor</ws-tab-panel>
+        <ws-tab-panel value="preview">Rendered markdown</ws-tab-panel>
+      </ws-tabs>
+    `);
+    await el.updateComplete;
+
+    const [edit, preview] = Array.from(el.querySelectorAll<WsTab>('ws-tab'));
+    const [editPanel, previewPanel] = Array.from(
+      el.querySelectorAll<WsTabPanel>('ws-tab-panel')
+    );
+    await edit.updateComplete;
+    await preview.updateComplete;
+    await editPanel.updateComplete;
+    await previewPanel.updateComplete;
+
+    assert.equal(el.variant, 'contained');
+    assert.equal(el.value, 'edit');
+    assert.isTrue(edit.selected);
+    assert.isFalse(preview.selected);
+    assert.isTrue(editPanel.active);
+    assert.isFalse(previewPanel.active);
+    assert.isFalse(editPanel.hidden);
+    assert.isTrue(previewPanel.hidden);
+    assert.equal(editPanel.slot, 'panel');
+    assert.equal(
+      edit.shadowRoot!.querySelector('button')!.getAttribute('aria-controls'),
+      editPanel.id
+    );
+    assert.equal(editPanel.getAttribute('aria-label'), 'Edit');
+  });
+
+  test('updates contained tabs when value changes programmatically', async () => {
+    const el = await fixture<WsTabs>(html`
+      <ws-tabs value="edit">
+        <ws-tab value="edit">Edit</ws-tab>
+        <ws-tab value="preview">Preview</ws-tab>
+        <ws-tab-panel value="edit">Editor</ws-tab-panel>
+        <ws-tab-panel value="preview">Preview body</ws-tab-panel>
+      </ws-tabs>
+    `);
+    const preview = el.querySelectorAll<WsTab>('ws-tab')[1];
+    const previewPanel = el.querySelectorAll<WsTabPanel>('ws-tab-panel')[1];
+
+    el.value = 'preview';
+    await el.updateComplete;
+    await preview.updateComplete;
+    await previewPanel.updateComplete;
+
+    assert.isTrue(preview.selected);
+    assert.isTrue(previewPanel.active);
+    assert.isFalse(previewPanel.hidden);
+  });
+
+  test('switches panel tabs with arrow keys and emits the selected value', async () => {
+    const el = await fixture<WsTabs>(html`
+      <ws-tabs value="edit">
+        <ws-tab value="edit">Edit</ws-tab>
+        <ws-tab value="preview">Preview</ws-tab>
+      </ws-tabs>
+    `);
+    const [edit, preview] = Array.from(el.querySelectorAll<WsTab>('ws-tab'));
+    await edit.updateComplete;
+    await preview.updateComplete;
+    const changed = oneEvent(el, 'ws-tab-change');
+
+    edit.shadowRoot!.querySelector('button')!.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'ArrowRight',
+        bubbles: true,
+        composed: true,
+      })
+    );
+
+    const event = await changed;
+    await preview.updateComplete;
+    assert.isTrue(preview.selected);
+    assert.equal(el.value, 'preview');
+    assert.equal(event.detail.value, 'preview');
   });
 
   test('reflects vertical orientation to the tablist', async () => {

@@ -7,6 +7,7 @@ import './components/drawer/ws-drawer-category.js';
 import './components/brand/ws-brand-mark.js';
 import './components/tabs/ws-tabs.js';
 import './components/tabs/ws-tab.js';
+import './components/tabs/ws-tab-panel.js';
 import './components/breadcrumbs/ws-breadcrumbs.js';
 import './components/card/ws-card.js';
 import './components/page/ws-page.js';
@@ -35,8 +36,11 @@ export type {WsDrawerItemClickDetail} from './components/drawer/index.js';
 
 export {WsBrandMark} from './components/brand/index.js';
 
-export {WsTab, WsTabs} from './components/tabs/index.js';
-export type {WsTabsOrientation} from './components/tabs/index.js';
+export {WsTab, WsTabPanel, WsTabs} from './components/tabs/index.js';
+export type {
+  WsTabsOrientation,
+  WsTabsVariant,
+} from './components/tabs/index.js';
 export {WsBreadcrumbs} from './components/breadcrumbs/index.js';
 export type {WsCrumb} from './components/breadcrumbs/index.js';
 

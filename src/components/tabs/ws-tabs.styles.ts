@@ -8,7 +8,7 @@ export const wsTabsStyles = css`
     --ws-tabs-indicator-opacity: 0;
     --ws-tabs-indicator-x: 0px;
     --ws-tabs-indicator-y: 0px;
-    display: inline-flex;
+    display: inline-grid;
     min-inline-size: 0;
   }
 
@@ -16,18 +16,29 @@ export const wsTabsStyles = css`
     display: none;
   }
 
+  .root {
+    display: grid;
+    gap: var(--ws-tabs-panel-gap, var(--ws-spacing-md, 12px));
+    min-inline-size: 0;
+  }
+
   .tabs {
     align-items: center;
     display: inline-flex;
     gap: var(--ws-tabs-gap);
+    justify-self: start;
     min-inline-size: 0;
     position: relative;
   }
 
-  /* Flatten the slot so assigned tabs participate in the flex layout. Without
-     this, the slot itself is the only flex item and vertical tabs run together. */
-  slot {
+  slot:not([name]),
+  .panels {
     display: contents;
+  }
+
+  ::slotted(ws-tab) {
+    position: relative;
+    z-index: 1;
   }
 
   .indicator {
@@ -59,6 +70,31 @@ export const wsTabsStyles = css`
         var(--ws-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1));
   }
 
+  :host([variant='contained']) {
+    --ws-tabs-gap: var(--ws-tabs-contained-gap, 3px);
+  }
+
+  :host([variant='contained']) .tabs {
+    background: var(--ws-color-surface-variant, #f1f5f9);
+    border-radius: var(
+      --ws-tabs-contained-radius,
+      var(--ws-shape-large, 12px)
+    );
+    padding: var(--ws-tabs-contained-padding, 3px);
+  }
+
+  :host([variant='contained']) .indicator {
+    background: var(--ws-color-secondary-container, #e2e8f0);
+    border-radius: var(
+      --ws-tabs-contained-indicator-radius,
+      var(--ws-shape-medium, 8px)
+    );
+    box-shadow: var(--ws-elevation-sm, 0 1px 2px rgb(15 23 42 / 8%));
+    inset-block-end: auto;
+    inset-block-start: 0;
+    z-index: 0;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     :host([indicator-animated]) .indicator {
       transition-duration: 1ms;
@@ -67,7 +103,7 @@ export const wsTabsStyles = css`
   }
 
   :host([orientation='vertical']) {
-    display: flex;
+    display: grid;
     inline-size: 100%;
   }
 

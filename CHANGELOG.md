@@ -7,10 +7,12 @@
 - Added `primary`, `secondary`, `outlined`, and `text` visual variants to `<ws-dropdown>`, aligned with `<ws-button>`.
 - Added button-aligned small, medium, and large dropdown sizing, animated chevron rotation, reduced-motion handling, and dropdown CSS parts.
 - Added icon-only dropdown triggers, a customizable `icon` slot with the existing arrow as its fallback, and configurable icon rotation through `rotate-icon`.
+- Added `contained` tabs for compact local view switching, value-driven button tabs, and the new `<ws-tab-panel>` component with automatic panel synchronization and keyboard navigation.
 
 ### Changed
 
 - Animated the dropdown menu surface itself when opening and closing, using a clipped expansion, subtle movement, and opacity while preserving reduced-motion behavior.
+- Expanded `<ws-tabs>` beyond navigation-only usage while preserving existing `href`-based tab behavior.
 
 All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components` are documented in this file.
 
