@@ -93,6 +93,13 @@ export const wsTabStyles = css`
     line-height: 1;
   }
 
+  :host-context(ws-tabs[variant='contained']) {
+    color: var(
+      --ws-tabs-contained-color,
+      var(--ws-color-on-surface-variant)
+    );
+  }
+
   :host-context(ws-tabs[variant='contained']) .tab {
     border-radius: var(--ws-tabs-contained-tab-radius, 8px);
     font: inherit;
@@ -105,9 +112,15 @@ export const wsTabStyles = css`
       var(--ws-motion-easing-standard, ease);
   }
 
+  :host-context(ws-tabs[variant='contained'])[selected] {
+    color: var(
+      --ws-tabs-contained-selected-color,
+      var(--ws-color-on-secondary-container)
+    );
+  }
+
   :host-context(ws-tabs[variant='contained'])[selected] .tab {
     background: transparent;
-    color: var(--ws-color-on-secondary-container, #0f172a);
   }
 
   :host-context(ws-tabs[variant='contained']) .tab:hover,
@@ -122,7 +135,8 @@ export const wsTabStyles = css`
 
   :host-context(ws-tabs[variant='contained']) .tab:focus-visible {
     box-shadow: none;
-    outline: 2px solid var(--ws-color-primary, #6c5cff);
+    outline: 2px solid
+      var(--ws-tabs-contained-focus-color, var(--ws-color-primary));
     outline-offset: 2px;
   }
 
