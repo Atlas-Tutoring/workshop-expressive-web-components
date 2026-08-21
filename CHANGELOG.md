@@ -8,6 +8,10 @@
 - Added button-aligned small, medium, and large dropdown sizing, animated chevron rotation, reduced-motion handling, and dropdown CSS parts.
 - Added icon-only dropdown triggers, a customizable `icon` slot with the existing arrow as its fallback, and configurable icon rotation through `rotate-icon`.
 
+### Changed
+
+- Animated the dropdown menu surface itself when opening and closing, using a clipped expansion, subtle movement, and opacity while preserving reduced-motion behavior.
+
 All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components` are documented in this file.
 
 ## 0.3.0
