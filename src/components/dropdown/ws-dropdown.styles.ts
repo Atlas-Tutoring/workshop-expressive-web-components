@@ -300,16 +300,56 @@ export const wsDropdownStyles = css`
     border-radius: var(--ws-shape-large, 12px);
     box-shadow: var(--ws-elevation-lg, 0 12px 32px rgb(15 23 42 / 16%));
     box-sizing: border-box;
+    clip-path: inset(0 0 100% 0 round var(--ws-shape-large, 12px));
     display: grid;
     gap: 2px;
     inline-size: max(100%, var(--ws-dropdown-menu-min-width, 160px));
     inset-block-start: calc(100% + 6px);
     inset-inline-start: 0;
     max-block-size: 280px;
+    opacity: 0;
     overflow: auto;
     padding: 6px;
+    pointer-events: none;
     position: absolute;
+    transform: translateY(var(--ws-dropdown-menu-closed-offset, -6px))
+      scale(var(--ws-dropdown-menu-closed-scale, 0.98));
+    transform-origin: top center;
+    transition: opacity
+        var(
+          --ws-dropdown-menu-duration,
+          var(--ws-motion-duration-medium, 180ms)
+        )
+        var(--ws-dropdown-menu-easing, cubic-bezier(0.2, 0, 0, 1)),
+      transform
+        var(
+          --ws-dropdown-menu-duration,
+          var(--ws-motion-duration-medium, 180ms)
+        )
+        var(--ws-dropdown-menu-easing, cubic-bezier(0.2, 0, 0, 1)),
+      clip-path
+        var(
+          --ws-dropdown-menu-duration,
+          var(--ws-motion-duration-medium, 180ms)
+        )
+        var(--ws-dropdown-menu-easing, cubic-bezier(0.2, 0, 0, 1)),
+      visibility 0s linear
+        var(
+          --ws-dropdown-menu-duration,
+          var(--ws-motion-duration-medium, 180ms)
+        );
+    visibility: hidden;
+    will-change: clip-path, opacity, transform;
     z-index: 20;
+  }
+
+  .listbox.open {
+    clip-path: inset(0 0 0 0 round var(--ws-shape-large, 12px));
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+    transition-delay: 0s;
+    visibility: visible;
   }
 
   .option {
@@ -361,6 +401,10 @@ export const wsDropdownStyles = css`
     .control,
     .indicator {
       transition-duration: 0.01ms;
+    }
+
+    .listbox {
+      transition: none;
     }
   }
 `;
