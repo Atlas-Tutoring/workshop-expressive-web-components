@@ -271,7 +271,7 @@ export class WsTabs extends LitElement {
     if (!matchingTab || matchingTab.disabled) return;
 
     this.tabs.forEach((tab) => {
-      if (tab.value) tab.selected = tab === matchingTab;
+      tab.selected = tab === matchingTab;
     });
   }
 
