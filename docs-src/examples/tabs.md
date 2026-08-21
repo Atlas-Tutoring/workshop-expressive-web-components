@@ -18,7 +18,9 @@ order: 6
 
 Use `href` when selecting a tab represents navigation. Use `value` when the application stays in the same place and only the local view changes.
 
-## Standard navigation tabs
+## Live demo
+
+### Standard navigation tabs
 
 Standard tabs preserve link semantics and are appropriate for peer destinations or sections.
 
@@ -62,7 +64,7 @@ Standard tabs preserve link semantics and are appropriate for peer destinations 
 </ws-tabs>
 ```
 
-## Contained Edit / Preview tabs
+### Contained Edit / Preview tabs
 
 This is the intended pattern for editors such as a Markdown dialog. The page does not navigate when the user moves between Edit and Preview. Instead, the selected `value` controls which matching `ws-tab-panel` is visible.
 
@@ -126,7 +128,7 @@ This is the intended pattern for editors such as a Markdown dialog. The page doe
 
 The selected surface moves between the buttons using the same Workshop motion system as standard tabs. The panels are synchronized automatically by matching values.
 
-## Text-only contained tabs
+### Text-only contained tabs
 
 Icons are optional. For compact labels, a contained group can remain entirely text based.
 
@@ -166,7 +168,7 @@ Icons are optional. For compact labels, a contained group can remain entirely te
 
 Disabled tabs cannot be selected and are skipped by keyboard navigation. A disabled tab does not need a panel until that view becomes available.
 
-## Vertical contained tabs
+### Vertical contained tabs
 
 Contained tabs also support vertical orientation. This is useful when labels are longer or when a local settings/detail area has several peer views.
 
@@ -220,7 +222,9 @@ Contained tabs also support vertical orientation. This is useful when labels are
 </ws-tabs>
 ```
 
-## Controlling the selected view
+## Code
+
+### Controlling the selected view
 
 For local view tabs, treat `value` as application state rather than addressing tabs by position. This keeps values such as `edit` and `preview` meaningful even if the tab order changes later.
 
@@ -331,7 +335,7 @@ The selected surface still uses the shared Workshop motion tokens, so customizat
 - Disabled value tabs are removed from the keyboard selection sequence.
 - Each managed panel receives `role="tabpanel"`, an accessible name derived from its matching tab when one is not supplied, and is removed from layout while inactive.
 
-## When to use tabs
+## Design notes
 
 - Use `standard` tabs for peer navigation and section-level movement.
 - Use `contained` tabs for compact local view changes such as Edit / Preview, Visual / Code, Details / Raw, or Summary / Metadata.
