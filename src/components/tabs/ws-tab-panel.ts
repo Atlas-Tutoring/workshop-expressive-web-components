@@ -24,7 +24,7 @@ export class WsTabPanel extends LitElement {
   active = false;
 
   /** Accessible label for the panel. Filled from its tab when omitted. */
-  @property({attribute: 'aria-label'})
+  @property({attribute: 'aria-label', reflect: true})
   accessibleLabel?: string;
 
   private static nextId = 1;
