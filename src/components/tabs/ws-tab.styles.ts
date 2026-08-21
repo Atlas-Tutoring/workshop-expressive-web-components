@@ -94,15 +94,15 @@ export const wsTabStyles = css`
   }
 
   :host-context(ws-tabs[variant='contained']) .tab {
-    border-radius: var(
-      --ws-tabs-contained-tab-radius,
-      var(--ws-shape-medium, 8px)
-    );
-    min-block-size: var(--ws-tabs-contained-tab-height, 34px);
-    padding-inline: var(
-      --ws-tabs-contained-tab-padding-inline,
-      var(--ws-spacing-md, 12px)
-    );
+    border-radius: var(--ws-tabs-contained-tab-radius, 8px);
+    font: inherit;
+    font-weight: var(--ws-tabs-contained-tab-font-weight, 500);
+    gap: var(--ws-tabs-contained-tab-gap, 6px);
+    min-block-size: 0;
+    padding: var(--ws-tabs-contained-tab-padding-block, 6px)
+      var(--ws-tabs-contained-tab-padding-inline, 12px);
+    transition: color var(--ws-motion-duration-medium, 180ms)
+      var(--ws-motion-easing-standard, ease);
   }
 
   :host-context(ws-tabs[variant='contained'])[selected] .tab {
@@ -110,16 +110,20 @@ export const wsTabStyles = css`
     color: var(--ws-color-on-secondary-container, #0f172a);
   }
 
-  :host-context(ws-tabs[variant='contained']) .tab:hover {
-    background: color-mix(
-      in srgb,
-      var(--ws-color-primary, #6c5cff) 9%,
-      transparent
-    );
-  }
-
+  :host-context(ws-tabs[variant='contained']) .tab:hover,
   :host-context(ws-tabs[variant='contained'])[selected] .tab:hover {
     background: transparent;
+    color: inherit;
+  }
+
+  :host-context(ws-tabs[variant='contained']) .tab:active {
+    transform: none;
+  }
+
+  :host-context(ws-tabs[variant='contained']) .tab:focus-visible {
+    box-shadow: none;
+    outline: 2px solid var(--ws-color-primary, #6c5cff);
+    outline-offset: 2px;
   }
 
   :host-context(ws-tabs[orientation='vertical']) {
@@ -131,5 +135,9 @@ export const wsTabStyles = css`
     justify-content: flex-start;
     min-block-size: var(--ws-tab-vertical-height, 44px);
     text-align: start;
+  }
+
+  :host-context(ws-tabs[variant='contained'][orientation='vertical']) .tab {
+    min-block-size: 0;
   }
 `;
