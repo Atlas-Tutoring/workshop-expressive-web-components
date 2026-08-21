@@ -13,8 +13,9 @@
 
 - Animated the dropdown menu surface itself when opening and closing, using a clipped expansion, subtle movement, and opacity while preserving reduced-motion behavior.
 - Expanded `<ws-tabs>` beyond navigation-only usage while preserving existing `href`-based tab behavior.
-- Aligned the default `contained` tab treatment with the Atlas Edit / Preview control, including its compact spacing, radii, typography, focus behavior, and selected surface.
-- Reworked the Tabs documentation so component previews follow the same demo layout as the rest of the documentation and panel content is shown separately from the tab-bar preview.
+- Aligned contained-tab geometry and interaction with the Atlas Edit / Preview control, including its compact 3px inset, 11px outer radius, 8px selected surface, and quiet interaction treatment.
+- Kept contained-tab colors tied to semantic Workshop tokens so Atlas dark and light themes provide the bar, selected surface, text, focus, and elevation colors directly.
+- Animated the contained selected-surface background during indicator movement, blending only between the active theme's `secondary-container` and `surface-variant` colors and respecting reduced-motion preferences.
 
 All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components` are documented in this file.
 
