@@ -7,7 +7,11 @@ import {wsDropdownStyles} from './ws-dropdown.styles.js';
 export type WsDropdownVariant = 'primary' | 'secondary' | 'outlined' | 'text';
 export type WsDropdownSize = 'small' | 'medium' | 'large';
 
-/** A form-associated Workshop Expressive dropdown. */
+/**
+ * A form-associated Workshop Expressive dropdown.
+ *
+ * @slot icon - Optional trigger indicator icon. Falls back to a chevron.
+ */
 @customElement('ws-dropdown')
 export class WsDropdown extends LitElement {
   static override styles = wsDropdownStyles;
@@ -24,6 +28,20 @@ export class WsDropdown extends LitElement {
   /** Dropdown density and trigger height. */
   @property({reflect: true})
   size: WsDropdownSize = 'medium';
+
+  /** Shows only the dropdown indicator, matching an icon button. */
+  @property({type: Boolean, reflect: true, attribute: 'icon-only'})
+  iconOnly = false;
+
+  /** Rotates the default or custom indicator while the dropdown is open. */
+  @property({
+    attribute: 'rotate-icon',
+    converter: {
+      fromAttribute: (value: string | null) =>
+        value === null || value.toLowerCase() !== 'false',
+    },
+  })
+  rotateIcon = true;
 
   @property({type: Boolean, reflect: true}) disabled = false;
   @property({type: Boolean, reflect: true}) required = false;
@@ -56,6 +74,10 @@ export class WsDropdown extends LitElement {
 
   override render() {
     const selected = this.options.find((option) => option.value === this.value);
+    const indicatorClass = this.rotateIcon
+      ? 'indicator rotatable'
+      : 'indicator';
+
     return html`
       <div class="field">
         ${this.label ? html`<span class="label">${this.label}</span>` : nothing}
@@ -73,10 +95,18 @@ export class WsDropdown extends LitElement {
           @click=${this.toggle}
           @keydown=${this.handleKeydown}
         >
-          <span class="value">${selected?.label ?? ''}</span>
-          <svg class="chevron" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="m7 9.5 5 5 5-5 1.4 1.4-6.4 6.4-6.4-6.4L7 9.5Z"></path>
-          </svg>
+          ${this.iconOnly
+            ? nothing
+            : html`<span class="value">${selected?.label ?? ''}</span>`}
+          <span class=${indicatorClass} part="icon" aria-hidden="true">
+            <slot name="icon">
+              <svg class="chevron" viewBox="0 0 24 24">
+                <path
+                  d="m7 9.5 5 5 5-5 1.4 1.4-6.4 6.4-6.4-6.4L7 9.5Z"
+                ></path>
+              </svg>
+            </slot>
+          </span>
         </button>
         ${this.open ? this.renderListbox() : nothing}
         <slot class="source-options" @slotchange=${this.syncOptions}></slot>

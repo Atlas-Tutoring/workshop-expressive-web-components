@@ -20,7 +20,8 @@ export const wsDropdownStyles = css`
     display: none;
   }
 
-  :host([variant='text']) {
+  :host([variant='text']),
+  :host([icon-only]) {
     min-inline-size: 0;
   }
 
@@ -72,6 +73,13 @@ export const wsDropdownStyles = css`
 
   :host([variant='text']) .control {
     inline-size: auto;
+  }
+
+  :host([icon-only]) .control {
+    aspect-ratio: 1;
+    inline-size: auto;
+    justify-content: center;
+    padding-inline: 0;
   }
 
   .control:focus-visible {
@@ -224,6 +232,13 @@ export const wsDropdownStyles = css`
       var(--ws-dropdown-large-padding-inline, var(--ws-spacing-xl, 24px));
   }
 
+  :host([icon-only][size='small']) .control,
+  :host([icon-only][size='medium']) .control,
+  :host([icon-only][size='large']) .control,
+  :host([icon-only]:not([size])) .control {
+    padding-inline: 0;
+  }
+
   .control:disabled {
     cursor: not-allowed;
     opacity: 0.48;
@@ -236,22 +251,46 @@ export const wsDropdownStyles = css`
     white-space: nowrap;
   }
 
-  .chevron {
+  .indicator {
+    align-items: center;
     block-size: var(--ws-dropdown-icon-size, 18px);
-    fill: currentcolor;
+    display: inline-flex;
     flex: 0 0 var(--ws-dropdown-icon-size, 18px);
     inline-size: var(--ws-dropdown-icon-size, 18px);
+    justify-content: center;
     transform: rotate(0deg);
     transform-origin: center;
     transition: transform
       var(
-        --ws-dropdown-chevron-duration,
+        --ws-dropdown-icon-rotation-duration,
         var(--ws-motion-duration-medium, 180ms)
       )
       var(--ws-motion-easing-standard, ease);
   }
 
-  .control[aria-expanded='true'] .chevron {
+  .indicator .chevron {
+    block-size: var(--ws-dropdown-icon-size, 18px);
+    fill: currentcolor;
+    inline-size: var(--ws-dropdown-icon-size, 18px);
+  }
+
+  .indicator ::slotted(*) {
+    align-items: center;
+    block-size: var(--ws-dropdown-icon-size, 18px);
+    display: inline-flex;
+    flex: 0 0 var(--ws-dropdown-icon-size, 18px);
+    font-size: var(--ws-dropdown-icon-size, 18px);
+    inline-size: var(--ws-dropdown-icon-size, 18px);
+    justify-content: center;
+    line-height: 1;
+  }
+
+  .indicator ::slotted(svg) {
+    block-size: var(--ws-dropdown-icon-size, 18px);
+    inline-size: var(--ws-dropdown-icon-size, 18px);
+  }
+
+  .control[aria-expanded='true'] .indicator.rotatable {
     transform: rotate(180deg);
   }
 
@@ -320,7 +359,7 @@ export const wsDropdownStyles = css`
 
   @media (prefers-reduced-motion: reduce) {
     .control,
-    .chevron {
+    .indicator {
       transition-duration: 0.01ms;
     }
   }

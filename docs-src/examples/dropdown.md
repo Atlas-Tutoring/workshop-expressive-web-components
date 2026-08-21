@@ -44,7 +44,7 @@ order: 13
   </ws-dropdown>
 </div>
 
-The `text` variant is useful when the selected value and chevron should read as a lightweight action rather than a form field. The chevron rotates smoothly when the menu opens and returns when it closes.
+The `text` variant is useful when the selected value and icon should read as a lightweight action rather than a form field.
 
 ## Sizes
 
@@ -66,6 +66,33 @@ The `text` variant is useful when the selected value and chevron should read as 
   </ws-dropdown>
 </div>
 
+## Icon dropdowns
+
+The trigger uses the dropdown arrow by default. Add `icon-only` to make the trigger an icon button, or provide `slot="icon"` to replace the arrow with your own icon. The indicator rotates while open by default, including custom icons. Set `rotate-icon="false"` when the chosen icon should remain stationary.
+
+<div class="demo-panel dropdown-demo">
+  <ws-dropdown icon-only variant="outlined" aria-label="Reporting period">
+    <option value="1">1 day</option>
+    <option value="7">7 days</option>
+    <option value="30">30 days</option>
+  </ws-dropdown>
+  <ws-dropdown
+    icon-only
+    variant="secondary"
+    rotate-icon="false"
+    aria-label="Sort order"
+  >
+    <i slot="icon" class="ri-sort-desc" aria-hidden="true"></i>
+    <option value="newest">Newest first</option>
+    <option value="oldest">Oldest first</option>
+  </ws-dropdown>
+  <ws-dropdown variant="text" value="recent" aria-label="Activity filter">
+    <i slot="icon" class="ri-filter-3-line" aria-hidden="true"></i>
+    <option value="recent">Recent</option>
+    <option value="popular">Popular</option>
+  </ws-dropdown>
+</div>
+
 ## Code
 
 ```html
@@ -74,35 +101,57 @@ The `text` variant is useful when the selected value and chevron should read as 
   <option value="7">7 days</option>
   <option value="30">30 days</option>
 </ws-dropdown>
+
+<ws-dropdown icon-only variant="outlined" aria-label="Reporting period">
+  <option value="1">1 day</option>
+  <option value="7">7 days</option>
+</ws-dropdown>
+
+<ws-dropdown
+  icon-only
+  variant="secondary"
+  rotate-icon="false"
+  aria-label="Sort order"
+>
+  <i slot="icon" class="ri-sort-desc" aria-hidden="true"></i>
+  <option value="newest">Newest first</option>
+  <option value="oldest">Oldest first</option>
+</ws-dropdown>
 ```
 
 ## API
 
-| Property   | Type                                                    | Default      | Description                              |
-| ---------- | ------------------------------------------------------- | ------------ | ---------------------------------------- |
-| `value`    | `string`                                                | —            | Selected option value.                   |
-| `name`     | `string`                                                | —            | Form field name.                         |
-| `label`    | `string`                                                | —            | Optional visible label.                  |
-| `variant`  | `'primary' \| 'secondary' \| 'outlined' \| 'text'`      | `'outlined'` | Trigger visual treatment.                |
-| `size`     | `'small' \| 'medium' \| 'large'`                        | `'medium'`   | Trigger height aligned with `ws-button`. |
-| `disabled` | `boolean`                                               | `false`      | Disables selection.                      |
-| `required` | `boolean`                                               | `false`      | Requires a value in forms.               |
+| Property      | Type                                                    | Default      | Description                                      |
+| ------------- | ------------------------------------------------------- | ------------ | ------------------------------------------------ |
+| `value`       | `string`                                                | —            | Selected option value.                           |
+| `name`        | `string`                                                | —            | Form field name.                                 |
+| `label`       | `string`                                                | —            | Optional visible label.                          |
+| `variant`     | `'primary' \| 'secondary' \| 'outlined' \| 'text'`      | `'outlined'` | Trigger visual treatment.                        |
+| `size`        | `'small' \| 'medium' \| 'large'`                        | `'medium'`   | Trigger height aligned with `ws-button`.         |
+| `icon-only`   | `boolean`                                               | `false`      | Shows only the dropdown indicator in the trigger. |
+| `rotate-icon` | `boolean`                                               | `true`       | Rotates the default or custom icon while open.   |
+| `disabled`    | `boolean`                                               | `false`      | Disables selection.                              |
+| `required`    | `boolean`                                               | `false`      | Requires a value in forms.                       |
+
+`rotate-icon` defaults to `true`; use `rotate-icon="false"` to opt out in markup.
 
 The default slot accepts `option` elements as a familiar data source. The component renders them in a Workshop Expressive listbox and emits a composed `change` event when the selection changes.
 
 ## Slots
 
-| Slot    | Description                               |
-| ------- | ----------------------------------------- |
-| default | Native `option` elements for the control. |
+| Slot    | Description                                                     |
+| ------- | --------------------------------------------------------------- |
+| default | Native `option` elements for the control.                       |
+| `icon`  | Optional trigger icon that replaces the default dropdown arrow. |
 
 ## CSS parts
 
-| Part      | Description                         |
-| --------- | ----------------------------------- |
-| `control` | Native dropdown trigger button.     |
-| `listbox` | Popup listbox containing the choices. |
-| `option`  | Each rendered option button.        |
+| Part      | Description                                   |
+| --------- | --------------------------------------------- |
+| `control` | Native dropdown trigger button.               |
+| `icon`    | Default or custom trigger indicator wrapper.  |
+| `listbox` | Popup listbox containing the choices.         |
+| `option`  | Each rendered option button.                  |
 
 ## Events
 
@@ -113,13 +162,16 @@ The default slot accepts `option` elements as a familiar data source. The compon
 ## Accessibility notes
 
 - Provide either a visible `label` or an `aria-label` that describes the choice being made.
+- Always provide `aria-label` for an `icon-only` dropdown unless a visible `label` is present.
 - Keep option labels distinct and place the most commonly selected choices first.
 - Use `disabled` only when the entire control is unavailable and explain the reason in nearby content.
-- The chevron animation respects reduced-motion preferences.
+- Icon rotation respects reduced-motion preferences.
 
 ## Design notes
 
 - Use `primary` for a strong action-like selector, `secondary` for a softer filled trigger, `outlined` for the familiar field treatment, and `text` for a lightweight value-and-icon action.
+- Use `icon-only` for compact utility selectors where the icon has a clear accessible name.
+- Keep rotation enabled for directional indicators such as the default arrow; disable it for icons whose orientation carries its own meaning.
 - Use a dropdown when only one option can be selected from a list.
 - Prefer visible choices such as buttons when there are only two or three important options and space permits.
 - Match the dropdown size to adjacent buttons or form controls.

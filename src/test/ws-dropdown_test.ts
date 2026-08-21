@@ -49,7 +49,7 @@ suite('ws-dropdown', () => {
     assert.equal(el.size, 'medium');
   });
 
-  test('toggles expanded state used by the chevron animation', async () => {
+  test('uses a rotating default arrow indicator', async () => {
     const el = await fixture<WsDropdown>(html`
       <ws-dropdown aria-label="Period">
         <option value="1">1 day</option>
@@ -59,16 +59,57 @@ suite('ws-dropdown', () => {
     await el.updateComplete;
     const control =
       el.shadowRoot!.querySelector<HTMLButtonElement>('.control')!;
+    const indicator = el.shadowRoot!.querySelector<HTMLElement>('.indicator')!;
 
+    assert.isTrue(el.rotateIcon);
+    assert.isTrue(indicator.classList.contains('rotatable'));
+    assert.exists(el.shadowRoot!.querySelector('.chevron'));
     assert.equal(control.getAttribute('aria-expanded'), 'false');
+
     control.click();
     await el.updateComplete;
     assert.equal(control.getAttribute('aria-expanded'), 'true');
-    assert.exists(el.shadowRoot!.querySelector('.chevron'));
 
     control.click();
     await el.updateComplete;
     assert.equal(control.getAttribute('aria-expanded'), 'false');
+  });
+
+  test('supports a custom indicator icon', async () => {
+    const el = await fixture<WsDropdown>(html`
+      <ws-dropdown aria-label="Sort order">
+        <span slot="icon" id="sort-icon">sort</span>
+        <option value="newest">Newest</option>
+        <option value="oldest">Oldest</option>
+      </ws-dropdown>
+    `);
+    await el.updateComplete;
+
+    const iconSlot =
+      el.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="icon"]')!;
+    assert.equal(iconSlot.assignedElements()[0]?.id, 'sort-icon');
+  });
+
+  test('supports icon-only triggers and disabling icon rotation', async () => {
+    const el = await fixture<WsDropdown>(html`
+      <ws-dropdown
+        icon-only
+        rotate-icon="false"
+        variant="secondary"
+        aria-label="Sort order"
+      >
+        <span slot="icon">sort</span>
+        <option value="newest">Newest</option>
+        <option value="oldest">Oldest</option>
+      </ws-dropdown>
+    `);
+    await el.updateComplete;
+
+    const indicator = el.shadowRoot!.querySelector<HTMLElement>('.indicator')!;
+    assert.isTrue(el.iconOnly);
+    assert.isFalse(el.rotateIcon);
+    assert.notExists(el.shadowRoot!.querySelector('.value'));
+    assert.isFalse(indicator.classList.contains('rotatable'));
   });
 
   test('updates value and emits a composed change event', async () => {

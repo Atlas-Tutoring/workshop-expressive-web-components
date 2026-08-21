@@ -6,6 +6,7 @@
 
 - Added `primary`, `secondary`, `outlined`, and `text` visual variants to `<ws-dropdown>`, aligned with `<ws-button>`.
 - Added button-aligned small, medium, and large dropdown sizing, animated chevron rotation, reduced-motion handling, and dropdown CSS parts.
+- Added icon-only dropdown triggers, a customizable `icon` slot with the existing arrow as its fallback, and configurable icon rotation through `rotate-icon`.
 
 All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components` are documented in this file.
 
