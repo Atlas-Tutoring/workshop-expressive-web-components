@@ -75,33 +75,68 @@ export const wsTabsStyles = css`
   }
 
   :host([variant='contained']) .tabs {
-    background: var(
+    background-color: var(
       --ws-tabs-contained-background,
-      var(--ws-color-surface-variant, #f1f5f9)
+      var(--ws-color-surface-variant)
     );
     border-radius: var(--ws-tabs-contained-radius, 11px);
     padding: var(--ws-tabs-contained-padding, 3px);
   }
 
   :host([variant='contained']) .indicator {
-    background: var(
+    background-color: var(
       --ws-tabs-contained-indicator-background,
-      var(--ws-color-secondary-container, #e2e8f0)
+      var(--ws-color-secondary-container)
     );
     border-radius: var(--ws-tabs-contained-indicator-radius, 8px);
     box-shadow: var(
       --ws-tabs-contained-indicator-shadow,
-      var(--ws-elevation-sm, 0 1px 2px rgb(15 23 42 / 8%))
+      var(--ws-elevation-sm)
     );
     inset-block-end: auto;
     inset-block-start: 0;
     z-index: 0;
   }
 
+  :host([variant='contained'][indicator-animated]) .indicator {
+    animation: ws-contained-indicator-surface
+      var(
+        --ws-tabs-contained-indicator-color-duration,
+        var(--ws-motion-duration-slow, 240ms)
+      )
+      var(--ws-motion-easing-standard, ease) both;
+  }
+
+  @keyframes ws-contained-indicator-surface {
+    0%,
+    100% {
+      background-color: var(
+        --ws-tabs-contained-indicator-background,
+        var(--ws-color-secondary-container)
+      );
+    }
+
+    50% {
+      background-color: color-mix(
+        in srgb,
+        var(
+            --ws-tabs-contained-indicator-background,
+            var(--ws-color-secondary-container)
+          )
+          72%,
+        var(--ws-tabs-contained-background, var(--ws-color-surface-variant))
+      );
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     :host([indicator-animated]) .indicator {
       transition-duration: 1ms;
       transition-timing-function: linear;
+    }
+
+    :host([variant='contained'][indicator-animated]) .indicator {
+      animation: none;
     }
   }
 
