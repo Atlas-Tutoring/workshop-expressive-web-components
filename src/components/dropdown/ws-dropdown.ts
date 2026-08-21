@@ -108,7 +108,7 @@ export class WsDropdown extends LitElement {
             </slot>
           </span>
         </button>
-        ${this.open ? this.renderListbox() : nothing}
+        ${this.renderListbox()}
         <slot class="source-options" @slotchange=${this.syncOptions}></slot>
       </div>
     `;
@@ -130,11 +130,13 @@ export class WsDropdown extends LitElement {
 
   private renderListbox() {
     return html`<div
-      class="listbox"
+      class=${this.open ? 'listbox open' : 'listbox'}
       part="listbox"
       id=${this.listboxId}
       role="listbox"
       aria-label=${ifDefined(this.accessibleLabel || this.label || undefined)}
+      aria-hidden=${this.open ? nothing : 'true'}
+      ?inert=${!this.open}
     >
       ${this.options.map(
         (option, index) => html`
