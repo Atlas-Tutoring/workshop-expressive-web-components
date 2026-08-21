@@ -75,21 +75,24 @@ export const wsTabsStyles = css`
   }
 
   :host([variant='contained']) .tabs {
-    background: var(--ws-color-surface-variant, #f1f5f9);
-    border-radius: var(
-      --ws-tabs-contained-radius,
-      var(--ws-shape-large, 12px)
+    background: var(
+      --ws-tabs-contained-background,
+      var(--ws-color-surface-variant, #f1f5f9)
     );
+    border-radius: var(--ws-tabs-contained-radius, 11px);
     padding: var(--ws-tabs-contained-padding, 3px);
   }
 
   :host([variant='contained']) .indicator {
-    background: var(--ws-color-secondary-container, #e2e8f0);
-    border-radius: var(
-      --ws-tabs-contained-indicator-radius,
-      var(--ws-shape-medium, 8px)
+    background: var(
+      --ws-tabs-contained-indicator-background,
+      var(--ws-color-secondary-container, #e2e8f0)
     );
-    box-shadow: var(--ws-elevation-sm, 0 1px 2px rgb(15 23 42 / 8%));
+    border-radius: var(--ws-tabs-contained-indicator-radius, 8px);
+    box-shadow: var(
+      --ws-tabs-contained-indicator-shadow,
+      var(--ws-elevation-sm, 0 1px 2px rgb(15 23 42 / 8%))
+    );
     inset-block-end: auto;
     inset-block-start: 0;
     z-index: 0;
