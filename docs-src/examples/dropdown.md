@@ -7,7 +7,7 @@ description: Expressive, accessible ws-dropdown selection controls
 order: 13
 ---
 
-<p>Dropdowns let people choose one option from a compact list.</p>
+<p>Dropdowns let people choose one option from a compact list. Their trigger can use the same visual language and sizes as Workshop buttons.</p>
 
 ## Live demo
 
@@ -19,10 +19,57 @@ order: 13
   </ws-dropdown>
 </div>
 
+## Variants
+
+<div class="demo-panel dropdown-demo">
+  <ws-dropdown variant="primary" value="7" aria-label="Primary period">
+    <option value="1">1 day</option>
+    <option value="7">7 days</option>
+    <option value="30">30 days</option>
+  </ws-dropdown>
+  <ws-dropdown variant="secondary" value="7" aria-label="Secondary period">
+    <option value="1">1 day</option>
+    <option value="7">7 days</option>
+    <option value="30">30 days</option>
+  </ws-dropdown>
+  <ws-dropdown variant="outlined" value="7" aria-label="Outlined period">
+    <option value="1">1 day</option>
+    <option value="7">7 days</option>
+    <option value="30">30 days</option>
+  </ws-dropdown>
+  <ws-dropdown variant="text" value="7" aria-label="Text period">
+    <option value="1">1 day</option>
+    <option value="7">7 days</option>
+    <option value="30">30 days</option>
+  </ws-dropdown>
+</div>
+
+The `text` variant is useful when the selected value and chevron should read as a lightweight action rather than a form field. The chevron rotates smoothly when the menu opens and returns when it closes.
+
+## Sizes
+
+<div class="demo-panel dropdown-demo">
+  <ws-dropdown size="small" value="7" aria-label="Small period">
+    <option value="1">1 day</option>
+    <option value="7">7 days</option>
+    <option value="30">30 days</option>
+  </ws-dropdown>
+  <ws-dropdown size="medium" value="7" aria-label="Medium period">
+    <option value="1">1 day</option>
+    <option value="7">7 days</option>
+    <option value="30">30 days</option>
+  </ws-dropdown>
+  <ws-dropdown size="large" value="7" aria-label="Large period">
+    <option value="1">1 day</option>
+    <option value="7">7 days</option>
+    <option value="30">30 days</option>
+  </ws-dropdown>
+</div>
+
 ## Code
 
 ```html
-<ws-dropdown value="7" aria-label="Reporting period">
+<ws-dropdown variant="primary" size="medium" value="7" aria-label="Reporting period">
   <option value="1">1 day</option>
   <option value="7">7 days</option>
   <option value="30">30 days</option>
@@ -31,14 +78,15 @@ order: 13
 
 ## API
 
-| Property   | Type                             | Default    | Description                |
-| ---------- | -------------------------------- | ---------- | -------------------------- |
-| `value`    | `string`                         | —          | Selected option value.     |
-| `name`     | `string`                         | —          | Form field name.           |
-| `label`    | `string`                         | —          | Optional visible label.    |
-| `size`     | `'small' \| 'medium' \| 'large'` | `'medium'` | Control height.            |
-| `disabled` | `boolean`                        | `false`    | Disables selection.        |
-| `required` | `boolean`                        | `false`    | Requires a value in forms. |
+| Property   | Type                                                    | Default      | Description                              |
+| ---------- | ------------------------------------------------------- | ------------ | ---------------------------------------- |
+| `value`    | `string`                                                | —            | Selected option value.                   |
+| `name`     | `string`                                                | —            | Form field name.                         |
+| `label`    | `string`                                                | —            | Optional visible label.                  |
+| `variant`  | `'primary' \| 'secondary' \| 'outlined' \| 'text'`      | `'outlined'` | Trigger visual treatment.                |
+| `size`     | `'small' \| 'medium' \| 'large'`                        | `'medium'`   | Trigger height aligned with `ws-button`. |
+| `disabled` | `boolean`                                               | `false`      | Disables selection.                      |
+| `required` | `boolean`                                               | `false`      | Requires a value in forms.               |
 
 The default slot accepts `option` elements as a familiar data source. The component renders them in a Workshop Expressive listbox and emits a composed `change` event when the selection changes.
 
@@ -47,6 +95,14 @@ The default slot accepts `option` elements as a familiar data source. The compon
 | Slot    | Description                               |
 | ------- | ----------------------------------------- |
 | default | Native `option` elements for the control. |
+
+## CSS parts
+
+| Part      | Description                         |
+| --------- | ----------------------------------- |
+| `control` | Native dropdown trigger button.     |
+| `listbox` | Popup listbox containing the choices. |
+| `option`  | Each rendered option button.        |
 
 ## Events
 
@@ -59,9 +115,11 @@ The default slot accepts `option` elements as a familiar data source. The compon
 - Provide either a visible `label` or an `aria-label` that describes the choice being made.
 - Keep option labels distinct and place the most commonly selected choices first.
 - Use `disabled` only when the entire control is unavailable and explain the reason in nearby content.
+- The chevron animation respects reduced-motion preferences.
 
 ## Design notes
 
+- Use `primary` for a strong action-like selector, `secondary` for a softer filled trigger, `outlined` for the familiar field treatment, and `text` for a lightweight value-and-icon action.
 - Use a dropdown when only one option can be selected from a list.
 - Prefer visible choices such as buttons when there are only two or three important options and space permits.
-- Match the dropdown size to adjacent form controls.
+- Match the dropdown size to adjacent buttons or form controls.

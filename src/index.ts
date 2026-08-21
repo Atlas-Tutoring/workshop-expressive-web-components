@@ -64,7 +64,10 @@ export type {
 } from './components/chip/index.js';
 
 export {WsDropdown} from './components/dropdown/index.js';
-export type {WsDropdownSize} from './components/dropdown/index.js';
+export type {
+  WsDropdownSize,
+  WsDropdownVariant,
+} from './components/dropdown/index.js';
 
 export {WsBadge} from './components/badge/index.js';
 export type {WsBadgeTone} from './components/badge/index.js';

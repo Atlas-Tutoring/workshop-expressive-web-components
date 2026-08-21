@@ -4,6 +4,7 @@ import {ifDefined} from 'lit/directives/if-defined.js';
 
 import {wsDropdownStyles} from './ws-dropdown.styles.js';
 
+export type WsDropdownVariant = 'primary' | 'secondary' | 'outlined' | 'text';
 export type WsDropdownSize = 'small' | 'medium' | 'large';
 
 /** A form-associated Workshop Expressive dropdown. */
@@ -15,7 +16,15 @@ export class WsDropdown extends LitElement {
   @property() value = '';
   @property({reflect: true}) name = '';
   @property() label = '';
-  @property({reflect: true}) size: WsDropdownSize = 'medium';
+
+  /** Visual treatment matching the Workshop button variants. */
+  @property({reflect: true})
+  variant: WsDropdownVariant = 'outlined';
+
+  /** Dropdown density and trigger height. */
+  @property({reflect: true})
+  size: WsDropdownSize = 'medium';
+
   @property({type: Boolean, reflect: true}) disabled = false;
   @property({type: Boolean, reflect: true}) required = false;
   @property({attribute: 'aria-label'}) accessibleLabel?: string;
@@ -52,6 +61,7 @@ export class WsDropdown extends LitElement {
         ${this.label ? html`<span class="label">${this.label}</span>` : nothing}
         <button
           class="control"
+          part="control"
           type="button"
           ?disabled=${this.disabled}
           aria-label=${ifDefined(
@@ -64,7 +74,7 @@ export class WsDropdown extends LitElement {
           @keydown=${this.handleKeydown}
         >
           <span class="value">${selected?.label ?? ''}</span>
-          <svg viewBox="0 0 24 24" aria-hidden="true">
+          <svg class="chevron" viewBox="0 0 24 24" aria-hidden="true">
             <path d="m7 9.5 5 5 5-5 1.4 1.4-6.4 6.4-6.4-6.4L7 9.5Z"></path>
           </svg>
         </button>
@@ -75,7 +85,11 @@ export class WsDropdown extends LitElement {
   }
 
   protected override updated(changed: Map<string, unknown>) {
-    if (changed.has('value') || changed.has('disabled')) {
+    if (
+      changed.has('value') ||
+      changed.has('disabled') ||
+      changed.has('required')
+    ) {
       this.internals.setFormValue(this.disabled ? null : this.value);
       this.internals.setValidity(
         this.required && !this.value ? {valueMissing: true} : {},
@@ -87,6 +101,7 @@ export class WsDropdown extends LitElement {
   private renderListbox() {
     return html`<div
       class="listbox"
+      part="listbox"
       id=${this.listboxId}
       role="listbox"
       aria-label=${ifDefined(this.accessibleLabel || this.label || undefined)}
@@ -95,6 +110,7 @@ export class WsDropdown extends LitElement {
         (option, index) => html`
           <button
             class="option ${index === this.activeIndex ? 'active' : ''}"
+            part="option"
             type="button"
             role="option"
             ?disabled=${option.disabled}
