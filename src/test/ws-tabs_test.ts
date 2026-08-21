@@ -150,7 +150,7 @@ suite('ws-tabs', () => {
       })
     );
 
-    const event = await changed;
+    const event = (await changed) as CustomEvent<{value: string}>;
     await preview.updateComplete;
     assert.isTrue(preview.selected);
     assert.equal(el.value, 'preview');
