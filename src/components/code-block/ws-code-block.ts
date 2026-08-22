@@ -105,6 +105,7 @@ export class WsCodeBlock extends LitElement {
   private lineNumbersElement?: HTMLElement;
 
   private editingStarted = false;
+  private tabNavigationArmed = false;
 
   private get displayCode() {
     if (this.editable && this.editingStarted) return this.code;
@@ -217,6 +218,7 @@ export class WsCodeBlock extends LitElement {
             aria-label=${this.accessibleLabel}
             @input=${this.handleEditorInput}
             @change=${this.handleEditorChange}
+            @blur=${this.handleEditorBlur}
             @keydown=${this.handleEditorKeydown}
             @scroll=${this.syncEditorScroll}
           ></textarea>
@@ -249,8 +251,24 @@ export class WsCodeBlock extends LitElement {
     this.dispatchEvent(new Event('change', {bubbles: true, composed: true}));
   }
 
+  private handleEditorBlur() {
+    this.tabNavigationArmed = false;
+  }
+
   private handleEditorKeydown(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      this.tabNavigationArmed = true;
+      return;
+    }
+
     if (event.key !== 'Tab' || this.readOnly || this.disabled) return;
+
+    if (this.tabNavigationArmed) {
+      this.tabNavigationArmed = false;
+      return;
+    }
+
+    if (event.altKey || event.ctrlKey || event.metaKey) return;
 
     const editor = event.currentTarget as HTMLTextAreaElement;
     event.preventDefault();
