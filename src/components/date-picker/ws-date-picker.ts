@@ -3,6 +3,12 @@ import {customElement, property, state} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
 
 import '../button/ws-button.js';
+import {
+  caretAfterDigitCount,
+  countDigits,
+  formatIsoDateInput,
+  moveCaretAcrossSeparator,
+} from '../structured-input.js';
 import {wsDatePickerStyles} from './ws-date-picker.styles.js';
 
 export type WsDatePickerSize = 'small' | 'medium' | 'large';
@@ -174,7 +180,10 @@ export class WsDatePicker extends LitElement {
           .value=${this.value}
           type="text"
           inputmode="numeric"
+          autocomplete="off"
+          maxlength="10"
           placeholder="YYYY-MM-DD"
+          spellcheck="false"
           ?required=${this.required}
           ?disabled=${isDisabled}
           ?readonly=${this.readOnly}
@@ -182,6 +191,7 @@ export class WsDatePicker extends LitElement {
           aria-describedby=${ifDefined(supportingId)}
           aria-errormessage=${ifDefined(isInvalid ? this.errorId : undefined)}
           aria-invalid=${isInvalid ? 'true' : 'false'}
+          @beforeinput=${this.handleBeforeInput}
           @input=${this.handleInput}
           @change=${this.handleChange}
           @blur=${this.handleBlur}
@@ -391,10 +401,28 @@ export class WsDatePicker extends LitElement {
     `;
   }
 
+  private handleBeforeInput(event: InputEvent) {
+    moveCaretAcrossSeparator(event, '-');
+  }
+
   private handleInput(event: InputEvent) {
     event.stopPropagation();
     const input = event.currentTarget as HTMLInputElement;
-    this.value = input.value;
+
+    if (event.isComposing) {
+      this.value = input.value;
+    } else {
+      const rawValue = input.value;
+      const rawCaret = input.selectionStart ?? rawValue.length;
+      const digitCaret = countDigits(rawValue.slice(0, rawCaret));
+      const formattedValue = formatIsoDateInput(rawValue);
+
+      input.value = formattedValue;
+      this.value = formattedValue;
+      const nextCaret = caretAfterDigitCount(formattedValue, digitCaret);
+      input.setSelectionRange(nextCaret, nextCaret);
+    }
+
     this.syncFormAndValidity();
     this.dispatchEvent(
       new InputEvent('input', {
@@ -591,7 +619,9 @@ export class WsDatePicker extends LitElement {
               ? `Date must be on or before ${this.max}.`
               : '';
 
-    this.internals.setFormValue(isDisabled ? null : this.value || null);
+    this.internals.setFormValue(
+      isDisabled || !parsedValue ? null : this.value
+    );
     this.internals.setValidity(flags, message, this.inputElement ?? undefined);
   }
 }
