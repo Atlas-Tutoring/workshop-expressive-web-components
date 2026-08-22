@@ -98,45 +98,10 @@ export const wsTabsStyles = css`
     z-index: 0;
   }
 
-  :host([variant='contained'][indicator-animated]) .indicator {
-    animation: ws-contained-indicator-surface
-      var(
-        --ws-tabs-contained-indicator-color-duration,
-        var(--ws-motion-duration-slow, 240ms)
-      )
-      var(--ws-motion-easing-standard, ease) both;
-  }
-
-  @keyframes ws-contained-indicator-surface {
-    0%,
-    100% {
-      background-color: var(
-        --ws-tabs-contained-indicator-background,
-        var(--ws-color-secondary-container)
-      );
-    }
-
-    50% {
-      background-color: color-mix(
-        in srgb,
-        var(
-            --ws-tabs-contained-indicator-background,
-            var(--ws-color-secondary-container)
-          )
-          72%,
-        var(--ws-tabs-contained-background, var(--ws-color-surface-variant))
-      );
-    }
-  }
-
   @media (prefers-reduced-motion: reduce) {
     :host([indicator-animated]) .indicator {
       transition-duration: 1ms;
       transition-timing-function: linear;
-    }
-
-    :host([variant='contained'][indicator-animated]) .indicator {
-      animation: none;
     }
   }
 
