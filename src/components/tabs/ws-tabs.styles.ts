@@ -55,19 +55,7 @@ export const wsTabsStyles = css`
       var(--ws-tabs-indicator-x),
       var(--ws-tabs-indicator-y)
     );
-    transition: none;
     z-index: 1;
-  }
-
-  :host([indicator-animated]) .indicator {
-    transition: inline-size var(--ws-motion-duration-slow, 240ms)
-        var(--ws-motion-easing-standard, ease),
-      block-size var(--ws-motion-duration-slow, 240ms)
-        var(--ws-motion-easing-standard, ease),
-      opacity var(--ws-motion-duration-fast, 120ms)
-        var(--ws-motion-easing-standard, ease),
-      transform var(--ws-motion-duration-slow, 240ms)
-        var(--ws-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1));
   }
 
   :host([variant='contained']) {
@@ -96,13 +84,6 @@ export const wsTabsStyles = css`
     inset-block-end: auto;
     inset-block-start: 0;
     z-index: 0;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    :host([indicator-animated]) .indicator {
-      transition-duration: 1ms;
-      transition-timing-function: linear;
-    }
   }
 
   :host([orientation='vertical']) {
