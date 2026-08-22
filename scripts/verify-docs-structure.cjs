@@ -222,6 +222,7 @@ const requiredBundledElements = [
   'ws-chip',
   'ws-code-block',
   'ws-date-picker',
+  'ws-dialog',
   'ws-time-picker',
   'ws-docs-shell',
   'ws-drawer',
@@ -245,6 +246,12 @@ for (const elementName of requiredBundledElements) {
     elementName
   );
 }
+
+addCheck(
+  'src/docs-entry.ts',
+  'docs entry imports ws-dialog',
+  "import './components/dialog/ws-dialog.js';"
+);
 
 addCheck(
   'docs/foundation/theme.css',
