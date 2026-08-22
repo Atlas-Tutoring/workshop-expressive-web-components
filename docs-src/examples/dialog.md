@@ -3,11 +3,11 @@ layout: example.11ty.cjs
 title: Workshop Expressive Web Components ⌲ Examples ⌲ Dialog
 tags: example
 name: Dialog
-description: Modal ws-dialog surfaces with a blurred backdrop and backend-style actions
+description: Accessible modal surfaces for focused tasks and decisions
 order: 14
 ---
 
-<p>Dialogs focus attention on a short task or decision while keeping the current page visible behind a softened, blurred backdrop. The example below follows the same visual language as the current Atlas backend dialogs.</p>
+<p>Dialogs focus attention on a short task or decision while keeping the current page visible behind a softened, blurred backdrop.</p>
 
 ## Live demo
 
@@ -24,6 +24,7 @@ order: 14
     heading="Create course"
     description="Add a title and description for the new course."
   >
+
     <i slot="icon" class="ri-graduation-cap-line" aria-hidden="true"></i>
 
     <div style="display: grid; gap: 16px;">
@@ -48,6 +49,7 @@ order: 14
       <i slot="icon" class="ri-add-line" aria-hidden="true"></i>
       Create
     </ws-button>
+
   </ws-dialog>
 </div>
 
@@ -62,7 +64,7 @@ order: 14
   confirmButton?.addEventListener('click', () => dialog?.close('create'));
 </script>
 
-Only the trigger is present in the normal page flow. Calling `showModal()` moves the dialog into the browser top layer, where the blurred backdrop and elevated Workshop surface become visible. On desktop, action buttons sit at the bottom-right of the dialog, matching the current backend course dialogs.
+Only the trigger is present in the normal page flow. Calling `showModal()` moves the dialog into the browser top layer. The action buttons are aligned to the end on wider screens and expand into a responsive grid on smaller screens.
 
 ## Code
 
@@ -79,18 +81,20 @@ Only the trigger is present in the normal page flow. Calling `showModal()` moves
 >
   <i slot="icon" class="ri-graduation-cap-line" aria-hidden="true"></i>
 
-  <ws-text-field
-    label="Course title"
-    placeholder="Introduction to design systems"
-    required
-  ></ws-text-field>
+  <div style="display: grid; gap: 16px;">
+    <ws-text-field
+      label="Course title"
+      placeholder="Introduction to design systems"
+      required
+    ></ws-text-field>
 
-  <ws-text-field
-    type="textarea"
-    label="Description"
-    rows="4"
-    placeholder="What will people learn?"
-  ></ws-text-field>
+    <ws-text-field
+      type="textarea"
+      label="Description"
+      rows="4"
+      placeholder="What will people learn?"
+    ></ws-text-field>
+  </div>
 
   <ws-button slot="actions" id="cancel-course-dialog" variant="text">
     Cancel
@@ -104,63 +108,63 @@ Only the trigger is present in the normal page flow. Calling `showModal()` moves
 <script type="module">
   const dialog = document.querySelector('#course-dialog');
 
-  document.querySelector('#open-course-dialog')?.addEventListener('click', () => {
-    dialog.showModal();
-  });
+  document
+    .querySelector('#open-course-dialog')
+    ?.addEventListener('click', () => dialog?.showModal());
 
-  document.querySelector('#cancel-course-dialog')?.addEventListener('click', () => {
-    dialog.close('cancel');
-  });
+  document
+    .querySelector('#cancel-course-dialog')
+    ?.addEventListener('click', () => dialog?.close('cancel'));
 
-  document.querySelector('#save-course-dialog')?.addEventListener('click', () => {
-    dialog.close('create');
-  });
+  document
+    .querySelector('#save-course-dialog')
+    ?.addEventListener('click', () => dialog?.close('create'));
 </script>
 ```
 
 ## API
 
-| Property | Type | Default | Description |
-| -------- | ---- | ------- | ----------- |
-| `open` | `boolean` | `false` | Opens the dialog modally and reflects the current open state. |
-| `heading` | `string` | `''` | Visible dialog heading and default accessible name. |
-| `description` | `string` | `''` | Optional supporting text below the heading. |
-| `aria-label` | `string` | `''` | Accessible name when there is no visible heading. |
+| Property      | Type      | Default | Description                                                   |
+| ------------- | --------- | ------- | ------------------------------------------------------------- |
+| `open`        | `boolean` | `false` | Opens the dialog modally and reflects the current open state. |
+| `heading`     | `string`  | `''`    | Visible dialog heading and default accessible name.           |
+| `description` | `string`  | `''`    | Optional supporting text below the heading.                   |
+| `aria-label`  | `string`  | `''`    | Accessible name when there is no visible heading.             |
 
-### Methods
+## Methods
 
-| Method | Description |
-| ------ | ----------- |
-| `showModal()` | Opens the native dialog in the browser top layer. |
+| Method                | Description                                             |
+| --------------------- | ------------------------------------------------------- |
+| `showModal()`         | Opens the native dialog in the browser top layer.       |
 | `close(returnValue?)` | Closes the dialog and optionally sets its return value. |
 
 ## Slots
 
-| Slot | Description |
-| ---- | ----------- |
-| `icon` | Optional heading icon, presented in an Atlas-style container. |
-| default | Main dialog content. |
+| Slot      | Description                                                  |
+| --------- | ------------------------------------------------------------ |
+| `icon`    | Optional decorative icon displayed beside the heading.       |
+| default   | Main dialog content.                                         |
 | `actions` | Action controls aligned to the end of the dialog on desktop. |
 
 ## Events
 
-| Event | Detail | Description |
-| ----- | ------ | ----------- |
-| `ws-dialog-cancel` | — | Fired when the native dialog receives a cancel action such as Escape. |
-| `ws-dialog-close` | `{ returnValue }` | Fired whenever the dialog closes. |
+| Event              | Detail            | Description                                                           |
+| ------------------ | ----------------- | --------------------------------------------------------------------- |
+| `ws-dialog-cancel` | —                 | Fired when the native dialog receives a cancel action such as Escape. |
+| `ws-dialog-close`  | `{ returnValue }` | Fired whenever the dialog closes.                                     |
 
 ## CSS parts
 
-| Part | Description |
-| ---- | ----------- |
-| `dialog` | Native dialog element. |
+| Part      | Description                         |
+| --------- | ----------------------------------- |
+| `dialog`  | Native dialog element.              |
 | `surface` | Internal scrollable dialog surface. |
-| `header` | Heading area. |
-| `icon` | Optional heading icon container. |
-| `content` | Main content area. |
-| `actions` | Right-aligned desktop action row. |
+| `header`  | Heading area.                       |
+| `icon`    | Optional heading icon container.    |
+| `content` | Main content area.                  |
+| `actions` | Right-aligned desktop action row.   |
 
-## Custom properties
+## CSS custom properties
 
 ```css
 ws-dialog {
@@ -183,9 +187,9 @@ ws-dialog {
 ## Design notes
 
 - Use a normal page button to open the modal rather than exposing dialog content directly in the page layout.
-- Keep actions at the bottom-right on desktop, with the lower-emphasis action first and the primary action last, matching the current backend dialog pattern.
+- Keep actions at the bottom-right on desktop, with the lower-emphasis action first and the primary action last.
 - Use dialogs for short, focused decisions or forms that should interrupt the current view temporarily.
 - Keep the content concise enough to fit comfortably on smaller screens. The surface becomes scrollable when needed.
-- The default `26px` radius, `560px` width, elevated surface, and blurred dark backdrop intentionally match the Atlas course-dialog language.
+- The default `26px` radius, `560px` width, elevated surface, and blurred dark backdrop use the Workshop visual language.
 - Prefer the `actions` slot for buttons so alignment and responsive behavior stay consistent.
 - Override the backdrop custom properties only when the surrounding product has a deliberate modal treatment of its own.
