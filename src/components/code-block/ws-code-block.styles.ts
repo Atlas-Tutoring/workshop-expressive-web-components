@@ -15,6 +15,9 @@ export const wsCodeBlockStyles = css`
     --ws-color-code-muted: #64748b;
     --ws-color-code-button: #f1f5f9;
     --ws-color-code-button-hover: #e2e8f0;
+    --ws-color-code-gutter: #f8fafc;
+    --ws-color-code-selection: rgb(108 92 255 / 24%);
+    --ws-color-code-caret: #6c5cff;
     --ws-color-code-token-comment: #64748b;
     --ws-color-code-token-keyword: #7c3aed;
     --ws-color-code-token-string: #047857;
@@ -33,6 +36,9 @@ export const wsCodeBlockStyles = css`
     --ws-color-code-muted: #8f8f9b;
     --ws-color-code-button: #101014;
     --ws-color-code-button-hover: #18181d;
+    --ws-color-code-gutter: #08080a;
+    --ws-color-code-selection: rgb(155 135 255 / 28%);
+    --ws-color-code-caret: #c6b8ff;
     --ws-color-code-token-comment: #8f8f9b;
     --ws-color-code-token-keyword: #c6b8ff;
     --ws-color-code-token-string: #72e0b1;
@@ -55,9 +61,19 @@ export const wsCodeBlockStyles = css`
     margin: 0;
     overflow: hidden;
     border: 1px solid var(--ws-color-code-border);
-    border-radius: var(--ws-shape-large, 12px);
+    border-radius: var(--ws-code-block-radius, var(--ws-shape-large, 12px));
     background: var(--ws-color-code-background);
     box-shadow: var(--ws-elevation-sm, 0 1px 2px rgb(15 23 42 / 8%));
+  }
+
+  :host([editable]:focus-within) .code-block {
+    border-color: var(--ws-code-editor-focus-color, var(--ws-color-primary, #6c5cff));
+    box-shadow: 0 0 0 1px
+      var(--ws-code-editor-focus-color, var(--ws-color-primary, #6c5cff));
+  }
+
+  :host([disabled]) .code-block {
+    opacity: 0.56;
   }
 
   .header {
@@ -76,16 +92,109 @@ export const wsCodeBlockStyles = css`
     letter-spacing: 0.08em;
   }
 
-  pre {
+  .readonly-code {
     margin: 0;
     overflow: auto;
     padding: var(--ws-spacing-lg, 16px);
   }
 
+  code,
+  .editor,
+  .line-numbers {
+    font: var(--ws-typography-code);
+    line-height: var(--ws-code-editor-line-height, 1.6);
+    tab-size: var(--ws-code-tab-size, 2);
+  }
+
   code {
     white-space: pre;
     color: var(--ws-color-code-on-background);
-    font: var(--ws-typography-code);
+  }
+
+  .editor-shell {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    min-inline-size: 0;
+    background: var(--ws-color-code-background);
+  }
+
+  .editor-shell.with-line-numbers {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .editor-stack {
+    position: relative;
+    min-inline-size: 0;
+  }
+
+  .highlight-layer,
+  .editor {
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-block-size: var(--ws-code-editor-min-height, 192px);
+    margin: 0;
+    border: 0;
+    padding: var(--ws-code-editor-padding, var(--ws-spacing-lg, 16px));
+    white-space: pre;
+    overflow: auto;
+  }
+
+  .highlight-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    color: var(--ws-color-code-on-background);
+    background: transparent;
+    scrollbar-width: none;
+  }
+
+  .highlight-layer::-webkit-scrollbar {
+    display: none;
+  }
+
+  .editor {
+    position: relative;
+    z-index: 1;
+    display: block;
+    resize: vertical;
+    outline: 0;
+    background: transparent;
+    color: transparent;
+    caret-color: var(--ws-color-code-caret);
+    -webkit-text-fill-color: transparent;
+  }
+
+  .editor::selection {
+    background: var(--ws-color-code-selection);
+  }
+
+  .editor::placeholder {
+    color: var(--ws-color-code-muted);
+    -webkit-text-fill-color: var(--ws-color-code-muted);
+    opacity: 0.82;
+  }
+
+  .editor[readonly] {
+    cursor: text;
+  }
+
+  .editor:disabled {
+    cursor: not-allowed;
+  }
+
+  .line-numbers {
+    box-sizing: border-box;
+    min-inline-size: var(--ws-code-editor-gutter-width, 48px);
+    max-block-size: none;
+    margin: 0;
+    overflow: hidden;
+    border-inline-end: 1px solid var(--ws-color-code-border);
+    padding: var(--ws-code-editor-padding, var(--ws-spacing-lg, 16px))
+      var(--ws-spacing-sm, 8px);
+    color: var(--ws-color-code-muted);
+    background: var(--ws-color-code-gutter);
+    text-align: end;
+    user-select: none;
   }
 
   .token.comment {
@@ -134,11 +243,21 @@ export const wsCodeBlockStyles = css`
     outline-offset: var(--ws-spacing-xs, 4px);
   }
 
-  .copy-button:hover {
+  .copy-button:hover:not(:disabled) {
     background: var(--ws-color-code-button-hover);
   }
 
-  .copy-button:active {
+  .copy-button:active:not(:disabled) {
     transform: scale(0.985);
+  }
+
+  .copy-button:disabled {
+    cursor: not-allowed;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .copy-button {
+      transition-duration: 1ms;
+    }
   }
 `;
