@@ -3,6 +3,7 @@ import {html} from 'lit/static-html.js';
 
 import '../components/code-block/ws-code-block.js';
 import type {WsCodeBlock} from '../components/code-block/ws-code-block.js';
+import type {WsDropdown} from '../components/dropdown/ws-dropdown.js';
 
 suite('ws-code-block', () => {
   test('is defined', () => {
@@ -123,13 +124,72 @@ suite('ws-code-block', () => {
     const editor = el.shadowRoot!.querySelector<HTMLTextAreaElement>('.editor')!;
     const highlight = el.shadowRoot!.querySelector('.highlight-layer')!;
     const lineNumbers = el.shadowRoot!.querySelector('.line-numbers')!;
+    const languagePicker =
+      el.shadowRoot!.querySelector<WsDropdown>('.language-picker')!;
 
     assert.exists(editor);
     assert.equal(editor.value, 'const answer = 42;\nreturn answer;');
     assert.include(highlight.textContent, 'const answer = 42;');
     assert.exists(highlight.querySelector('.token.keyword'));
     assert.equal(lineNumbers.textContent?.trim(), '1\n2');
+    assert.equal(languagePicker.value, 'typescript');
     assert.notExists(el.shadowRoot!.querySelector('.readonly-code'));
+  });
+
+  test('changes syntax language from the editable dropdown', async () => {
+    const el = await fixture<WsCodeBlock>(html`
+      <ws-code-block
+        editable
+        language="text"
+        .code=${'<section>Workshop</section>'}
+      ></ws-code-block>
+    `);
+    const dropdown = el.shadowRoot!.querySelector<WsDropdown>('.language-picker')!;
+    await dropdown.updateComplete;
+
+    const sourceOptions = [...dropdown.querySelectorAll('option')];
+    assert.deepEqual(
+      sourceOptions.map((option) => option.value),
+      [
+        'text',
+        'html',
+        'css',
+        'javascript',
+        'typescript',
+        'json',
+        'markdown',
+        'xml',
+        'svg',
+      ]
+    );
+
+    const languageChange = oneEvent(el, 'ws-code-language-change');
+    dropdown.value = 'html';
+    dropdown.dispatchEvent(new Event('change', {bubbles: true, composed: true}));
+    const event = await languageChange;
+    await el.updateComplete;
+
+    assert.equal(el.language, 'html');
+    assert.equal(event.detail.language, 'html');
+    assert.exists(el.shadowRoot!.querySelector('.highlight-layer .token.tag'));
+  });
+
+  test('supports product-defined language choices', async () => {
+    const el = await fixture<WsCodeBlock>(html`
+      <ws-code-block editable language="kotlin"></ws-code-block>
+    `);
+    el.languageOptions = [
+      {value: 'kotlin', label: 'Kotlin'},
+      {value: 'java', label: 'Java'},
+    ];
+    await el.updateComplete;
+
+    const dropdown = el.shadowRoot!.querySelector<WsDropdown>('.language-picker')!;
+    await dropdown.updateComplete;
+    assert.deepEqual(
+      [...dropdown.querySelectorAll('option')].map((option) => option.textContent),
+      ['Kotlin', 'Java']
+    );
   });
 
   test('updates code and emits composed input and change events while editing', async () => {
@@ -260,14 +320,19 @@ suite('ws-code-block', () => {
       ></ws-code-block>
     `);
     let editor = el.shadowRoot!.querySelector<HTMLTextAreaElement>('.editor')!;
+    let languagePicker =
+      el.shadowRoot!.querySelector<WsDropdown>('.language-picker')!;
 
     assert.isTrue(editor.readOnly);
+    assert.isTrue(languagePicker.disabled);
     assert.notExists(el.shadowRoot!.querySelector('.line-numbers'));
 
     el.readOnly = false;
     el.disabled = true;
     await el.updateComplete;
     editor = el.shadowRoot!.querySelector<HTMLTextAreaElement>('.editor')!;
+    languagePicker = el.shadowRoot!.querySelector<WsDropdown>('.language-picker')!;
     assert.isTrue(editor.disabled);
+    assert.isTrue(languagePicker.disabled);
   });
 });
