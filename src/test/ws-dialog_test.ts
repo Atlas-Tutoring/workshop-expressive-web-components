@@ -41,6 +41,32 @@ suite('ws-dialog', () => {
     );
   });
 
+  test('uses backend-style content spacing and end-aligned actions', async () => {
+    const el = await fixture<WsDialog>(html`
+      <ws-dialog heading="Create course">
+        <input />
+        <textarea></textarea>
+        <button slot="actions">Cancel</button>
+        <button slot="actions">Create</button>
+      </ws-dialog>
+    `);
+
+    await el.updateComplete;
+
+    const content = el.shadowRoot!.querySelector<HTMLElement>('.content')!;
+    const actions = el.shadowRoot!.querySelector<HTMLSlotElement>(
+      'slot[name="actions"]'
+    )!;
+    const contentStyle = getComputedStyle(content);
+    const actionsStyle = getComputedStyle(actions);
+
+    assert.equal(contentStyle.display, 'grid');
+    assert.equal(contentStyle.gap, '20px');
+    assert.equal(actionsStyle.display, 'flex');
+    assert.equal(actionsStyle.justifyContent, 'flex-end');
+    assert.equal(actionsStyle.gap, '8px');
+  });
+
   test('opens in the modal top layer through showModal', async () => {
     const el = await fixture<WsDialog>(
       html`<ws-dialog heading="Confirm">Continue?</ws-dialog>`
