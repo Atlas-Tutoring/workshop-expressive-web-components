@@ -7,6 +7,8 @@ import {
   state,
 } from 'lit/decorators.js';
 
+import '../dropdown/ws-dropdown.js';
+import type {WsDropdown} from '../dropdown/ws-dropdown.js';
 import {wsCodeBlockStyles} from './ws-code-block.styles.js';
 
 type HighlightToken = {
@@ -22,6 +24,23 @@ type HighlightToken = {
   text: string;
 };
 
+export type WsCodeLanguageOption = {
+  value: string;
+  label: string;
+};
+
+const DEFAULT_LANGUAGE_OPTIONS: readonly WsCodeLanguageOption[] = [
+  {value: 'text', label: 'Plain text'},
+  {value: 'html', label: 'HTML'},
+  {value: 'css', label: 'CSS'},
+  {value: 'javascript', label: 'JavaScript'},
+  {value: 'typescript', label: 'TypeScript'},
+  {value: 'json', label: 'JSON'},
+  {value: 'markdown', label: 'Markdown'},
+  {value: 'xml', label: 'XML'},
+  {value: 'svg', label: 'SVG'},
+];
+
 /**
  * Workshop code surface for read-only snippets and lightweight editing.
  *
@@ -31,8 +50,10 @@ type HighlightToken = {
  * @fires input - Dispatched while editable code changes.
  * @fires change - Dispatched when editable code is committed by the browser.
  * @fires ws-code-copy - Dispatched when the current code is copied.
+ * @fires ws-code-language-change - Dispatched when the editable syntax language changes.
  * @csspart header - Header containing the language and actions.
- * @csspart language - Programming language label.
+ * @csspart language - Programming language label in read-only mode.
+ * @csspart language-picker - Programming language dropdown in editable mode.
  * @csspart code - Read-only highlighted code surface.
  * @csspart editor - Editable textarea.
  * @csspart line-numbers - Editable line-number gutter.
@@ -45,6 +66,10 @@ export class WsCodeBlock extends LitElement {
   /** Programming language label and syntax-highlighting hint. */
   @property({type: String})
   language = 'text';
+
+  /** Languages offered by the editable syntax dropdown. */
+  @property({attribute: false})
+  languageOptions: readonly WsCodeLanguageOption[] = DEFAULT_LANGUAGE_OPTIONS;
 
   /** Code shown or edited by the component. */
   @property({type: String})
@@ -122,6 +147,18 @@ export class WsCodeBlock extends LitElement {
     return Math.max(1, this.displayCode.split('\n').length);
   }
 
+  private get availableLanguageOptions(): readonly WsCodeLanguageOption[] {
+    const options = this.languageOptions.filter(
+      (option) => option.value.trim() && option.label.trim()
+    );
+    if (options.some((option) => option.value === this.language)) return options;
+
+    return [
+      {value: this.language, label: this.language || 'Plain text'},
+      ...options,
+    ];
+  }
+
   private async copyCode() {
     const code = this.displayCode;
     if (!code.trim()) return;
@@ -153,7 +190,9 @@ export class WsCodeBlock extends LitElement {
       <slot class="source" @slotchange=${this.syncSlottedCode}></slot>
       <figure class="code-block">
         <figcaption class="header" part="header">
-          <span class="language" part="language">${this.language}</span>
+          ${this.editable
+            ? this.renderLanguagePicker()
+            : html`<span class="language" part="language">${this.language}</span>`}
 
           ${this.copy
             ? html`
@@ -178,6 +217,25 @@ export class WsCodeBlock extends LitElement {
               code
             )}</code></pre>`}
       </figure>
+    `;
+  }
+
+  private renderLanguagePicker() {
+    return html`
+      <ws-dropdown
+        class="language-picker"
+        part="language-picker"
+        variant="text"
+        size="small"
+        .value=${this.language}
+        ?disabled=${this.disabled || this.readOnly}
+        aria-label="Syntax language"
+        @change=${this.handleLanguageChange}
+      >
+        ${this.availableLanguageOptions.map(
+          (option) => html`<option value=${option.value}>${option.label}</option>`
+        )}
+      </ws-dropdown>
     `;
   }
 
@@ -225,6 +283,22 @@ export class WsCodeBlock extends LitElement {
         </div>
       </div>
     `;
+  }
+
+  private handleLanguageChange(event: Event) {
+    event.stopPropagation();
+    const dropdown = event.currentTarget as WsDropdown;
+    const nextLanguage = dropdown.value;
+    if (!nextLanguage || nextLanguage === this.language) return;
+
+    this.language = nextLanguage;
+    this.dispatchEvent(
+      new CustomEvent('ws-code-language-change', {
+        detail: {language: nextLanguage},
+        bubbles: true,
+        composed: true,
+      })
+    );
   }
 
   private handleEditorInput(event: InputEvent) {
@@ -387,7 +461,7 @@ export class WsCodeBlock extends LitElement {
     }
 
     if (
-      ['js', 'javascript', 'ts', 'typescript', 'css'].includes(
+      ['js', 'javascript', 'ts', 'typescript', 'css', 'json'].includes(
         this.language.toLowerCase()
       )
     ) {
