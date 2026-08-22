@@ -18,10 +18,10 @@ order: 6
     <ws-tab value="preview">Preview</ws-tab>
 
     <ws-tab-panel value="edit">
-      <p>Edit the course description in Markdown.</p>
+      <p>Custom content #1</p>
     </ws-tab-panel>
     <ws-tab-panel value="preview">
-      <p>Preview the formatted course description.</p>
+      <p>Custom content #2</p>
     </ws-tab-panel>
   </ws-tabs>
 </div>
@@ -88,10 +88,10 @@ Disabled tabs cannot be selected and are skipped by keyboard navigation.
   <ws-tab value="preview">Preview</ws-tab>
 
   <ws-tab-panel value="edit">
-    <p>Edit the course description in Markdown.</p>
+    <p>Custom content #1</p>
   </ws-tab-panel>
   <ws-tab-panel value="preview">
-    <p>Preview the formatted course description.</p>
+    <p>Custom content #2</p>
   </ws-tab-panel>
 </ws-tabs>
 ```
