@@ -115,8 +115,9 @@ For application-controlled editors, prefer the `code` property. Slotted text is 
 | --------------- | -------------------------------------------------------------- |
 | `Tab`           | Inserts `tab-size` spaces or indents every selected line.      |
 | `Shift` + `Tab` | Removes up to `tab-size` leading spaces from the current lines. |
+| `Escape`, `Tab` | Lets Tab move focus out of the editor instead of indenting.     |
 
-All other editing behavior stays native to the browser, including selection, undo and redo, clipboard commands, IME composition, and platform text-navigation shortcuts.
+Modified Tab shortcuts using Ctrl, Alt, or Meta are never intercepted. All other editing behavior stays native to the browser, including selection, undo and redo, clipboard commands, IME composition, and platform text-navigation shortcuts.
 
 ## CSS parts
 
@@ -148,6 +149,7 @@ The existing `--ws-color-code-*` syntax and surface tokens continue to control b
 
 - Give every editable block a specific `aria-label` when the surrounding context does not already make its purpose obvious.
 - The visible syntax-highlight layer and line numbers are presentation only. Assistive technology interacts with the real textarea and receives the actual source text.
+- Because Tab is useful for indentation, press Escape and then Tab or Shift+Tab to leave the editor with the keyboard.
 - `readonly` is preferable to `disabled` when users should still be able to focus, select, or copy the code.
 - Keep the language label accurate so users understand the source they are editing.
 
