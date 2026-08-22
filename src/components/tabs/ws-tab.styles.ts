@@ -56,8 +56,11 @@ export const wsTabStyles = css`
   }
 
   .tab:hover {
-    background: var(--ws-color-primary-container, #f5f3ff);
-    color: var(--ws-color-primary, #6c5cff);
+    background: var(
+      --ws-tab-hover-background,
+      var(--ws-color-primary-container, #f5f3ff)
+    );
+    color: var(--ws-tab-hover-color, var(--ws-color-primary, #6c5cff));
   }
 
   .tab:active {
@@ -101,6 +104,9 @@ export const wsTabStyles = css`
   }
 
   :host-context(ws-tabs[variant='contained']) .tab {
+    --ws-tab-hover-background: transparent;
+    --ws-tab-hover-color: inherit;
+
     border-radius: var(--ws-tabs-contained-tab-radius, 8px);
     font: inherit;
     font-weight: var(--ws-tabs-contained-tab-font-weight, 500);
@@ -121,11 +127,6 @@ export const wsTabStyles = css`
 
   :host-context(ws-tabs[variant='contained'])[selected] .tab {
     background: transparent;
-  }
-
-  :host-context(ws-tabs[variant='contained']) .tab:hover {
-    background: transparent;
-    color: inherit;
   }
 
   :host-context(ws-tabs[variant='contained']) .tab:active {
