@@ -3,19 +3,21 @@ layout: example.11ty.cjs
 title: Workshop Expressive Web Components ⌲ Examples ⌲ Dialog
 tags: example
 name: Dialog
-description: Modal ws-dialog surfaces with a blurred backdrop and composable content
+description: Modal ws-dialog surfaces with a blurred backdrop and backend-style actions
 order: 14
 ---
 
-<p>Dialogs focus attention on a short task or decision while keeping the current page visible behind a softened, blurred backdrop.</p>
+<p>Dialogs focus attention on a short task or decision while keeping the current page visible behind a softened, blurred backdrop. The example below follows the same visual language as the current Atlas backend dialogs.</p>
 
 ## Live demo
 
 <div class="demo-panel component-demo">
-  <ws-button id="open-dialog-demo" variant="primary">
-    <i slot="icon" class="ri-add-line" aria-hidden="true"></i>
-    Create course
-  </ws-button>
+  <div style="display: flex; justify-content: flex-start;">
+    <ws-button id="open-dialog-demo" variant="primary">
+      <i slot="icon" class="ri-window-line" aria-hidden="true"></i>
+      Open dialog
+    </ws-button>
+  </div>
 
   <ws-dialog
     id="dialog-demo"
@@ -24,20 +26,24 @@ order: 14
   >
     <i slot="icon" class="ri-graduation-cap-line" aria-hidden="true"></i>
 
-    <ws-text-field
-      label="Course title"
-      placeholder="Introduction to design systems"
-      required
-    ></ws-text-field>
+    <div style="display: grid; gap: 16px;">
+      <ws-text-field
+        label="Course title"
+        placeholder="Introduction to design systems"
+        required
+      ></ws-text-field>
 
-    <ws-text-field
-      type="textarea"
-      label="Description"
-      rows="4"
-      placeholder="What will people learn?"
-    ></ws-text-field>
+      <ws-text-field
+        type="textarea"
+        label="Description"
+        rows="4"
+        placeholder="What will people learn?"
+      ></ws-text-field>
+    </div>
 
-    <ws-button id="cancel-dialog-demo" slot="actions" variant="text">Cancel</ws-button>
+    <ws-button id="cancel-dialog-demo" slot="actions" variant="text">
+      Cancel
+    </ws-button>
     <ws-button id="confirm-dialog-demo" slot="actions" variant="primary">
       <i slot="icon" class="ri-add-line" aria-hidden="true"></i>
       Create
@@ -47,17 +53,24 @@ order: 14
 
 <script type="module">
   const dialog = document.querySelector('#dialog-demo');
-  document.querySelector('#open-dialog-demo')?.addEventListener('click', () => dialog?.showModal());
-  document.querySelector('#cancel-dialog-demo')?.addEventListener('click', () => dialog?.close('cancel'));
-  document.querySelector('#confirm-dialog-demo')?.addEventListener('click', () => dialog?.close('create'));
+  const openButton = document.querySelector('#open-dialog-demo');
+  const cancelButton = document.querySelector('#cancel-dialog-demo');
+  const confirmButton = document.querySelector('#confirm-dialog-demo');
+
+  openButton?.addEventListener('click', () => dialog?.showModal());
+  cancelButton?.addEventListener('click', () => dialog?.close('cancel'));
+  confirmButton?.addEventListener('click', () => dialog?.close('create'));
 </script>
 
-The default backdrop follows the Atlas course dialog treatment: a dark translucent layer with a `4px` background blur. The dialog itself uses the shared Workshop surface, outline, shape, elevation, color, and motion tokens.
+Only the trigger is present in the normal page flow. Calling `showModal()` moves the dialog into the browser top layer, where the blurred backdrop and elevated Workshop surface become visible. On desktop, action buttons sit at the bottom-right of the dialog, matching the current backend course dialogs.
 
 ## Code
 
 ```html
-<ws-button id="open-course-dialog" variant="primary">Create course</ws-button>
+<ws-button id="open-course-dialog" variant="primary">
+  <i slot="icon" class="ri-window-line" aria-hidden="true"></i>
+  Open dialog
+</ws-button>
 
 <ws-dialog
   id="course-dialog"
@@ -66,13 +79,24 @@ The default backdrop follows the Atlas course dialog treatment: a dark transluce
 >
   <i slot="icon" class="ri-graduation-cap-line" aria-hidden="true"></i>
 
-  <ws-text-field label="Course title" required></ws-text-field>
-  <ws-text-field type="textarea" label="Description" rows="4"></ws-text-field>
+  <ws-text-field
+    label="Course title"
+    placeholder="Introduction to design systems"
+    required
+  ></ws-text-field>
+
+  <ws-text-field
+    type="textarea"
+    label="Description"
+    rows="4"
+    placeholder="What will people learn?"
+  ></ws-text-field>
 
   <ws-button slot="actions" id="cancel-course-dialog" variant="text">
     Cancel
   </ws-button>
   <ws-button slot="actions" id="save-course-dialog" variant="primary">
+    <i slot="icon" class="ri-add-line" aria-hidden="true"></i>
     Create
   </ws-button>
 </ws-dialog>
@@ -86,6 +110,10 @@ The default backdrop follows the Atlas course dialog treatment: a dark transluce
 
   document.querySelector('#cancel-course-dialog')?.addEventListener('click', () => {
     dialog.close('cancel');
+  });
+
+  document.querySelector('#save-course-dialog')?.addEventListener('click', () => {
+    dialog.close('create');
   });
 </script>
 ```
@@ -112,7 +140,7 @@ The default backdrop follows the Atlas course dialog treatment: a dark transluce
 | ---- | ----------- |
 | `icon` | Optional heading icon, presented in an Atlas-style container. |
 | default | Main dialog content. |
-| `actions` | Action controls aligned at the bottom of the dialog. |
+| `actions` | Action controls aligned to the end of the dialog on desktop. |
 
 ## Events
 
@@ -130,7 +158,7 @@ The default backdrop follows the Atlas course dialog treatment: a dark transluce
 | `header` | Heading area. |
 | `icon` | Optional heading icon container. |
 | `content` | Main content area. |
-| `actions` | Action row. |
+| `actions` | Right-aligned desktop action row. |
 
 ## Custom properties
 
@@ -149,11 +177,13 @@ ws-dialog {
 - Give every dialog a visible `heading` or an `aria-label`.
 - Keep keyboard focus inside the modal flow. Native `showModal()` provides browser-managed modal focus behavior.
 - Escape closes the dialog through the platform cancel behavior.
-- Use clear action labels and keep the primary action visually distinct from cancellation.
+- Keep cancellation before the primary action in DOM order so keyboard and reading order remain predictable.
 - Clicking the backdrop dismisses the dialog and returns `dismiss`.
 
 ## Design notes
 
+- Use a normal page button to open the modal rather than exposing dialog content directly in the page layout.
+- Keep actions at the bottom-right on desktop, with the lower-emphasis action first and the primary action last, matching the current backend dialog pattern.
 - Use dialogs for short, focused decisions or forms that should interrupt the current view temporarily.
 - Keep the content concise enough to fit comfortably on smaller screens. The surface becomes scrollable when needed.
 - The default `26px` radius, `560px` width, elevated surface, and blurred dark backdrop intentionally match the Atlas course-dialog language.
