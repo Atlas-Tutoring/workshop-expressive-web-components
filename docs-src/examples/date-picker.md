@@ -7,7 +7,7 @@ description: Form-associated date selection using an expressive calendar
 order: 6
 ---
 
-<p>The date picker places a custom Workshop Expressive calendar directly beneath the text field, with consistent labels, validation, sizing, and form participation.</p>
+<p>The date picker combines progressively formatted <code>YYYY-MM-DD</code> typing with a custom Workshop Expressive calendar. It inserts separators while the user types, normalizes year-first pasted dates, preserves the editing caret, and only submits complete canonical dates to forms.</p>
 
 ## Live demo
 
@@ -51,6 +51,12 @@ order: 6
     <ws-date-picker size="large" label="Large" value="2026-07-28"></ws-date-picker>
   </div>
 </div>
+
+## Typing behavior
+
+The editable field behaves like a structured input rather than an unrestricted text box. Typing `20260822` progressively becomes `2026-08-22`, and pasting a year-first value such as `2026/08/22` normalizes to the same canonical value. Backspace and Delete move cleanly across generated separators instead of fighting the formatter.
+
+Incomplete edits remain visible so the user can continue typing and validation can explain the problem, but an incomplete value is not placed into `FormData`. Once all three date segments form a real calendar date, the submitted value is the canonical `YYYY-MM-DD` string used by the component API.
 
 ## Code
 
@@ -124,8 +130,8 @@ The date picker does not expose slots. Its calendar and clear icons are built in
 
 ## Accessibility notes
 
-The component uses `ElementInternals`, so `name`, `value`, reset, disabled fieldsets, restored state, and date constraints behave like a regular form control. The calendar exposes dialog, grid, column-header, and grid-cell semantics.
+The component uses `ElementInternals`, so `name`, `value`, reset, disabled fieldsets, restored state, and date constraints behave like a regular form control. The calendar exposes dialog, grid, column-header, and grid-cell semantics. Automatic formatting does not replace the native text caret or keyboard editing model.
 
 ## Design notes
 
-The calendar uses Workshop surfaces, compact shapes, expressive selection color, and familiar month navigation rather than delegating its visual design to the browser.
+The calendar uses Workshop surfaces, compact shapes, expressive selection color, and familiar month navigation rather than delegating its visual design to the browser. The text field keeps the same canonical ISO format as the component value, so products can offer a smoother typing experience without maintaining a separate display-to-API conversion layer.
