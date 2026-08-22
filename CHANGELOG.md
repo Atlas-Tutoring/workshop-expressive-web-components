@@ -19,6 +19,7 @@
 - Aligned contained-tab geometry and interaction with the Atlas Edit / Preview control, including its compact 3px inset, 11px outer radius, 8px selected surface, and quiet interaction treatment.
 - Kept contained-tab colors tied to semantic Workshop tokens so Atlas dark and light themes provide the bar, selected surface, text, focus, and elevation colors directly.
 - Kept contained-tab surface colors stable during selection motion while synchronizing the selected-label color transition with the moving indicator.
+- Added progressive, caret-aware typing to `<ws-date-picker>` and `<ws-time-picker>`, including automatic separators, compact-input and paste normalization, canonical completed values, and omission of incomplete edits from form submission.
 - Standardized component documentation spacing, section hierarchy, demo surfaces, and tables, and removed the redundant tabs panel-switching demo.
 - Aligned `<ws-dialog>` body spacing, typography, desktop action placement, and mobile action layout with the current backend course dialogs.
 
