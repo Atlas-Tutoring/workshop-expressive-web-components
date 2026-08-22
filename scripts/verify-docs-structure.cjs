@@ -160,6 +160,16 @@ for (const snippet of requiredGeneratedExamplesIndex) {
   );
 }
 
+const generatedDialogPath = 'docs/examples/dialog/index.html';
+const generatedDialog = read(generatedDialogPath);
+checks.push({
+  filePath: generatedDialogPath,
+  description: 'dialog live demo emits a real ws-dialog custom element',
+  passed:
+    generatedDialog.includes('<ws-dialog id="dialog-demo"') &&
+    !generatedDialog.includes('&lt;ws-dialog id="dialog-demo"'),
+});
+
 const siteUrl =
   'https://mihaicristiancondrea.github.io/workshop-expressive-web-components/';
 const examplesUrl = new URL('examples/', siteUrl).href;
