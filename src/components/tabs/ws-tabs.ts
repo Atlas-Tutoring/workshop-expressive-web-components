@@ -9,6 +9,13 @@ import {wsTabsStyles} from './ws-tabs.styles.js';
 export type WsTabsOrientation = 'horizontal' | 'vertical';
 export type WsTabsVariant = 'standard' | 'contained';
 
+type IndicatorGeometry = {
+  x: number;
+  y: number;
+  inlineSize: number;
+  blockSize: number;
+};
+
 /**
  * Workshop tabs for navigation or local view switching.
  *
@@ -43,6 +50,9 @@ export class WsTabs extends LitElement {
   @query('.tabs')
   private tabsElement?: HTMLElement;
 
+  @query('.indicator')
+  private indicatorElement?: HTMLElement;
+
   @query('slot:not([name])')
   private slotElement?: HTMLSlotElement;
 
@@ -50,8 +60,9 @@ export class WsTabs extends LitElement {
   private panelSlotElement?: HTMLSlotElement;
 
   private hasMeasuredIndicator = false;
-  private indicatorAnimationTimeout = 0;
+  private indicatorAnimation?: Animation;
   private indicatorUpdateFrame = 0;
+  private lastIndicatorGeometry?: IndicatorGeometry;
   private lastSelectedTab: WsTab | null = null;
   private syncingValue = false;
 
@@ -72,8 +83,8 @@ export class WsTabs extends LitElement {
 
   override disconnectedCallback() {
     window.removeEventListener('resize', this.handleResize);
-    window.clearTimeout(this.indicatorAnimationTimeout);
     window.cancelAnimationFrame(this.indicatorUpdateFrame);
+    this.cancelIndicatorAnimation();
     this.mutationObserver.disconnect();
     this.resizeObserver.disconnect();
     super.disconnectedCallback();
@@ -116,7 +127,6 @@ export class WsTabs extends LitElement {
             class="indicator"
             part="indicator"
             aria-hidden="true"
-            @transitionend=${this.handleIndicatorTransitionEnd}
           ></div>
           <slot @slotchange=${this.handleSlotChange}></slot>
         </div>
@@ -129,25 +139,53 @@ export class WsTabs extends LitElement {
     `;
   }
 
-  private animateIndicator() {
-    window.clearTimeout(this.indicatorAnimationTimeout);
-    this.toggleAttribute('indicator-animated', true);
-    this.getBoundingClientRect();
-    this.indicatorAnimationTimeout = window.setTimeout(() => {
-      this.toggleAttribute('indicator-animated', false);
-    }, 320);
+  private cancelIndicatorAnimation() {
+    const animation = this.indicatorAnimation;
+    this.indicatorAnimation = undefined;
+    if (animation) animation.cancel();
+    this.toggleAttribute('indicator-animated', false);
   }
 
-  private handleIndicatorTransitionEnd(event: TransitionEvent) {
-    if (
-      event.target !== event.currentTarget ||
-      event.propertyName !== 'transform'
-    ) {
-      return;
-    }
+  private animateIndicator(
+    previous: IndicatorGeometry,
+    next: IndicatorGeometry
+  ) {
+    const indicator = this.indicatorElement;
+    if (!indicator) return;
 
-    window.clearTimeout(this.indicatorAnimationTimeout);
-    this.toggleAttribute('indicator-animated', false);
+    this.cancelIndicatorAnimation();
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    this.toggleAttribute('indicator-animated', true);
+    const duration = 240;
+    const animation = indicator.animate(
+      [
+        {
+          transform: `translate(${previous.x}px, ${previous.y}px)`,
+          inlineSize: `${previous.inlineSize}px`,
+          blockSize: `${previous.blockSize}px`,
+        },
+        {
+          transform: `translate(${next.x}px, ${next.y}px)`,
+          inlineSize: `${next.inlineSize}px`,
+          blockSize: `${next.blockSize}px`,
+        },
+      ],
+      {
+        duration,
+        easing: 'cubic-bezier(0.2, 0, 0, 1)',
+      }
+    );
+
+    this.indicatorAnimation = animation;
+    animation.finished
+      .catch(() => undefined)
+      .finally(() => {
+        if (this.indicatorAnimation !== animation) return;
+        this.indicatorAnimation = undefined;
+        this.toggleAttribute('indicator-animated', false);
+      });
   }
 
   private readonly handleResize = () => {
@@ -165,66 +203,79 @@ export class WsTabs extends LitElement {
     const tabsElement = this.tabsElement;
     const selectedTab = this.selectedTab;
     const selectedChanged = selectedTab !== this.lastSelectedTab;
+    const previousGeometry = this.lastIndicatorGeometry;
     const shouldAnimate =
-      options.animate !== false && this.hasMeasuredIndicator && selectedChanged;
+      options.animate !== false &&
+      this.hasMeasuredIndicator &&
+      selectedChanged &&
+      Boolean(previousGeometry);
 
     this.lastSelectedTab = selectedTab;
 
     if (!tabsElement || !selectedTab) {
+      this.cancelIndicatorAnimation();
       this.style.setProperty('--ws-tabs-indicator-opacity', '0');
       this.hasMeasuredIndicator = true;
+      this.lastIndicatorGeometry = undefined;
       return;
     }
 
-    if (shouldAnimate) this.animateIndicator();
+    const geometry = this.measureIndicatorGeometry(tabsElement, selectedTab);
 
+    this.style.setProperty(
+      '--ws-tabs-indicator-inline-size',
+      `${geometry.inlineSize}px`
+    );
+    this.style.setProperty(
+      '--ws-tabs-indicator-block-size',
+      `${geometry.blockSize}px`
+    );
+    this.style.setProperty('--ws-tabs-indicator-x', `${geometry.x}px`);
+    this.style.setProperty('--ws-tabs-indicator-y', `${geometry.y}px`);
+    this.style.setProperty('--ws-tabs-indicator-opacity', '1');
+
+    if (shouldAnimate && previousGeometry) {
+      this.animateIndicator(previousGeometry, geometry);
+    } else {
+      this.cancelIndicatorAnimation();
+    }
+
+    this.lastIndicatorGeometry = geometry;
+    this.hasMeasuredIndicator = true;
+  };
+
+  private measureIndicatorGeometry(
+    tabsElement: HTMLElement,
+    selectedTab: WsTab
+  ): IndicatorGeometry {
     const hostRect = tabsElement.getBoundingClientRect();
     const selectedRect = selectedTab.getBoundingClientRect();
 
     if (this.variant === 'contained') {
-      this.style.setProperty(
-        '--ws-tabs-indicator-inline-size',
-        `${selectedRect.width}px`
-      );
-      this.style.setProperty(
-        '--ws-tabs-indicator-block-size',
-        `${selectedRect.height}px`
-      );
-      this.style.setProperty(
-        '--ws-tabs-indicator-x',
-        `${selectedRect.left - hostRect.left}px`
-      );
-      this.style.setProperty(
-        '--ws-tabs-indicator-y',
-        `${selectedRect.top - hostRect.top}px`
-      );
-    } else if (this.orientation === 'vertical') {
-      this.style.setProperty('--ws-tabs-indicator-inline-size', '3px');
-      this.style.setProperty(
-        '--ws-tabs-indicator-block-size',
-        `${selectedRect.height}px`
-      );
-      this.style.setProperty('--ws-tabs-indicator-x', '0px');
-      this.style.setProperty(
-        '--ws-tabs-indicator-y',
-        `${selectedRect.top - hostRect.top}px`
-      );
-    } else {
-      this.style.setProperty(
-        '--ws-tabs-indicator-inline-size',
-        `${selectedRect.width}px`
-      );
-      this.style.setProperty('--ws-tabs-indicator-block-size', '3px');
-      this.style.setProperty(
-        '--ws-tabs-indicator-x',
-        `${selectedRect.left - hostRect.left}px`
-      );
-      this.style.setProperty('--ws-tabs-indicator-y', '0px');
+      return {
+        x: selectedRect.left - hostRect.left,
+        y: selectedRect.top - hostRect.top,
+        inlineSize: selectedRect.width,
+        blockSize: selectedRect.height,
+      };
     }
 
-    this.style.setProperty('--ws-tabs-indicator-opacity', '1');
-    this.hasMeasuredIndicator = true;
-  };
+    if (this.orientation === 'vertical') {
+      return {
+        x: 0,
+        y: selectedRect.top - hostRect.top,
+        inlineSize: 3,
+        blockSize: selectedRect.height,
+      };
+    }
+
+    return {
+      x: selectedRect.left - hostRect.left,
+      y: 0,
+      inlineSize: selectedRect.width,
+      blockSize: 3,
+    };
+  }
 
   private get selectedTab() {
     return this.tabs.find((tab) => tab.selected) ?? null;
