@@ -18,14 +18,14 @@
 - Expanded `<ws-tabs>` beyond navigation-only usage while preserving existing `href`-based tab behavior.
 - Aligned contained-tab geometry and interaction with the Atlas Edit / Preview control, including its compact 3px inset, 11px outer radius, 8px selected surface, and quiet interaction treatment.
 - Kept contained-tab colors tied to semantic Workshop tokens so Atlas dark and light themes provide the bar, selected surface, text, focus, and elevation colors directly.
-- Kept contained-tab surface colors stable during selection motion so only indicator geometry animates across themes.
+- Kept contained-tab surface colors stable during selection motion while synchronizing the selected-label color transition with the moving indicator.
 - Standardized component documentation spacing, section hierarchy, demo surfaces, and tables, and removed the redundant tabs panel-switching demo.
 - Aligned `<ws-dialog>` body spacing, typography, desktop action placement, and mobile action layout with the current backend course dialogs.
 
 ### Fixed
 
-- Fixed contained-tab switching animation in dark mode by removing the transient selected-surface color blend.
-- Prevented contained tabs from changing foreground or background color on hover.
+- Fixed contained-tab switching in the dark documentation theme by giving the secondary selected surface distinct contrast from the contained track.
+- Prevented contained tabs from changing foreground or background color on hover; hover now inherits the tab's current selected or unselected color.
 - Fixed `<ws-dialog>` action-slot layout so desktop actions reliably stay grouped at the bottom-right instead of depending on slot flattening behavior.
 
 All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components` are documented in this file.
