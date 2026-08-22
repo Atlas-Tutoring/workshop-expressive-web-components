@@ -10,6 +10,7 @@
 - Added optional per-choice dropdown icons through the source `option` element's `icon` attribute, without reserving icon space for text-only choices.
 - Added `contained` tabs for compact local view switching, value-driven button tabs, and the new `<ws-tab-panel>` component with automatic panel synchronization and keyboard navigation.
 - Added `<ws-dialog>` with native modal top-layer behavior, Atlas-style blurred backdrops, composable content and action slots, responsive layout, and close/cancel events.
+- Added form-associated `<ws-time-picker>` with editable `HH:mm` values, hour/minute selection, configurable minute steps, time ranges, validation, clear behavior, and small, medium, and large sizes.
 
 ### Changed
 

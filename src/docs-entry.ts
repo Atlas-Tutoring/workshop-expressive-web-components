@@ -14,6 +14,7 @@ import './components/card/ws-card.js';
 import './components/page/ws-page.js';
 import './components/text-field/ws-text-field.js';
 import './components/date-picker/ws-date-picker.js';
+import './components/time-picker/ws-time-picker.js';
 import './components/chip/ws-chip.js';
 import './components/dropdown/ws-dropdown.js';
 import './components/badge/ws-badge.js';

@@ -212,6 +212,7 @@ const requiredBundledElements = [
   'ws-chip',
   'ws-code-block',
   'ws-date-picker',
+  'ws-time-picker',
   'ws-docs-shell',
   'ws-drawer',
   'ws-drawer-category',
