@@ -50,6 +50,64 @@ suite('ws-date-picker', () => {
     assert.isTrue(event.composed);
   });
 
+  test('formats date input progressively and normalizes pasted separators', async () => {
+    const el = await fixture<WsDatePicker>(html`
+      <ws-date-picker label="Release date"></ws-date-picker>
+    `);
+    const input = el.shadowRoot!.querySelector<HTMLInputElement>('input')!;
+
+    input.value = '2026';
+    input.setSelectionRange(4, 4);
+    input.dispatchEvent(
+      new InputEvent('input', {bubbles: true, inputType: 'insertText'})
+    );
+    await el.updateComplete;
+
+    assert.equal(input.value, '2026-');
+    assert.equal(el.value, '2026-');
+    assert.equal(input.selectionStart, 5);
+
+    input.value = '2026/08/22';
+    input.setSelectionRange(input.value.length, input.value.length);
+    input.dispatchEvent(
+      new InputEvent('input', {bubbles: true, inputType: 'insertFromPaste'})
+    );
+    await el.updateComplete;
+
+    assert.equal(input.value, '2026-08-22');
+    assert.equal(el.value, '2026-08-22');
+    assert.equal(input.selectionStart, 10);
+  });
+
+  test('keeps incomplete typed dates out of form submission', async () => {
+    const form = await fixture<HTMLFormElement>(html`
+      <form>
+        <ws-date-picker name="releaseDate"></ws-date-picker>
+      </form>
+    `);
+    const el = form.querySelector<WsDatePicker>('ws-date-picker')!;
+    const input = el.shadowRoot!.querySelector<HTMLInputElement>('input')!;
+
+    input.value = '202608';
+    input.setSelectionRange(6, 6);
+    input.dispatchEvent(
+      new InputEvent('input', {bubbles: true, inputType: 'insertText'})
+    );
+    await el.updateComplete;
+
+    assert.equal(input.value, '2026-08-');
+    assert.isNull(new FormData(form).get('releaseDate'));
+
+    input.value = '20260822';
+    input.setSelectionRange(8, 8);
+    input.dispatchEvent(
+      new InputEvent('input', {bubbles: true, inputType: 'insertText'})
+    );
+    await el.updateComplete;
+
+    assert.equal(new FormData(form).get('releaseDate'), '2026-08-22');
+  });
+
   test('participates in form submission and reset', async () => {
     const form = await fixture<HTMLFormElement>(html`
       <form>
