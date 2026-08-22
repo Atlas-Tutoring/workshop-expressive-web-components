@@ -108,7 +108,8 @@ export const wsTabStyles = css`
     min-block-size: 0;
     padding: var(--ws-tabs-contained-tab-padding-block, 6px)
       var(--ws-tabs-contained-tab-padding-inline, 12px);
-    transition: none;
+    transition: color var(--ws-motion-duration-slow, 240ms)
+      var(--ws-motion-easing-standard, ease);
   }
 
   :host-context(ws-tabs[variant='contained'])[selected] {
@@ -124,18 +125,7 @@ export const wsTabStyles = css`
 
   :host-context(ws-tabs[variant='contained']) .tab:hover {
     background: transparent;
-    color: var(
-      --ws-tabs-contained-color,
-      var(--ws-color-on-surface-variant)
-    );
-  }
-
-  :host-context(ws-tabs[variant='contained'])[selected] .tab:hover {
-    background: transparent;
-    color: var(
-      --ws-tabs-contained-selected-color,
-      var(--ws-color-on-secondary-container)
-    );
+    color: inherit;
   }
 
   :host-context(ws-tabs[variant='contained']) .tab:active {
