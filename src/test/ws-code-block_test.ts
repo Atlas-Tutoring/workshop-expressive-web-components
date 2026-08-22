@@ -111,4 +111,112 @@ suite('ws-code-block', () => {
       value: originalClipboard,
     });
   });
+
+  test('turns into a syntax-highlighted editor when editable', async () => {
+    const el = await fixture<WsCodeBlock>(html`
+      <ws-code-block
+        editable
+        language="typescript"
+        .code=${'const answer = 42;\nreturn answer;'}
+      ></ws-code-block>
+    `);
+    const editor = el.shadowRoot!.querySelector<HTMLTextAreaElement>('.editor')!;
+    const highlight = el.shadowRoot!.querySelector('.highlight-layer')!;
+    const lineNumbers = el.shadowRoot!.querySelector('.line-numbers')!;
+
+    assert.exists(editor);
+    assert.equal(editor.value, 'const answer = 42;\nreturn answer;');
+    assert.include(highlight.textContent, 'const answer = 42;');
+    assert.exists(highlight.querySelector('.token.keyword'));
+    assert.equal(lineNumbers.textContent?.trim(), '1\n2');
+    assert.notExists(el.shadowRoot!.querySelector('.readonly-code'));
+  });
+
+  test('updates code and emits composed input and change events while editing', async () => {
+    const el = await fixture<WsCodeBlock>(html`
+      <ws-code-block editable language="typescript"></ws-code-block>
+    `);
+    const editor = el.shadowRoot!.querySelector<HTMLTextAreaElement>('.editor')!;
+    const inputPromise = oneEvent(el, 'input');
+
+    editor.value = 'const name = "Workshop";';
+    editor.dispatchEvent(
+      new InputEvent('input', {
+        bubbles: true,
+        composed: true,
+        inputType: 'insertText',
+      })
+    );
+
+    const inputEvent = await inputPromise;
+    await el.updateComplete;
+    assert.equal(el.code, 'const name = "Workshop";');
+    assert.isTrue(inputEvent.composed);
+    assert.include(
+      el.shadowRoot!.querySelector('.highlight-layer')!.textContent,
+      'Workshop'
+    );
+
+    const changePromise = oneEvent(el, 'change');
+    editor.dispatchEvent(new Event('change', {bubbles: true, composed: true}));
+    const changeEvent = await changePromise;
+    assert.isTrue(changeEvent.composed);
+  });
+
+  test('inserts and removes indentation with Tab and Shift+Tab', async () => {
+    const el = await fixture<WsCodeBlock>(html`
+      <ws-code-block editable tab-size="2" .code=${'return value;'}></ws-code-block>
+    `);
+    let editor = el.shadowRoot!.querySelector<HTMLTextAreaElement>('.editor')!;
+    editor.focus();
+    editor.setSelectionRange(0, 0);
+
+    editor.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'Tab',
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+      })
+    );
+    await el.updateComplete;
+
+    assert.equal(el.code, '  return value;');
+    editor = el.shadowRoot!.querySelector<HTMLTextAreaElement>('.editor')!;
+    assert.equal(editor.selectionStart, 2);
+
+    editor.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'Tab',
+        shiftKey: true,
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+      })
+    );
+    await el.updateComplete;
+
+    assert.equal(el.code, 'return value;');
+  });
+
+  test('respects line-number, readonly, and disabled editor states', async () => {
+    const el = await fixture<WsCodeBlock>(html`
+      <ws-code-block
+        editable
+        .lineNumbers=${false}
+        readonly
+        .code=${'const x = 1;'}
+      ></ws-code-block>
+    `);
+    let editor = el.shadowRoot!.querySelector<HTMLTextAreaElement>('.editor')!;
+
+    assert.isTrue(editor.readOnly);
+    assert.notExists(el.shadowRoot!.querySelector('.line-numbers'));
+
+    el.readOnly = false;
+    el.disabled = true;
+    await el.updateComplete;
+    editor = el.shadowRoot!.querySelector<HTMLTextAreaElement>('.editor')!;
+    assert.isTrue(editor.disabled);
+  });
 });
