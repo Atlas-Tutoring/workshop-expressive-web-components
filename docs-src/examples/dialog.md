@@ -11,36 +11,15 @@ order: 14
 
 ## Live demo
 
+<!-- prettier-ignore -->
 <div class="demo-panel component-demo">
-  <ws-button id="open-dialog-demo" variant="primary">Open dialog</ws-button>
-
-  <ws-dialog
-    id="dialog-demo"
-    heading="Create course"
-    description="Add a title and description for the new course."
-  >
+  <div class="button-row"><ws-button id="open-dialog-demo" variant="primary">Open dialog</ws-button></div>
+  <ws-dialog id="dialog-demo" heading="Create course" description="Add a title and description for the new course.">
     <i slot="icon" class="ri-graduation-cap-line" aria-hidden="true"></i>
-
-    <ws-text-field
-      label="Course title"
-      placeholder="Introduction to design systems"
-      required
-    ></ws-text-field>
-
-    <ws-text-field
-      type="textarea"
-      label="Description"
-      rows="4"
-      placeholder="What will people learn?"
-    ></ws-text-field>
-
-    <ws-button id="cancel-dialog-demo" slot="actions" variant="text">
-      Cancel
-    </ws-button>
-    <ws-button id="confirm-dialog-demo" slot="actions" variant="primary">
-      <i slot="icon" class="ri-add-line" aria-hidden="true"></i>
-      Create
-    </ws-button>
+    <ws-text-field label="Course title" placeholder="Introduction to design systems" required></ws-text-field>
+    <ws-text-field type="textarea" label="Description" rows="4" placeholder="What will people learn?"></ws-text-field>
+    <ws-button id="cancel-dialog-demo" slot="actions" variant="text">Cancel</ws-button>
+    <ws-button id="confirm-dialog-demo" slot="actions" variant="primary"><i slot="icon" class="ri-add-line" aria-hidden="true"></i>Create</ws-button>
   </ws-dialog>
 </div>
 
@@ -55,7 +34,7 @@ order: 14
   confirmButton?.addEventListener('click', () => dialog?.close('create'));
 </script>
 
-Only the `Open dialog` trigger appears in the normal page flow. The modal itself mirrors the current backend course-dialog structure: 560px desktop width, 26px corners, a 24px padded grid with 20px spacing, the 46px heading icon, and Cancel/Create actions grouped at the bottom-right. On narrow screens the padding drops to 20px and the two actions become equal-width columns.
+Only the `Open dialog` trigger appears in the normal page flow. Clicking it calls `showModal()`, so the native dialog moves into the browser top layer with its backdrop instead of rendering as page content. The modal mirrors the current backend course-dialog structure: 560px desktop width, 26px corners, a 24px padded grid with 20px spacing, the 46px heading icon, and Cancel/Create actions grouped at the bottom-right. On narrow screens the padding drops to 20px and the two actions become equal-width columns.
 
 ## Code
 
