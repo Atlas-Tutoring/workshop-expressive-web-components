@@ -12,6 +12,7 @@
 - Added `<ws-dialog>` with native modal top-layer behavior, Atlas-style blurred backdrops, composable content and action slots, responsive layout, and close/cancel events.
 - Added form-associated `<ws-time-picker>` with editable `HH:mm` values, hour/minute selection, configurable minute steps, time ranges, validation, clear behavior, and small, medium, and large sizes.
 - Added editable `<ws-code-block>` mode with live syntax highlighting, synchronized line numbers, native textarea editing, Tab/Shift+Tab indentation, readonly and disabled states, configurable rows and tab size, and composed input/change events.
+- Added a Workshop language dropdown to editable `<ws-code-block>` headers, with built-in syntax choices, configurable product language lists, immediate re-highlighting, and a dedicated `ws-code-language-change` event.
 
 ### Changed
 
