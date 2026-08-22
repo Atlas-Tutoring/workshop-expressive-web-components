@@ -243,26 +243,41 @@ suite('ws-tabs', () => {
     assert.isTrue(el.hasAttribute('indicator-animated'));
   });
 
-  test('keeps indicator animation active until transform finishes', async () => {
-    const el = await fixture<WsTabs>(html`
-      <ws-tabs>
-        <ws-tab href="#overview" selected>Overview</ws-tab>
-        <ws-tab href="#settings">Settings</ws-tab>
-      </ws-tabs>
-    `);
-    const indicator = el.shadowRoot!.querySelector<HTMLElement>('.indicator')!;
+  test('runs a real contained indicator animation in light theme', async () => {
+    const root = document.documentElement;
+    const previousTheme = root.getAttribute('data-ws-theme');
+    root.setAttribute('data-ws-theme', 'light');
 
-    el.setAttribute('indicator-animated', '');
+    try {
+      const el = await fixture<WsTabs>(html`
+        <ws-tabs variant="contained" value="edit">
+          <ws-tab value="edit">Edit</ws-tab>
+          <ws-tab value="preview">Longer preview</ws-tab>
+        </ws-tabs>
+      `);
+      const preview = el.querySelectorAll<WsTab>('ws-tab')[1];
+      const previewButton =
+        preview.shadowRoot!.querySelector<HTMLButtonElement>('button')!;
+      const indicator =
+        el.shadowRoot!.querySelector<HTMLElement>('.indicator')!;
 
-    indicator.dispatchEvent(
-      new TransitionEvent('transitionend', {propertyName: 'opacity'})
-    );
-    assert.isTrue(el.hasAttribute('indicator-animated'));
+      await waitForMeasuredIndicator(el);
+      previewButton.click();
 
-    indicator.dispatchEvent(
-      new TransitionEvent('transitionend', {propertyName: 'transform'})
-    );
-    assert.isFalse(el.hasAttribute('indicator-animated'));
+      await waitUntil(
+        () => indicator.getAnimations().length > 0,
+        'contained indicator did not start a browser animation in light theme'
+      );
+
+      const [animation] = indicator.getAnimations();
+      const frames = (animation.effect as KeyframeEffect).getKeyframes();
+      assert.lengthOf(frames, 2);
+      assert.notEqual(frames[0].transform, frames[1].transform);
+      assert.notEqual(frames[0].inlineSize, frames[1].inlineSize);
+    } finally {
+      if (previousTheme === null) root.removeAttribute('data-ws-theme');
+      else root.setAttribute('data-ws-theme', previousTheme);
+    }
   });
 
   test('does not animate while repositioning for orientation changes', async () => {
