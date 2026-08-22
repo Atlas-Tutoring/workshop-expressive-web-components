@@ -34,6 +34,7 @@ module.exports = function (data) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.9.1/fonts/remixicon.css">
     <link rel="stylesheet" href="${relative(page.url, '/docs.css')}">
     <link rel="stylesheet" href="${relative(page.url, '/palette.css')}">
+    <link rel="stylesheet" href="${relative(page.url, '/component-docs.css')}">
     <script type="module" src="${relative(
       page.url,
       '/ws-button.bundled.js'

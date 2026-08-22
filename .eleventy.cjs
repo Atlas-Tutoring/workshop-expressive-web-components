@@ -21,6 +21,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.setLibrary('md', markdown);
   eleventyConfig.addPassthroughCopy('docs-src/docs.css');
   eleventyConfig.addPassthroughCopy('docs-src/palette.css');
+  eleventyConfig.addPassthroughCopy('docs-src/component-docs.css');
   eleventyConfig.addPassthroughCopy('docs-src/favicon.svg');
   eleventyConfig.addPassthroughCopy('docs-src/.nojekyll');
   eleventyConfig.addCollection('example', (collectionApi) =>

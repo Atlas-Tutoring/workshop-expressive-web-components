@@ -1,0 +1,116 @@
+.example-content > p:first-of-type {
+  max-inline-size: 72ch;
+  margin: 0 0 30px;
+  color: var(--ws-color-on-surface-variant, #64748b);
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+.example-content > h2 {
+  margin: 48px 0 14px;
+  color: var(--ws-color-on-surface, #0f172a);
+  font-size: clamp(1.3rem, 2vw, 1.55rem);
+  line-height: 1.25;
+}
+
+.example-content > h2:first-of-type {
+  margin-block-start: 24px;
+}
+
+.example-content > h3 {
+  margin: 30px 0 12px;
+  color: var(--ws-color-on-surface, #0f172a);
+  font-size: 1.05rem;
+  line-height: 1.35;
+}
+
+.example-content > h2 + p,
+.example-content > h3 + p {
+  margin-block-start: 0;
+}
+
+.example-content > ul,
+.example-content > ol {
+  padding-inline-start: 22px;
+}
+
+.demo-panel {
+  margin: 16px 0 30px;
+  border-color: color-mix(
+    in srgb,
+    var(--ws-color-outline-variant, #e2e8f0) 82%,
+    var(--ws-color-primary, #6c5cff)
+  );
+  border-radius: var(--ws-shape-extra-large, 18px);
+  padding: clamp(20px, 3vw, 30px);
+  background: color-mix(
+    in srgb,
+    var(--ws-color-surface, #ffffff) 96%,
+    var(--ws-color-primary, #6c5cff) 4%
+  );
+  box-shadow: var(--ws-elevation-sm, 0 1px 2px rgb(15 23 42 / 8%));
+}
+
+.demo-panel > :first-child {
+  margin-block-start: 0;
+}
+
+.demo-panel > :last-child {
+  margin-block-end: 0;
+}
+
+.component-demo {
+  gap: 16px;
+}
+
+.component-demo h3 {
+  margin: 0;
+  color: var(--ws-color-on-surface-variant, #64748b);
+  font-size: 0.92rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.example-content table {
+  margin: 18px 0 30px;
+  font-size: 0.92rem;
+}
+
+.example-content th {
+  white-space: nowrap;
+}
+
+.example-content td {
+  color: var(--ws-color-on-surface-variant, #64748b);
+  vertical-align: top;
+}
+
+.example-content tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.example-content ws-code-block {
+  display: block;
+  margin-block: 18px 30px;
+}
+
+@media (max-width: 760px) {
+  .example-content > p:first-of-type {
+    margin-block-end: 24px;
+  }
+
+  .example-content > h2 {
+    margin-block-start: 38px;
+  }
+
+  .demo-panel {
+    margin-block: 14px 26px;
+    padding: 18px;
+  }
+
+  .example-content table {
+    display: block;
+    max-inline-size: 100%;
+    overflow-x: auto;
+  }
+}

@@ -3,7 +3,7 @@ layout: example.11ty.cjs
 title: Workshop Expressive Web Components ⌲ Examples ⌲ Tabs
 tags: example
 name: Tabs
-description: Navigation and contained view tabs with ws-tabs, ws-tab, and ws-tab-panel
+description: Navigation and contained view tabs with ws-tabs and ws-tab
 order: 6
 ---
 
@@ -68,27 +68,6 @@ Contained tabs stay in the current context. Give each `ws-tab` a stable `value` 
 
 Disabled tabs cannot be selected and are skipped by keyboard navigation.
 
-## Panel switching
-
-Pair value-driven tabs with matching `ws-tab-panel` children when Workshop should manage the visible local view for you.
-
-<div class="demo-panel component-demo">
-  <ws-tabs variant="contained" value="edit" aria-label="Editor mode">
-    <ws-tab value="edit">Edit</ws-tab>
-    <ws-tab value="preview">Preview</ws-tab>
-
-    <ws-tab-panel value="edit">
-      <p><strong>Edit view.</strong> Place the editor, form, or source control for this mode here.</p>
-    </ws-tab-panel>
-
-    <ws-tab-panel value="preview">
-      <p><strong>Preview view.</strong> Place the rendered representation of the same content here.</p>
-    </ws-tab-panel>
-  </ws-tabs>
-</div>
-
-The panel content is deliberately unstyled by `ws-tabs`. The application owns the panel UI; Workshop only owns selection, accessibility, keyboard behavior, and visibility.
-
 ## Code
 
 ```html
@@ -103,20 +82,6 @@ The panel content is deliberately unstyled by `ws-tabs`. The application owns th
 <ws-tabs variant="contained" value="edit" aria-label="Markdown mode">
   <ws-tab value="edit">Edit</ws-tab>
   <ws-tab value="preview">Preview</ws-tab>
-</ws-tabs>
-
-<!-- Contained tabs managing panels -->
-<ws-tabs variant="contained" value="edit" aria-label="Editor mode">
-  <ws-tab value="edit">Edit</ws-tab>
-  <ws-tab value="preview">Preview</ws-tab>
-
-  <ws-tab-panel value="edit">
-    Editor content
-  </ws-tab-panel>
-
-  <ws-tab-panel value="preview">
-    Preview content
-  </ws-tab-panel>
 </ws-tabs>
 ```
 
