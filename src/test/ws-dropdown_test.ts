@@ -124,6 +124,35 @@ suite('ws-dropdown', () => {
     assert.equal(iconSlot.assignedElements()[0]?.id, 'sort-icon');
   });
 
+  test('supports optional icons on individual choices', async () => {
+    const el = await fixture<WsDropdown>(html`
+      <ws-dropdown aria-label="Course action">
+        <option value="edit" icon="ri-edit-line">Edit</option>
+        <option value="duplicate">Duplicate</option>
+        <option value="delete" icon="ri-delete-bin-6-line">Delete</option>
+      </ws-dropdown>
+    `);
+    await el.updateComplete;
+
+    const options = Array.from(
+      el.shadowRoot!.querySelectorAll<HTMLButtonElement>('.option')
+    );
+
+    assert.include(
+      options[0].querySelector('.option-icon')?.className ?? '',
+      'ri-edit-line'
+    );
+    assert.notExists(options[1].querySelector('.option-icon'));
+    assert.include(
+      options[2].querySelector('.option-icon')?.className ?? '',
+      'ri-delete-bin-6-line'
+    );
+    assert.equal(
+      options[0].querySelector('.option-icon')?.getAttribute('part'),
+      'option-icon'
+    );
+  });
+
   test('supports icon-only triggers and disabling icon rotation', async () => {
     const el = await fixture<WsDropdown>(html`
       <ws-dropdown
