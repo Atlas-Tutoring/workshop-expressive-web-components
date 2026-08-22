@@ -52,6 +52,7 @@ export type {WsCrumb} from './components/breadcrumbs/index.js';
 export {WsCard} from './components/card/index.js';
 export {WsPage} from './components/page/index.js';
 export {WsCodeBlock} from './components/code-block/index.js';
+export type {WsCodeLanguageOption} from './components/code-block/index.js';
 export {WsSwitch} from './components/switch/index.js';
 
 export {WsTextField} from './components/text-field/index.js';
