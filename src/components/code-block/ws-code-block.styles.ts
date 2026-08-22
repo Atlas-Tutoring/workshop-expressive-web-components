@@ -59,7 +59,7 @@ export const wsCodeBlockStyles = css`
 
   .code-block {
     margin: 0;
-    overflow: hidden;
+    overflow: visible;
     border: 1px solid var(--ws-color-code-border);
     border-radius: var(--ws-code-block-radius, var(--ws-shape-large, 12px));
     background: var(--ws-color-code-background);
@@ -83,6 +83,8 @@ export const wsCodeBlockStyles = css`
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid var(--ws-color-code-border);
+    position: relative;
+    z-index: 3;
   }
 
   .language {
@@ -92,10 +94,40 @@ export const wsCodeBlockStyles = css`
     letter-spacing: 0.08em;
   }
 
+  .language-picker {
+    --ws-dropdown-small-height: 28px;
+    --ws-dropdown-small-padding-inline: 8px;
+    --ws-dropdown-menu-min-width: 168px;
+    --ws-dropdown-icon-size: 14px;
+    --ws-dropdown-icon-spacing: 4px;
+    --ws-dropdown-radius: var(--ws-shape-small, 6px);
+  }
+
+  .language-picker::part(control) {
+    color: var(--ws-color-code-muted);
+    font: var(--ws-typography-label-small);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .language-picker::part(listbox),
+  .language-picker::part(option) {
+    text-transform: none;
+    letter-spacing: normal;
+  }
+
   .readonly-code {
     margin: 0;
     overflow: auto;
     padding: var(--ws-spacing-lg, 16px);
+    border-end-start-radius: var(
+      --ws-code-block-radius,
+      var(--ws-shape-large, 12px)
+    );
+    border-end-end-radius: var(
+      --ws-code-block-radius,
+      var(--ws-shape-large, 12px)
+    );
   }
 
   code,
@@ -115,7 +147,16 @@ export const wsCodeBlockStyles = css`
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     min-inline-size: 0;
+    overflow: hidden;
     background: var(--ws-color-code-background);
+    border-end-start-radius: var(
+      --ws-code-block-radius,
+      var(--ws-shape-large, 12px)
+    );
+    border-end-end-radius: var(
+      --ws-code-block-radius,
+      var(--ws-shape-large, 12px)
+    );
   }
 
   .editor-shell.with-line-numbers {
