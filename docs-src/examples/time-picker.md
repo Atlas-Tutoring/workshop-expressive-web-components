@@ -7,7 +7,7 @@ description: Form-associated time-of-day selection with hour and minute controls
 order: 7
 ---
 
-<p>The time picker combines editable <code>HH:mm</code> input with a Workshop Expressive hour-and-minute surface, giving forms a consistent way to select a time of day without depending on browser-specific picker UI.</p>
+<p>The time picker combines progressively formatted <code>HH:mm</code> typing with a Workshop Expressive hour-and-minute surface. It inserts the separator while the user types, normalizes compact entries such as <code>930</code> to <code>09:30</code>, preserves the editing caret, and only submits complete canonical times to forms.</p>
 
 ## Live demo
 
@@ -52,6 +52,12 @@ order: 7
     <ws-time-picker size="large" label="Large" value="18:45"></ws-time-picker>
   </div>
 </div>
+
+## Typing behavior
+
+The editable field behaves like a structured time input. Typing `1430` progressively becomes `14:30`. An unambiguous one-digit hour is normalized too, so `930` becomes `09:30`. The generated colon is part of the editing experience: Backspace and Delete move cleanly across it instead of repeatedly removing and recreating the separator.
+
+Incomplete edits such as `14:` remain visible so the user can continue typing and validation can describe the issue, but they are not included in `FormData`. Once the entry is a valid complete time, forms receive the canonical 24-hour `HH:mm` value used by the component API. Range and `minute-step` validation still apply after formatting.
 
 ## Code
 
@@ -127,8 +133,8 @@ The time picker does not expose slots. The clock and clear actions are built in 
 
 ## Accessibility notes
 
-The component uses `ElementInternals`, so its name, value, reset behavior, disabled fieldsets, restored form state, required state, range constraints, and step validation behave like a native form control. The visual picker is exposed as a dialog with separate hour and minute listboxes, while the text field remains available for direct keyboard entry. Press Escape to close the picker without committing its draft value.
+The component uses `ElementInternals`, so its name, value, reset behavior, disabled fieldsets, restored form state, required state, range constraints, and step validation behave like a native form control. The visual picker is exposed as a dialog with separate hour and minute listboxes, while the text field remains available for direct keyboard entry. Automatic formatting preserves the normal text caret and keyboard editing model. Press Escape to close the picker without committing its draft value.
 
 ## Design notes
 
-The picker deliberately separates selection from commitment: choosing an hour or minute updates the large preview, while **Done** commits the complete time. This avoids accidental changes while scrolling through values. The surface uses semantic Workshop colors and elevation so it remains readable in both light and dark themes.
+The picker deliberately separates selection from commitment: choosing an hour or minute updates the large preview, while **Done** commits the complete time. Direct typing uses the same canonical 24-hour representation as the component value, so products do not need a second display-to-API conversion layer. The surface uses semantic Workshop colors and elevation so it remains readable in both light and dark themes.
