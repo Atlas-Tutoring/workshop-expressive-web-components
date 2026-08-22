@@ -5,7 +5,9 @@ on:
     branches:
       - main
     paths:
+      - .github/workflows/regenerate-security-lockfile.yml
       - package.json
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -26,27 +28,51 @@ jobs:
           node-version: 24
           cache: npm
 
+      - name: Correct security overrides
+        run: |
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+          packageJson.overrides ??= {};
+          delete packageJson.overrides['brace-expansion@1.1.15'];
+          packageJson.overrides['brace-expansion'] = '1.1.18';
+          fs.writeFileSync('package.json', `${JSON.stringify(packageJson, null, 2)}\n`);
+          NODE
+
       - name: Regenerate package lock
         run: npm install --package-lock-only --ignore-scripts
 
-      - name: Verify patched resolution
+      - name: Verify patched resolutions
         run: |
           node - <<'NODE'
           const lock = require('./package-lock.json');
-          const version = lock.packages?.['node_modules/brace-expansion']?.version;
-          if (version !== '1.1.18') {
-            throw new Error(`Expected brace-expansion 1.1.18, got ${version ?? 'missing'}`);
+          const packages = lock.packages ?? {};
+          const expected = new Map([
+            ['node_modules/brace-expansion', '1.1.18'],
+            ['node_modules/ip-address', '10.4.0'],
+            ['node_modules/linkify-it', '5.0.2'],
+            ['node_modules/serialize-javascript', '7.0.5'],
+            ['node_modules/tar-fs', '3.1.2'],
+            ['node_modules/js-yaml', '4.3.0'],
+            ['node_modules/gray-matter/node_modules/js-yaml', '3.15.0'],
+          ]);
+
+          for (const [path, version] of expected) {
+            const actual = packages[path]?.version;
+            if (actual !== version) {
+              throw new Error(`Expected ${path} ${version}, got ${actual ?? 'missing'}`);
+            }
           }
           NODE
 
-      - name: Commit regenerated lockfile
+      - name: Commit regenerated manifests
         run: |
-          if git diff --quiet -- package-lock.json; then
-            echo "package-lock.json is already current"
+          if git diff --quiet -- package.json package-lock.json; then
+            echo "Security manifests are already current"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add package-lock.json
-          git commit -m "Regenerate lockfile for security override"
+          git add package.json package-lock.json
+          git commit -m "Fix dependency security resolutions"
           git push origin HEAD
