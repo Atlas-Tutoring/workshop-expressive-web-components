@@ -26,7 +26,7 @@ order: 6
   </ws-tabs>
 </div>
 
-Contained tabs intentionally use the same compact treatment as the Atlas Markdown editor: a quiet `surface-variant` container, a slightly raised `secondary-container` selected surface, `on-surface-variant` idle text, and `on-secondary-container` selected text. The selected surface slides between tabs and briefly softens toward the container color during the move.
+Contained tabs intentionally use the same compact treatment as the Atlas Markdown editor: a quiet `surface-variant` container, a slightly raised `secondary-container` selected surface, `on-surface-variant` idle text, and `on-secondary-container` selected text. The selected surface slides between tabs while its theme color remains stable throughout the movement.
 
 ## Variants
 
@@ -158,11 +158,10 @@ ws-tabs[variant='contained'] {
   --ws-tabs-contained-tab-padding-block: 6px;
   --ws-tabs-contained-tab-padding-inline: 12px;
   --ws-tabs-contained-tab-font-weight: 500;
-  --ws-tabs-contained-indicator-color-duration: var(--ws-motion-duration-slow);
 }
 ```
 
-The selected surface uses `--ws-elevation-sm` by default. During a selection change, its background color is animated only between `secondary-container` and `surface-variant`, keeping the motion inside the active application palette. Motion comes from the shared `--ws-motion-*` tokens and respects `prefers-reduced-motion`.
+The selected surface uses `--ws-elevation-sm` by default. Selection motion only changes the indicator position and size, so semantic foreground and surface colors stay stable in both light and dark themes. Motion comes from the shared `--ws-motion-*` tokens and respects `prefers-reduced-motion`.
 
 ## Accessibility notes
 
@@ -178,6 +177,7 @@ The selected surface uses `--ws-elevation-sm` by default. During a selection cha
 - Use `standard` tabs for peer navigation and section-level movement.
 - Use `contained` tabs for compact local view changes such as Edit / Preview, Visual / Code, or Details / Raw.
 - Contained tabs are intentionally compact. Do not increase their radius or height just because the surrounding application uses larger shape tokens.
+- Contained tabs do not change color on hover; selection and focus are the meaningful states.
 - Let the application theme provide the contained colors through the shared `--ws-color-*` tokens instead of hardcoding a second component palette.
 - Icons are supported, but do not add them unless they improve recognition. The Atlas Edit / Preview pattern is text-only.
 - Keep panel presentation outside of the tab component. `ws-tab-panel` controls visibility and semantics, not the visual design of the editor or preview inside it.
