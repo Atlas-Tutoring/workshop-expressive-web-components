@@ -3,6 +3,12 @@ import {customElement, property, state} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
 
 import '../button/ws-button.js';
+import {
+  caretAfterDigitCount,
+  countDigits,
+  formatTimeInput,
+  moveCaretAcrossSeparator,
+} from '../structured-input.js';
 import {wsTimePickerStyles} from './ws-time-picker.styles.js';
 
 export type WsTimePickerSize = 'small' | 'medium' | 'large';
@@ -195,7 +201,9 @@ export class WsTimePicker extends LitElement {
             type="text"
             inputmode="numeric"
             autocomplete="off"
-            placeholder="HH:MM"
+            maxlength="5"
+            placeholder="HH:mm"
+            spellcheck="false"
             ?required=${this.required}
             ?disabled=${isDisabled}
             ?readonly=${this.readOnly}
@@ -205,6 +213,7 @@ export class WsTimePicker extends LitElement {
             aria-invalid=${isInvalid ? 'true' : 'false'}
             aria-controls=${this.pickerId}
             aria-expanded=${this.pickerOpen ? 'true' : 'false'}
+            @beforeinput=${this.handleBeforeInput}
             @input=${this.handleInput}
             @change=${this.handleChange}
             @blur=${this.handleBlur}
@@ -440,10 +449,28 @@ export class WsTimePicker extends LitElement {
     `;
   }
 
+  private handleBeforeInput(event: InputEvent) {
+    moveCaretAcrossSeparator(event, ':');
+  }
+
   private handleInput(event: InputEvent) {
     event.stopPropagation();
     const input = event.currentTarget as HTMLInputElement;
-    this.value = input.value;
+
+    if (event.isComposing) {
+      this.value = input.value;
+    } else {
+      const rawValue = input.value;
+      const rawCaret = input.selectionStart ?? rawValue.length;
+      const digitCaret = countDigits(rawValue.slice(0, rawCaret));
+      const formattedValue = formatTimeInput(rawValue);
+
+      input.value = formattedValue;
+      this.value = formattedValue;
+      const nextCaret = caretAfterDigitCount(formattedValue, digitCaret);
+      input.setSelectionRange(nextCaret, nextCaret);
+    }
+
     this.syncFormAndValidity();
     this.dispatchEvent(
       new InputEvent('input', {
@@ -577,7 +604,11 @@ export class WsTimePicker extends LitElement {
   }
 
   private syncFormAndValidity() {
-    this.internals.setFormValue(this.isEffectivelyDisabled ? null : this.value);
+    this.internals.setFormValue(
+      this.isEffectivelyDisabled || !this.parseTime(this.value)
+        ? null
+        : this.value
+    );
 
     if (this.customValidationMessage) {
       this.internals.setValidity(
