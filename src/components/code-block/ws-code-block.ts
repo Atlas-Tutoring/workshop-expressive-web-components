@@ -104,7 +104,10 @@ export class WsCodeBlock extends LitElement {
   @query('.line-numbers')
   private lineNumbersElement?: HTMLElement;
 
+  private editingStarted = false;
+
   private get displayCode() {
+    if (this.editable && this.editingStarted) return this.code;
     return this.code || this.slottedCode;
   }
 
@@ -225,6 +228,7 @@ export class WsCodeBlock extends LitElement {
   private handleEditorInput(event: InputEvent) {
     event.stopPropagation();
     const editor = event.currentTarget as HTMLTextAreaElement;
+    this.editingStarted = true;
     this.code = editor.value;
 
     this.dispatchEvent(
@@ -316,6 +320,7 @@ export class WsCodeBlock extends LitElement {
   ) {
     editor.value = value;
     editor.setSelectionRange(selectionStart, selectionEnd);
+    this.editingStarted = true;
     this.code = value;
 
     this.dispatchEvent(
