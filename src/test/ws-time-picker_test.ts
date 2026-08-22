@@ -44,6 +44,65 @@ suite('ws-time-picker', () => {
     assert.isTrue(event.composed);
   });
 
+  test('formats time input progressively and normalizes one-digit hours', async () => {
+    const el = await fixture<WsTimePicker>(html`
+      <ws-time-picker label="Start time"></ws-time-picker>
+    `);
+    const input = el.shadowRoot!.querySelector<HTMLInputElement>('input')!;
+
+    input.value = '14';
+    input.setSelectionRange(2, 2);
+    input.dispatchEvent(
+      new InputEvent('input', {bubbles: true, inputType: 'insertText'})
+    );
+    await el.updateComplete;
+
+    assert.equal(input.value, '14:');
+    assert.equal(el.value, '14:');
+    assert.equal(input.selectionStart, 3);
+
+    input.value = '930';
+    input.setSelectionRange(3, 3);
+    input.dispatchEvent(
+      new InputEvent('input', {bubbles: true, inputType: 'insertText'})
+    );
+    await el.updateComplete;
+
+    assert.equal(input.value, '09:30');
+    assert.equal(el.value, '09:30');
+    assert.equal(input.selectionStart, 5);
+  });
+
+  test('keeps incomplete typed times out of form submission', async () => {
+    const form = await fixture<HTMLFormElement>(html`
+      <form>
+        <ws-time-picker name="startTime"></ws-time-picker>
+      </form>
+    `);
+    const el = form.querySelector<WsTimePicker>('ws-time-picker')!;
+    const input = el.shadowRoot!.querySelector<HTMLInputElement>('input')!;
+
+    input.value = '14';
+    input.setSelectionRange(2, 2);
+    input.dispatchEvent(
+      new InputEvent('input', {bubbles: true, inputType: 'insertText'})
+    );
+    await el.updateComplete;
+
+    assert.equal(input.value, '14:');
+    assert.isNull(new FormData(form).get('startTime'));
+
+    input.value = '1430';
+    input.setSelectionRange(4, 4);
+    input.dispatchEvent(
+      new InputEvent('input', {bubbles: true, inputType: 'insertText'})
+    );
+    await el.updateComplete;
+
+    assert.equal(input.value, '14:30');
+    assert.equal(new FormData(form).get('startTime'), '14:30');
+  });
+
   test('commits selected hour and minute from the picker', async () => {
     const el = await fixture<WsTimePicker>(html`
       <ws-time-picker
