@@ -17,10 +17,10 @@ order: 6
     <ws-tab value="edit">Edit</ws-tab>
     <ws-tab value="preview">Preview</ws-tab>
 
-    <ws-tab-panel value="edit">
+    <ws-tab-panel slot="panel" value="edit">
       <p>Custom content #1</p>
     </ws-tab-panel>
-    <ws-tab-panel value="preview">
+    <ws-tab-panel slot="panel" value="preview">
       <p>Custom content #2</p>
     </ws-tab-panel>
   </ws-tabs>
@@ -87,10 +87,10 @@ Disabled tabs cannot be selected and are skipped by keyboard navigation.
   <ws-tab value="edit">Edit</ws-tab>
   <ws-tab value="preview">Preview</ws-tab>
 
-  <ws-tab-panel value="edit">
+  <ws-tab-panel slot="panel" value="edit">
     <p>Custom content #1</p>
   </ws-tab-panel>
-  <ws-tab-panel value="preview">
+  <ws-tab-panel slot="panel" value="preview">
     <p>Custom content #2</p>
   </ws-tab-panel>
 </ws-tabs>
