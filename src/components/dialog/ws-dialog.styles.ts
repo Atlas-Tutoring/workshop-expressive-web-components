@@ -14,10 +14,12 @@ export const wsDialogStyles = css`
     border: 1px solid
       var(--ws-dialog-border-color, var(--ws-color-outline-variant));
     border-radius: var(--ws-dialog-radius, 26px);
+    box-sizing: border-box;
     padding: 0;
     color: var(--ws-dialog-color, var(--ws-color-on-surface));
     background: var(--ws-dialog-background, var(--ws-color-surface));
     box-shadow: var(--ws-dialog-shadow, var(--ws-elevation-md));
+    font-family: var(--ws-font-family, 'Google Sans Flex', system-ui, sans-serif);
   }
 
   .dialog[open] {
@@ -101,22 +103,31 @@ export const wsDialogStyles = css`
   }
 
   .content {
+    display: grid;
+    gap: var(--ws-dialog-content-gap, 20px);
     min-inline-size: 0;
   }
 
+  .content slot {
+    display: contents;
+  }
+
   .content ::slotted(*) {
+    box-sizing: border-box;
+    inline-size: 100%;
     max-inline-size: 100%;
   }
 
   .actions {
+    min-inline-size: 0;
+  }
+
+  .actions slot {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
     gap: var(--ws-dialog-actions-gap, 8px);
-  }
-
-  .actions slot {
-    display: contents;
+    inline-size: 100%;
   }
 
   @keyframes ws-dialog-enter {
@@ -146,9 +157,9 @@ export const wsDialogStyles = css`
       padding: var(--ws-dialog-mobile-padding, 20px);
     }
 
-    .actions {
+    .actions slot {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      grid-template-columns: 1fr 1fr;
     }
 
     .actions ::slotted(ws-button) {
