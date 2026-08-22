@@ -163,6 +163,31 @@ suite('ws-code-block', () => {
     assert.isTrue(changeEvent.composed);
   });
 
+  test('lets slotted starter code be cleared without restoring it', async () => {
+    const el = await fixture<WsCodeBlock>(html`
+      <ws-code-block editable language="typescript">const starter = true;</ws-code-block>
+    `);
+    await el.updateComplete;
+    const editor = el.shadowRoot!.querySelector<HTMLTextAreaElement>('.editor')!;
+    assert.equal(editor.value, 'const starter = true;');
+
+    editor.value = '';
+    editor.dispatchEvent(
+      new InputEvent('input', {
+        bubbles: true,
+        composed: true,
+        inputType: 'deleteContentBackward',
+      })
+    );
+    await el.updateComplete;
+
+    assert.equal(el.code, '');
+    assert.equal(
+      el.shadowRoot!.querySelector<HTMLTextAreaElement>('.editor')!.value,
+      ''
+    );
+  });
+
   test('inserts and removes indentation with Tab and Shift+Tab', async () => {
     const el = await fixture<WsCodeBlock>(html`
       <ws-code-block editable tab-size="2" .code=${'return value;'}></ws-code-block>
@@ -197,6 +222,32 @@ suite('ws-code-block', () => {
     await el.updateComplete;
 
     assert.equal(el.code, 'return value;');
+  });
+
+  test('allows Escape then Tab to leave the editor', async () => {
+    const el = await fixture<WsCodeBlock>(html`
+      <ws-code-block editable .code=${'const x = 1;'}></ws-code-block>
+    `);
+    const editor = el.shadowRoot!.querySelector<HTMLTextAreaElement>('.editor')!;
+
+    const escape = new KeyboardEvent('keydown', {
+      key: 'Escape',
+      bubbles: true,
+      composed: true,
+      cancelable: true,
+    });
+    editor.dispatchEvent(escape);
+
+    const tab = new KeyboardEvent('keydown', {
+      key: 'Tab',
+      bubbles: true,
+      composed: true,
+      cancelable: true,
+    });
+    editor.dispatchEvent(tab);
+
+    assert.isFalse(tab.defaultPrevented);
+    assert.equal(el.code, 'const x = 1;');
   });
 
   test('respects line-number, readonly, and disabled editor states', async () => {
