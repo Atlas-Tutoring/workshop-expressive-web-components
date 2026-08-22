@@ -10,6 +10,9 @@ export type WsDropdownSize = 'small' | 'medium' | 'large';
 /**
  * A form-associated Workshop Expressive dropdown.
  *
+ * Source `option` elements may provide an optional `icon` attribute containing
+ * one or more icon classes. Options without it render as text-only choices.
+ *
  * @slot icon - Optional trigger indicator icon. Falls back to a chevron.
  */
 @customElement('ws-dropdown')
@@ -53,6 +56,7 @@ export class WsDropdown extends LitElement {
     value: string;
     label: string;
     disabled: boolean;
+    icon?: string;
   }> = [];
 
   private readonly internals = this.attachInternals();
@@ -150,8 +154,18 @@ export class WsDropdown extends LitElement {
             @pointerenter=${() => (this.activeIndex = index)}
             @click=${() => this.selectOption(index)}
           >
-            <span>${option.label}</span>${option.value === this.value
-              ? html`<svg viewBox="0 0 24 24" aria-hidden="true">
+            <span class="option-content">
+              ${option.icon
+                ? html`<i
+                    class="option-icon ${option.icon}"
+                    part="option-icon"
+                    aria-hidden="true"
+                  ></i>`
+                : nothing}
+              <span class="option-label">${option.label}</span>
+            </span>
+            ${option.value === this.value
+              ? html`<svg class="option-check" viewBox="0 0 24 24" aria-hidden="true">
                   <path
                     d="m9.2 16.2-4.1-4.1-1.4 1.4L9.2 19 21 7.2l-1.4-1.4-10.4 10.4Z"
                   ></path>
@@ -218,6 +232,7 @@ export class WsDropdown extends LitElement {
         value: option.value,
         label: option.textContent?.trim() ?? '',
         disabled: option.disabled,
+        icon: option.getAttribute('icon')?.trim() || undefined,
       })
     );
     if (!this.value && this.options.length) this.value = this.options[0].value;
