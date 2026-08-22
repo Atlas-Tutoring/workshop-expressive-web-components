@@ -4,6 +4,7 @@ import './components/app-bar/ws-app-bar.js';
 import './components/drawer/ws-drawer.js';
 import './components/drawer/ws-drawer-item.js';
 import './components/drawer/ws-drawer-category.js';
+import './components/dialog/ws-dialog.js';
 import './components/brand/ws-brand-mark.js';
 import './components/tabs/ws-tabs.js';
 import './components/tabs/ws-tab.js';
@@ -33,6 +34,9 @@ export {
   WsDrawerItem,
 } from './components/drawer/index.js';
 export type {WsDrawerItemClickDetail} from './components/drawer/index.js';
+
+export {WsDialog} from './components/dialog/index.js';
+export type {WsDialogCloseDetail} from './components/dialog/index.js';
 
 export {WsBrandMark} from './components/brand/index.js';
 

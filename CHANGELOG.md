@@ -8,6 +8,7 @@
 - Added button-aligned small, medium, and large dropdown sizing, animated chevron rotation, reduced-motion handling, and dropdown CSS parts.
 - Added icon-only dropdown triggers, a customizable `icon` slot with the existing arrow as its fallback, and configurable icon rotation through `rotate-icon`.
 - Added `contained` tabs for compact local view switching, value-driven button tabs, and the new `<ws-tab-panel>` component with automatic panel synchronization and keyboard navigation.
+- Added `<ws-dialog>` with native modal top-layer behavior, Atlas-style blurred backdrops, composable content and action slots, responsive layout, and close/cancel events.
 
 ### Changed
 
@@ -16,6 +17,7 @@
 - Aligned contained-tab geometry and interaction with the Atlas Edit / Preview control, including its compact 3px inset, 11px outer radius, 8px selected surface, and quiet interaction treatment.
 - Kept contained-tab colors tied to semantic Workshop tokens so Atlas dark and light themes provide the bar, selected surface, text, focus, and elevation colors directly.
 - Animated the contained selected-surface background during indicator movement, blending only between the active theme's `secondary-container` and `surface-variant` colors and respecting reduced-motion preferences.
+- Standardized component documentation spacing, section hierarchy, demo surfaces, and tables, and removed the redundant tabs panel-switching demo.
 
 All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components` are documented in this file.
 
