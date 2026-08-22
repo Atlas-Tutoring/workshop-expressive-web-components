@@ -1,0 +1,133 @@
+name: Apply structured picker input formatting
+
+on:
+  push:
+    paths:
+      - .github/workflows/structured-picker-inputs.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Apply picker formatting changes
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+
+          const replace = (path, from, to) => {
+            const source = fs.readFileSync(path, 'utf8');
+            if (!source.includes(from)) {
+              throw new Error(`Expected source was not found in ${path}`);
+            }
+            fs.writeFileSync(path, source.replace(from, to));
+          };
+
+          replace(
+            'src/components/date-picker/ws-date-picker.ts',
+            "import '../button/ws-button.js';\nimport {wsDatePickerStyles} from './ws-date-picker.styles.js';",
+            "import '../button/ws-button.js';\nimport {\n  caretAfterDigitCount,\n  countDigits,\n  formatIsoDateInput,\n  moveCaretAcrossSeparator,\n} from '../structured-input.js';\nimport {wsDatePickerStyles} from './ws-date-picker.styles.js';"
+          );
+
+          replace(
+            'src/components/date-picker/ws-date-picker.ts',
+            `          inputmode="numeric"\n          placeholder="YYYY-MM-DD"\n          ?required=\${this.required}`,
+            `          inputmode="numeric"\n          autocomplete="off"\n          maxlength="10"\n          placeholder="YYYY-MM-DD"\n          spellcheck="false"\n          ?required=\${this.required}`
+          );
+
+          replace(
+            'src/components/date-picker/ws-date-picker.ts',
+            `          aria-invalid=\${isInvalid ? 'true' : 'false'}\n          @input=\${this.handleInput}`,
+            `          aria-invalid=\${isInvalid ? 'true' : 'false'}\n          @beforeinput=\${this.handleBeforeInput}\n          @input=\${this.handleInput}`
+          );
+
+          replace(
+            'src/components/date-picker/ws-date-picker.ts',
+            `  private handleInput(event: InputEvent) {\n    event.stopPropagation();\n    const input = event.currentTarget as HTMLInputElement;\n    this.value = input.value;\n    this.syncFormAndValidity();\n    this.dispatchEvent(\n      new InputEvent('input', {\n        bubbles: true,\n        composed: true,\n        data: event.data,\n        inputType: event.inputType,\n        isComposing: event.isComposing,\n      })\n    );\n  }`,
+            `  private handleBeforeInput(event: InputEvent) {\n    moveCaretAcrossSeparator(event, '-');\n  }\n\n  private handleInput(event: InputEvent) {\n    event.stopPropagation();\n    const input = event.currentTarget as HTMLInputElement;\n\n    if (event.isComposing) {\n      this.value = input.value;\n    } else {\n      const rawValue = input.value;\n      const rawCaret = input.selectionStart ?? rawValue.length;\n      const digitCaret = countDigits(rawValue.slice(0, rawCaret));\n      const formattedValue = formatIsoDateInput(rawValue);\n\n      input.value = formattedValue;\n      this.value = formattedValue;\n      const nextCaret = caretAfterDigitCount(formattedValue, digitCaret);\n      input.setSelectionRange(nextCaret, nextCaret);\n    }\n\n    this.syncFormAndValidity();\n    this.dispatchEvent(\n      new InputEvent('input', {\n        bubbles: true,\n        composed: true,\n        data: event.data,\n        inputType: event.inputType,\n        isComposing: event.isComposing,\n      })\n    );\n  }`
+          );
+
+          replace(
+            'src/components/date-picker/ws-date-picker.ts',
+            `    this.internals.setFormValue(isDisabled ? null : this.value || null);`,
+            `    this.internals.setFormValue(\n      isDisabled || !parsedValue ? null : this.value\n    );`
+          );
+
+          replace(
+            'src/components/time-picker/ws-time-picker.ts',
+            "import '../button/ws-button.js';\nimport {wsTimePickerStyles} from './ws-time-picker.styles.js';",
+            "import '../button/ws-button.js';\nimport {\n  caretAfterDigitCount,\n  countDigits,\n  formatTimeInput,\n  moveCaretAcrossSeparator,\n} from '../structured-input.js';\nimport {wsTimePickerStyles} from './ws-time-picker.styles.js';"
+          );
+
+          replace(
+            'src/components/time-picker/ws-time-picker.ts',
+            `            inputmode="numeric"\n            autocomplete="off"\n            placeholder="HH:MM"`,
+            `            inputmode="numeric"\n            autocomplete="off"\n            maxlength="5"\n            placeholder="HH:mm"\n            spellcheck="false"`
+          );
+
+          replace(
+            'src/components/time-picker/ws-time-picker.ts',
+            `            aria-expanded=\${this.pickerOpen ? 'true' : 'false'}\n            @input=\${this.handleInput}`,
+            `            aria-expanded=\${this.pickerOpen ? 'true' : 'false'}\n            @beforeinput=\${this.handleBeforeInput}\n            @input=\${this.handleInput}`
+          );
+
+          replace(
+            'src/components/time-picker/ws-time-picker.ts',
+            `  private handleInput(event: InputEvent) {\n    event.stopPropagation();\n    const input = event.currentTarget as HTMLInputElement;\n    this.value = input.value;\n    this.syncFormAndValidity();\n    this.dispatchEvent(\n      new InputEvent('input', {\n        bubbles: true,\n        composed: true,\n        data: event.data,\n        inputType: event.inputType,\n        isComposing: event.isComposing,\n      })\n    );\n  }`,
+            `  private handleBeforeInput(event: InputEvent) {\n    moveCaretAcrossSeparator(event, ':');\n  }\n\n  private handleInput(event: InputEvent) {\n    event.stopPropagation();\n    const input = event.currentTarget as HTMLInputElement;\n\n    if (event.isComposing) {\n      this.value = input.value;\n    } else {\n      const rawValue = input.value;\n      const rawCaret = input.selectionStart ?? rawValue.length;\n      const digitCaret = countDigits(rawValue.slice(0, rawCaret));\n      const formattedValue = formatTimeInput(rawValue);\n\n      input.value = formattedValue;\n      this.value = formattedValue;\n      const nextCaret = caretAfterDigitCount(formattedValue, digitCaret);\n      input.setSelectionRange(nextCaret, nextCaret);\n    }\n\n    this.syncFormAndValidity();\n    this.dispatchEvent(\n      new InputEvent('input', {\n        bubbles: true,\n        composed: true,\n        data: event.data,\n        inputType: event.inputType,\n        isComposing: event.isComposing,\n      })\n    );\n  }`
+          );
+
+          replace(
+            'src/components/time-picker/ws-time-picker.ts',
+            `    this.internals.setFormValue(this.isEffectivelyDisabled ? null : this.value);`,
+            `    this.internals.setFormValue(\n      this.isEffectivelyDisabled || !this.parseTime(this.value)\n        ? null\n        : this.value\n    );`
+          );
+
+          replace(
+            'src/test/ws-date-picker_test.ts',
+            `  test('participates in form submission and reset', async () => {`,
+            `  test('formats date input progressively and normalizes pasted separators', async () => {\n    const el = await fixture<WsDatePicker>(html\`\n      <ws-date-picker label="Release date"></ws-date-picker>\n    \`);\n    const input = el.shadowRoot!.querySelector<HTMLInputElement>('input')!;\n\n    input.value = '2026';\n    input.setSelectionRange(4, 4);\n    input.dispatchEvent(\n      new InputEvent('input', {bubbles: true, inputType: 'insertText'})\n    );\n    await el.updateComplete;\n    assert.equal(input.value, '2026-');\n    assert.equal(el.value, '2026-');\n\n    input.value = '2026/08/22';\n    input.setSelectionRange(input.value.length, input.value.length);\n    input.dispatchEvent(\n      new InputEvent('input', {bubbles: true, inputType: 'insertFromPaste'})\n    );\n    await el.updateComplete;\n    assert.equal(input.value, '2026-08-22');\n    assert.equal(el.value, '2026-08-22');\n    assert.equal(input.selectionStart, 10);\n  });\n\n  test('participates in form submission and reset', async () => {`
+          );
+
+          replace(
+            'src/test/ws-time-picker_test.ts',
+            `  test('commits selected hour and minute from the picker', async () => {`,
+            `  test('formats time input progressively and normalizes one-digit hours', async () => {\n    const el = await fixture<WsTimePicker>(html\`\n      <ws-time-picker label="Start time"></ws-time-picker>\n    \`);\n    const input = el.shadowRoot!.querySelector<HTMLInputElement>('input')!;\n\n    input.value = '14';\n    input.setSelectionRange(2, 2);\n    input.dispatchEvent(\n      new InputEvent('input', {bubbles: true, inputType: 'insertText'})\n    );\n    await el.updateComplete;\n    assert.equal(input.value, '14:');\n    assert.equal(el.value, '14:');\n\n    input.value = '930';\n    input.setSelectionRange(3, 3);\n    input.dispatchEvent(\n      new InputEvent('input', {bubbles: true, inputType: 'insertText'})\n    );\n    await el.updateComplete;\n    assert.equal(input.value, '09:30');\n    assert.equal(el.value, '09:30');\n    assert.equal(input.selectionStart, 5);\n  });\n\n  test('commits selected hour and minute from the picker', async () => {`
+          );
+
+          replace(
+            'docs-src/examples/date-picker.md',
+            '<p>The date picker places a custom Workshop Expressive calendar directly beneath the text field, with consistent labels, validation, sizing, and form participation.</p>',
+            '<p>The date picker combines progressively formatted <code>YYYY-MM-DD</code> typing with a custom Workshop Expressive calendar. Separators are inserted automatically, pasted numeric date variants are normalized, incomplete edits stay out of form submission, and completed values remain canonical for APIs.</p>'
+          );
+
+          replace(
+            'docs-src/examples/time-picker.md',
+            '<p>The time picker combines editable <code>HH:mm</code> input with a Workshop Expressive hour-and-minute surface, giving forms a consistent way to select a time of day without depending on browser-specific picker UI.</p>',
+            '<p>The time picker combines progressively formatted <code>HH:mm</code> typing with a Workshop Expressive hour-and-minute surface. Separators are inserted automatically, compact input such as <code>930</code> normalizes to <code>09:30</code>, incomplete edits stay out of form submission, and completed values remain canonical for APIs.</p>'
+          );
+
+          replace(
+            'CHANGELOG.md',
+            '- Standardized component documentation spacing, section hierarchy, demo surfaces, and tables, and removed the redundant tabs panel-switching demo.',
+            '- Added progressive, caret-aware typing formats to the date and time pickers, including automatic separators, paste normalization, and canonical form values.\n- Standardized component documentation spacing, section hierarchy, demo surfaces, and tables, and removed the redundant tabs panel-switching demo.'
+          );
+          NODE
+      - name: Verify library
+        run: npm run ci
+      - name: Commit verified picker improvements
+        run: |
+          rm .github/workflows/structured-picker-inputs.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Improve date and time typing experience"
+          git push
