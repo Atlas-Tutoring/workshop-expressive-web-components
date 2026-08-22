@@ -364,12 +364,38 @@ export const wsDropdownStyles = css`
       --ws-typography-body-medium,
       400 14px / 20px var(--ws-font-family, sans-serif)
     );
+    gap: var(--ws-spacing-sm, 8px);
     inline-size: 100%;
     justify-content: space-between;
     min-block-size: var(--ws-dropdown-option-height, 40px);
     outline: none;
     padding: 8px 10px;
     text-align: start;
+  }
+
+  .option-content {
+    align-items: center;
+    display: inline-flex;
+    gap: var(--ws-dropdown-option-icon-gap, var(--ws-spacing-sm, 8px));
+    min-inline-size: 0;
+  }
+
+  .option-icon {
+    align-items: center;
+    block-size: var(--ws-dropdown-option-icon-size, 18px);
+    display: inline-flex;
+    flex: 0 0 var(--ws-dropdown-option-icon-size, 18px);
+    font-size: var(--ws-dropdown-option-icon-size, 18px);
+    inline-size: var(--ws-dropdown-option-icon-size, 18px);
+    justify-content: center;
+    line-height: 1;
+  }
+
+  .option-label {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .option.active,
@@ -387,9 +413,10 @@ export const wsDropdownStyles = css`
     opacity: 0.42;
   }
 
-  .option svg {
+  .option-check {
     block-size: 18px;
     fill: currentcolor;
+    flex: 0 0 18px;
     inline-size: 18px;
   }
 
