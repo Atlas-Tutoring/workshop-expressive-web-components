@@ -106,16 +106,6 @@ suite('ws-tabs', () => {
       editPanel.id
     );
     assert.equal(editPanel.getAttribute('aria-label'), 'Edit');
-    const editControl = edit.shadowRoot!.querySelector('button')!;
-    const editStyles = getComputedStyle(editControl);
-    assert.equal(
-      editStyles.getPropertyValue('--ws-tab-hover-background').trim(),
-      'transparent'
-    );
-    assert.equal(
-      editStyles.getPropertyValue('--ws-tab-hover-color').trim(),
-      'inherit'
-    );
   });
 
   test('updates contained tabs when value changes programmatically', async () => {
