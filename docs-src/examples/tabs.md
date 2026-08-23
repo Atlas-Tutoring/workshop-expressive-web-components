@@ -183,7 +183,7 @@ ws-tabs[variant='contained'] {
 }
 ```
 
-The selected surface uses `--ws-elevation-sm` by default. Selection motion only changes the indicator position and size, so semantic foreground and surface colors stay stable in both light and dark themes. Motion comes from the shared `--ws-motion-*` tokens and respects `prefers-reduced-motion`.
+The selected surface uses `--ws-elevation-sm` by default. Selection motion only changes the indicator position and size, so semantic foreground and surface colors stay stable in both light and dark themes. Motion comes from `--ws-motion-duration-slow` and `--ws-motion-easing-standard`, continues from the indicator's current visible position when selection changes quickly, and respects `prefers-reduced-motion`.
 
 ## Accessibility notes
 

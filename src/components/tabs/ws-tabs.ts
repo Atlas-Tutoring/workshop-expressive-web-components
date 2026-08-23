@@ -123,11 +123,7 @@ export class WsTabs extends LitElement {
           @click=${this.selectClickedTab}
           @keydown=${this.handleKeydown}
         >
-          <div
-            class="indicator"
-            part="indicator"
-            aria-hidden="true"
-          ></div>
+          <div class="indicator" part="indicator" aria-hidden="true"></div>
           <slot @slotchange=${this.handleSlotChange}></slot>
         </div>
         <slot
@@ -155,10 +151,15 @@ export class WsTabs extends LitElement {
 
     this.cancelIndicatorAnimation();
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
     this.toggleAttribute('indicator-animated', true);
-    const duration = 240;
+    const styles = getComputedStyle(this);
+    const duration = this.parseDuration(
+      styles.getPropertyValue('--ws-motion-duration-slow'),
+      240
+    );
+    const easing =
+      styles.getPropertyValue('--ws-motion-easing-standard').trim() ||
+      'cubic-bezier(0.2, 0, 0, 1)';
     const animation = indicator.animate(
       [
         {
@@ -174,7 +175,8 @@ export class WsTabs extends LitElement {
       ],
       {
         duration,
-        easing: 'cubic-bezier(0.2, 0, 0, 1)',
+        easing,
+        fill: 'forwards',
       }
     );
 
@@ -183,9 +185,22 @@ export class WsTabs extends LitElement {
       .catch(() => undefined)
       .finally(() => {
         if (this.indicatorAnimation !== animation) return;
+        this.applyIndicatorGeometry(next);
         this.indicatorAnimation = undefined;
+        animation.cancel();
         this.toggleAttribute('indicator-animated', false);
       });
+  }
+
+  private parseDuration(value: string, fallback: number) {
+    const duration = value.trim();
+    const match = /^(-?[\d.]+)(ms|s)$/.exec(duration);
+    if (!match) return fallback;
+
+    const milliseconds = Number(match[1]) * (match[2] === 's' ? 1000 : 1);
+    return Number.isFinite(milliseconds) && milliseconds >= 0
+      ? milliseconds
+      : fallback;
   }
 
   private readonly handleResize = () => {
@@ -203,12 +218,16 @@ export class WsTabs extends LitElement {
     const tabsElement = this.tabsElement;
     const selectedTab = this.selectedTab;
     const selectedChanged = selectedTab !== this.lastSelectedTab;
-    const previousGeometry = this.lastIndicatorGeometry;
+    const previousGeometry =
+      tabsElement && this.indicatorAnimation
+        ? this.measureRenderedIndicatorGeometry(tabsElement)
+        : this.lastIndicatorGeometry;
     const shouldAnimate =
       options.animate !== false &&
       this.hasMeasuredIndicator &&
       selectedChanged &&
-      Boolean(previousGeometry);
+      Boolean(previousGeometry) &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     this.lastSelectedTab = selectedTab;
 
@@ -222,6 +241,20 @@ export class WsTabs extends LitElement {
 
     const geometry = this.measureIndicatorGeometry(tabsElement, selectedTab);
 
+    this.style.setProperty('--ws-tabs-indicator-opacity', '1');
+
+    if (shouldAnimate && previousGeometry) {
+      this.animateIndicator(previousGeometry, geometry);
+    } else {
+      this.cancelIndicatorAnimation();
+      this.applyIndicatorGeometry(geometry);
+    }
+
+    this.lastIndicatorGeometry = geometry;
+    this.hasMeasuredIndicator = true;
+  };
+
+  private applyIndicatorGeometry(geometry: IndicatorGeometry) {
     this.style.setProperty(
       '--ws-tabs-indicator-inline-size',
       `${geometry.inlineSize}px`
@@ -232,17 +265,21 @@ export class WsTabs extends LitElement {
     );
     this.style.setProperty('--ws-tabs-indicator-x', `${geometry.x}px`);
     this.style.setProperty('--ws-tabs-indicator-y', `${geometry.y}px`);
-    this.style.setProperty('--ws-tabs-indicator-opacity', '1');
+  }
 
-    if (shouldAnimate && previousGeometry) {
-      this.animateIndicator(previousGeometry, geometry);
-    } else {
-      this.cancelIndicatorAnimation();
-    }
+  private measureRenderedIndicatorGeometry(
+    tabsElement: HTMLElement
+  ): IndicatorGeometry {
+    const hostRect = tabsElement.getBoundingClientRect();
+    const indicatorRect = this.indicatorElement!.getBoundingClientRect();
 
-    this.lastIndicatorGeometry = geometry;
-    this.hasMeasuredIndicator = true;
-  };
+    return {
+      x: indicatorRect.left - hostRect.left,
+      y: indicatorRect.top - hostRect.top,
+      inlineSize: indicatorRect.width,
+      blockSize: indicatorRect.height,
+    };
+  }
 
   private measureIndicatorGeometry(
     tabsElement: HTMLElement,
