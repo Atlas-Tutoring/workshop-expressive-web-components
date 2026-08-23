@@ -10,9 +10,11 @@ export type WsDropdownSize = 'small' | 'medium' | 'large';
 /**
  * A form-associated Workshop Expressive dropdown.
  *
- * Source `option` elements may provide an optional `icon` attribute containing
- * one or more icon classes. Options without it render as text-only choices.
+ * Source `option` elements may provide an optional `data-icon` attribute
+ * containing one or more icon classes. Options without it render as text-only
+ * choices.
  *
+ * @slot - Native `option` elements used to populate the dropdown.
  * @slot icon - Optional trigger indicator icon. Falls back to a chevron.
  */
 @customElement('ws-dropdown')
@@ -139,8 +141,8 @@ export class WsDropdown extends LitElement {
       id=${this.listboxId}
       role="listbox"
       aria-label=${ifDefined(this.accessibleLabel || this.label || undefined)}
-      aria-hidden=${this.open ? nothing : 'true'}
-      ?inert=${!this.open}
+      aria-hidden=${ifDefined(this.open ? undefined : 'true')}
+      .inert=${!this.open}
     >
       ${this.options.map(
         (option, index) => html`
@@ -232,7 +234,9 @@ export class WsDropdown extends LitElement {
         value: option.value,
         label: option.textContent?.trim() ?? '',
         disabled: option.disabled,
-        icon: option.getAttribute('icon')?.trim() || undefined,
+        icon:
+          (option.dataset.icon ?? option.getAttribute('icon'))?.trim() ||
+          undefined,
       })
     );
     if (!this.value && this.options.length) this.value = this.options[0].value;

@@ -40,7 +40,7 @@ jobs:
 
       - name: Upload Lit analyzer diagnostics
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: lit-analyzer-diagnostics
           path: lit-analyzer.log
