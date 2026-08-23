@@ -324,6 +324,12 @@ suite('ws-tabs', () => {
     const tabsRect = indicator.parentElement!.getBoundingClientRect();
 
     editButton.click();
+    await waitUntil(
+      () =>
+        indicator.getAnimations().length > 0 &&
+        indicator.getAnimations()[0] !== firstAnimation,
+      'reversed contained indicator animation did not start'
+    );
     const [reversedAnimation] = indicator.getAnimations();
     const [firstFrame] = (
       reversedAnimation.effect as KeyframeEffect
