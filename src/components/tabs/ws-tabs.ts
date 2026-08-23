@@ -63,6 +63,7 @@ export class WsTabs extends LitElement {
   private indicatorAnimation?: Animation;
   private indicatorUpdateFrame = 0;
   private lastIndicatorGeometry?: IndicatorGeometry;
+  private pendingIndicatorGeometry?: IndicatorGeometry;
   private lastSelectedTab: WsTab | null = null;
   private syncingValue = false;
 
@@ -226,9 +227,11 @@ export class WsTabs extends LitElement {
     const selectedTab = this.selectedTab;
     const selectedChanged = selectedTab !== this.lastSelectedTab;
     const previousGeometry =
-      tabsElement && this.indicatorAnimation
+      this.pendingIndicatorGeometry ??
+      (tabsElement && this.indicatorAnimation
         ? this.measureRenderedIndicatorGeometry(tabsElement)
-        : this.lastIndicatorGeometry;
+        : this.lastIndicatorGeometry);
+    this.pendingIndicatorGeometry = undefined;
     const shouldAnimate =
       options.animate !== false &&
       this.hasMeasuredIndicator &&
@@ -286,6 +289,13 @@ export class WsTabs extends LitElement {
       inlineSize: indicatorRect.width,
       blockSize: indicatorRect.height,
     };
+  }
+
+  private captureIndicatorAnimationGeometry() {
+    const tabsElement = this.tabsElement;
+    if (!tabsElement || !this.indicatorAnimation) return;
+    this.pendingIndicatorGeometry =
+      this.measureRenderedIndicatorGeometry(tabsElement);
   }
 
   private measureIndicatorGeometry(
@@ -365,6 +375,7 @@ export class WsTabs extends LitElement {
     const matchingTab = this.tabs.find((tab) => tab.value === this.value);
     if (!matchingTab || matchingTab.disabled) return;
 
+    this.captureIndicatorAnimationGeometry();
     this.tabs.forEach((tab) => {
       tab.selected = tab === matchingTab;
     });
@@ -477,6 +488,7 @@ export class WsTabs extends LitElement {
   }
 
   private selectTab(tab: WsTab, options: {emit?: boolean} = {}) {
+    this.captureIndicatorAnimationGeometry();
     this.tabs.forEach((candidate) => {
       candidate.selected = candidate === tab;
     });
