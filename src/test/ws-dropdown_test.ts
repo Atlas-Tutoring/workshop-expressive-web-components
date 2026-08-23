@@ -127,9 +127,9 @@ suite('ws-dropdown', () => {
   test('supports optional icons on individual choices', async () => {
     const el = await fixture<WsDropdown>(html`
       <ws-dropdown aria-label="Course action">
-        <option value="edit" icon="ri-edit-line">Edit</option>
+        <option value="edit" data-icon="ri-edit-line">Edit</option>
         <option value="duplicate">Duplicate</option>
-        <option value="delete" icon="ri-delete-bin-6-line">Delete</option>
+        <option value="delete" data-icon="ri-delete-bin-6-line">Delete</option>
       </ws-dropdown>
     `);
     await el.updateComplete;
@@ -157,7 +157,7 @@ suite('ws-dropdown', () => {
     const el = await fixture<WsDropdown>(html`
       <ws-dropdown
         icon-only
-        rotate-icon="false"
+        .rotateIcon=${false}
         variant="secondary"
         aria-label="Sort order"
       >

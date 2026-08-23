@@ -95,13 +95,13 @@ The trigger uses the dropdown arrow by default. Add `icon-only` to make the trig
 
 ## Choice icons
 
-Individual choices may optionally provide an `icon` attribute containing one or more icon classes. Choices without `icon` stay text-only and do not reserve empty icon space, so icon and non-icon entries can be mixed in the same menu.
+Individual choices may optionally provide a `data-icon` attribute containing one or more icon classes. Choices without `data-icon` stay text-only and do not reserve empty icon space, so icon and non-icon entries can be mixed in the same menu.
 
 <div class="demo-panel dropdown-demo">
   <ws-dropdown value="edit" aria-label="Course action">
-    <option value="edit" icon="ri-edit-line">Edit</option>
+    <option value="edit" data-icon="ri-edit-line">Edit</option>
     <option value="duplicate">Duplicate</option>
-    <option value="delete" icon="ri-delete-bin-6-line">Delete</option>
+    <option value="delete" data-icon="ri-delete-bin-6-line">Delete</option>
   </ws-dropdown>
 </div>
 
@@ -131,9 +131,9 @@ Individual choices may optionally provide an `icon` attribute containing one or 
 </ws-dropdown>
 
 <ws-dropdown value="edit" aria-label="Course action">
-  <option value="edit" icon="ri-edit-line">Edit</option>
+  <option value="edit" data-icon="ri-edit-line">Edit</option>
   <option value="duplicate">Duplicate</option>
-  <option value="delete" icon="ri-delete-bin-6-line">Delete</option>
+  <option value="delete" data-icon="ri-delete-bin-6-line">Delete</option>
 </ws-dropdown>
 ```
 

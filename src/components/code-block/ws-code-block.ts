@@ -270,7 +270,7 @@ export class WsCodeBlock extends LitElement {
             spellcheck="false"
             autocomplete="off"
             autocapitalize="off"
-            wrap="off"
+            wrap="soft"
             ?readonly=${this.readOnly}
             ?disabled=${this.disabled}
             aria-label=${this.accessibleLabel}
