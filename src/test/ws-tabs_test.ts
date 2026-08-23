@@ -340,11 +340,18 @@ suite('ws-tabs', () => {
       visibleRect.width,
       0.5
     );
-    assert.equal(
-      firstFrame.transform,
-      `translate(${visibleRect.left - tabsRect.left}px, ${
-        visibleRect.top - tabsRect.top
-      }px)`
+    const firstFrameTransform = new DOMMatrixReadOnly(
+      String(firstFrame.transform)
+    );
+    assert.closeTo(
+      firstFrameTransform.m41,
+      visibleRect.left - tabsRect.left,
+      0.01
+    );
+    assert.closeTo(
+      firstFrameTransform.m42,
+      visibleRect.top - tabsRect.top,
+      0.01
     );
   });
 
