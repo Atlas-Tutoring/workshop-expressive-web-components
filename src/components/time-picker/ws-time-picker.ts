@@ -464,10 +464,17 @@ export class WsTimePicker extends LitElement {
       const rawCaret = input.selectionStart ?? rawValue.length;
       const digitCaret = countDigits(rawValue.slice(0, rawCaret));
       const formattedValue = formatTimeInput(rawValue);
+      const insertedLeadingDigits = Math.max(
+        0,
+        countDigits(formattedValue) - countDigits(rawValue)
+      );
 
       input.value = formattedValue;
       this.value = formattedValue;
-      const nextCaret = caretAfterDigitCount(formattedValue, digitCaret);
+      const nextCaret = caretAfterDigitCount(
+        formattedValue,
+        digitCaret > 0 ? digitCaret + insertedLeadingDigits : digitCaret
+      );
       input.setSelectionRange(nextCaret, nextCaret);
     }
 
