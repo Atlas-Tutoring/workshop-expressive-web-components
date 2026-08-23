@@ -144,8 +144,7 @@ export const wsCodeBlockStyles = css`
   }
 
   .editor-shell {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
+    position: relative;
     min-inline-size: 0;
     overflow: hidden;
     background: var(--ws-color-code-background);
@@ -160,7 +159,7 @@ export const wsCodeBlockStyles = css`
   }
 
   .editor-shell.with-line-numbers {
-    grid-template-columns: auto minmax(0, 1fr);
+    padding-inline-start: var(--ws-code-editor-gutter-width, 48px);
   }
 
   .editor-stack {
@@ -224,9 +223,13 @@ export const wsCodeBlockStyles = css`
   }
 
   .line-numbers {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    z-index: 2;
     box-sizing: border-box;
-    min-inline-size: var(--ws-code-editor-gutter-width, 48px);
-    max-block-size: none;
+    inline-size: var(--ws-code-editor-gutter-width, 48px);
+    min-inline-size: 0;
     margin: 0;
     overflow: hidden;
     border-inline-end: 1px solid var(--ws-color-code-border);
@@ -236,6 +239,7 @@ export const wsCodeBlockStyles = css`
     background: var(--ws-color-code-gutter);
     text-align: end;
     user-select: none;
+    pointer-events: none;
   }
 
   .token.comment {
