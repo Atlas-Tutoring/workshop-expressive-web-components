@@ -30,6 +30,7 @@
 - Fixed contained-tab indicator motion so switching uses an explicit measured browser animation instead of depending on theme-sensitive CSS custom-property transition timing, keeping light and dark modes consistent.
 - Prevented contained tabs from changing foreground or background color on hover; hover now inherits the tab's current selected or unselected color.
 - Fixed `<ws-dialog>` action-slot layout so desktop actions reliably stay grouped at the bottom-right instead of depending on slot flattening behavior.
+- Fixed editable `<ws-code-block>` sizing when code grows beyond the configured rows: line numbers no longer expand the visual editor past the textarea viewport, keeping vertical and horizontal scrollbars aligned with the highlighted code layer.
 
 All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components` are documented in this file.
 
@@ -67,7 +68,7 @@ All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components
 ### Added
 
 - Added the form-associated `<ws-text-field>` component with text, email, password, number, URL, telephone, and search input types.
-- Added native form submission, reset, validation, disabled-fieldset handling, state restoration, helper and error messages, icon slots, clear behavior, and size and shape variants for text fields.
+- Added native form submission, reset, validation, disabled-fieldset handling, state restoration, helper and error messages, icon slots, clear behavior, and size and shape variants.
 - Added the `<ws-chip>` component with assist, filter, input, and status variants, semantic tones, selection, removal events, icon slots, and small and medium sizes.
 - Added the form-associated `<ws-date-picker>` component with the platform calendar, date constraints, validation, clear behavior, three sizes, and native form participation.
 - Added documentation pages, live examples, package exports, custom-element registration, and browser tests for the new components.
