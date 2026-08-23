@@ -262,6 +262,10 @@ suite('ws-tabs', () => {
         el.shadowRoot!.querySelector<HTMLElement>('.indicator')!;
 
       await waitForMeasuredIndicator(el);
+      const initialX = el.style.getPropertyValue('--ws-tabs-indicator-x');
+      const initialInlineSize = el.style.getPropertyValue(
+        '--ws-tabs-indicator-inline-size'
+      );
       previewButton.click();
 
       await waitUntil(
@@ -274,10 +278,103 @@ suite('ws-tabs', () => {
       assert.lengthOf(frames, 2);
       assert.notEqual(frames[0].transform, frames[1].transform);
       assert.notEqual(frames[0].inlineSize, frames[1].inlineSize);
+      assert.equal(
+        el.style.getPropertyValue('--ws-tabs-indicator-x'),
+        initialX,
+        'base position should remain unchanged while the animation is running'
+      );
+      assert.equal(
+        el.style.getPropertyValue('--ws-tabs-indicator-inline-size'),
+        initialInlineSize,
+        'base size should remain unchanged while the animation is running'
+      );
+
+      animation.finish();
+      await animation.finished;
+      await Promise.resolve();
+
+      assert.equal(
+        el.style.getPropertyValue('--ws-tabs-indicator-x'),
+        `${
+          preview.getBoundingClientRect().left -
+          indicator.parentElement!.getBoundingClientRect().left
+        }px`
+      );
+      assert.equal(
+        el.style.getPropertyValue('--ws-tabs-indicator-inline-size'),
+        `${preview.getBoundingClientRect().width}px`
+      );
     } finally {
       if (previousTheme === null) root.removeAttribute('data-ws-theme');
       else root.setAttribute('data-ws-theme', previousTheme);
     }
+  });
+
+  test('continues a contained indicator animation from its visible position', async () => {
+    const el = await fixture<WsTabs>(html`
+      <ws-tabs variant="contained" value="edit">
+        <ws-tab value="edit">Edit</ws-tab>
+        <ws-tab value="preview">Longer preview</ws-tab>
+      </ws-tabs>
+    `);
+    const [edit, preview] = Array.from(el.querySelectorAll<WsTab>('ws-tab'));
+    const editButton =
+      edit.shadowRoot!.querySelector<HTMLButtonElement>('button')!;
+    const previewButton =
+      preview.shadowRoot!.querySelector<HTMLButtonElement>('button')!;
+    const indicator = el.shadowRoot!.querySelector<HTMLElement>('.indicator')!;
+
+    await waitForMeasuredIndicator(el);
+    previewButton.click();
+    await waitUntil(() => indicator.getAnimations().length > 0);
+
+    const firstAnimation = indicator.getAnimations()[0];
+    firstAnimation.currentTime = 120;
+    const visibleRect = indicator.getBoundingClientRect();
+    const tabsRect = indicator.parentElement!.getBoundingClientRect();
+
+    editButton.click();
+    const [reversedAnimation] = indicator.getAnimations();
+    const [firstFrame] = (
+      reversedAnimation.effect as KeyframeEffect
+    ).getKeyframes();
+
+    assert.closeTo(
+      Number.parseFloat(String(firstFrame.inlineSize)),
+      visibleRect.width,
+      0.5
+    );
+    assert.equal(
+      firstFrame.transform,
+      `translate(${visibleRect.left - tabsRect.left}px, ${
+        visibleRect.top - tabsRect.top
+      }px)`
+    );
+  });
+
+  test('uses shared motion tokens for contained indicator animations', async () => {
+    const el = await fixture<WsTabs>(html`
+      <ws-tabs
+        variant="contained"
+        value="edit"
+        style="--ws-motion-duration-slow: 0.4s; --ws-motion-easing-standard: linear"
+      >
+        <ws-tab value="edit">Edit</ws-tab>
+        <ws-tab value="preview">Preview</ws-tab>
+      </ws-tabs>
+    `);
+    const preview = el.querySelectorAll<WsTab>('ws-tab')[1];
+    const indicator = el.shadowRoot!.querySelector<HTMLElement>('.indicator')!;
+
+    await waitForMeasuredIndicator(el);
+    preview.shadowRoot!.querySelector<HTMLButtonElement>('button')!.click();
+    await waitUntil(() => indicator.getAnimations().length > 0);
+
+    const timing = (
+      indicator.getAnimations()[0].effect as KeyframeEffect
+    ).getTiming();
+    assert.equal(timing.duration, 400);
+    assert.equal(timing.easing, 'linear');
   });
 
   test('does not animate while repositioning for orientation changes', async () => {
