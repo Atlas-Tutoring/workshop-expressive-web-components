@@ -73,7 +73,7 @@ export class WsTabs extends LitElement {
   });
 
   private readonly resizeObserver = new ResizeObserver(() => {
-    this.scheduleIndicatorUpdate({animate: false});
+    this.schedulePassiveIndicatorUpdate();
   });
 
   override connectedCallback() {
@@ -84,6 +84,7 @@ export class WsTabs extends LitElement {
   override disconnectedCallback() {
     window.removeEventListener('resize', this.handleResize);
     window.cancelAnimationFrame(this.indicatorUpdateFrame);
+    this.indicatorUpdateFrame = 0;
     this.cancelIndicatorAnimation();
     this.mutationObserver.disconnect();
     this.resizeObserver.disconnect();
@@ -204,12 +205,18 @@ export class WsTabs extends LitElement {
   }
 
   private readonly handleResize = () => {
-    this.scheduleIndicatorUpdate({animate: false});
+    this.schedulePassiveIndicatorUpdate();
   };
+
+  private schedulePassiveIndicatorUpdate() {
+    if (this.indicatorUpdateFrame !== 0 || this.indicatorAnimation) return;
+    this.scheduleIndicatorUpdate({animate: false});
+  }
 
   private scheduleIndicatorUpdate(options: {animate?: boolean} = {}) {
     window.cancelAnimationFrame(this.indicatorUpdateFrame);
     this.indicatorUpdateFrame = window.requestAnimationFrame(() => {
+      this.indicatorUpdateFrame = 0;
       this.updateIndicator(options);
     });
   }
