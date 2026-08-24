@@ -23,6 +23,7 @@ export class WsDropdown extends LitElement {
   @property() value = '';
   @property({reflect: true}) name = '';
   @property() label = '';
+  @property({attribute: 'trigger-label'}) triggerLabel = '';
   @property({reflect: true}) variant: WsDropdownVariant = 'outlined';
   @property({reflect: true}) size: WsDropdownSize = 'medium';
   @property({reflect: true}) mode: WsDropdownMode = 'select';
@@ -74,6 +75,12 @@ export class WsDropdown extends LitElement {
   override render() {
     const selected = this.options.find((option) => option.value === this.value);
     const role = this.mode === 'menu' ? 'menu' : 'listbox';
+    const triggerText =
+      this.mode === 'select'
+        ? selected?.label ?? ''
+        : this.triggerLabel || this.label;
+    const accessibleName =
+      this.accessibleLabel || this.triggerLabel || this.label || undefined;
     return html`<div class="field">
       ${this.label ? html`<span class="label">${this.label}</span>` : nothing}
       <button
@@ -81,7 +88,7 @@ export class WsDropdown extends LitElement {
         part="control"
         type="button"
         ?disabled=${this.disabled}
-        aria-label=${ifDefined(this.accessibleLabel || this.label || undefined)}
+        aria-label=${ifDefined(accessibleName)}
         aria-haspopup=${role}
         aria-expanded=${this.open ? 'true' : 'false'}
         aria-controls=${this.popupId}
@@ -93,11 +100,7 @@ export class WsDropdown extends LitElement {
       >
         ${this.iconOnly
           ? nothing
-          : html`<span class="value"
-              >${this.mode === 'select'
-                ? selected?.label ?? ''
-                : this.label}</span
-            >`}
+          : html`<span class="value">${triggerText}</span>`}
         <span
           class=${this.rotateIcon ? 'indicator rotatable' : 'indicator'}
           part="icon"
@@ -149,7 +152,9 @@ export class WsDropdown extends LitElement {
       part="listbox"
       id=${this.popupId}
       role=${this.mode === 'menu' ? 'menu' : 'listbox'}
-      aria-label=${ifDefined(this.accessibleLabel || this.label || undefined)}
+      aria-label=${ifDefined(
+        this.accessibleLabel || this.triggerLabel || this.label || undefined
+      )}
       aria-hidden=${ifDefined(this.open ? undefined : 'true')}
       .inert=${!this.open}
     >
@@ -180,8 +185,8 @@ export class WsDropdown extends LitElement {
                   aria-hidden="true"
                   style=${ifDefined(
                     option.iconFontFamily
-                      ? `font-family: ${option.iconFontFamily}`
-                      : undefined
+                      ? `font-family: ${option.iconFontFamily}; font-style: normal; font-weight: normal;`
+                      : 'font-style: normal; font-weight: normal;'
                   )}
                   >${option.iconGlyph ?? nothing}</i
                 >`
