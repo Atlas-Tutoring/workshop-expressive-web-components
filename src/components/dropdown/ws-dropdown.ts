@@ -49,6 +49,8 @@ export class WsDropdown extends LitElement {
     label: string;
     disabled: boolean;
     icon?: string;
+    iconGlyph?: string;
+    iconFontFamily?: string;
     tone: WsDropdownOptionTone;
   }> = [];
 
@@ -176,7 +178,13 @@ export class WsDropdown extends LitElement {
                   class="option-icon ${option.icon}"
                   part="option-icon"
                   aria-hidden="true"
-                ></i>`
+                  style=${ifDefined(
+                    option.iconFontFamily
+                      ? `font-family: ${option.iconFontFamily}`
+                      : undefined
+                  )}
+                  >${option.iconGlyph ?? nothing}</i
+                >`
               : nothing}<span class="option-label">${option.label}</span></span
           >
           ${showChecks && option.value === this.value
@@ -304,20 +312,50 @@ export class WsDropdown extends LitElement {
   };
   private syncOptions = () => {
     this.options = Array.from(this.querySelectorAll('option')).map(
-      (element) => ({
-        element,
-        value: element.value,
-        label: element.textContent?.trim() ?? '',
-        disabled: element.disabled,
-        icon:
-          (element.dataset.icon ?? element.getAttribute('icon'))?.trim() ||
-          undefined,
-        tone: element.dataset.tone === 'danger' ? 'danger' : 'default',
-      })
+      (element) => {
+        const icon = (
+          element.dataset.icon ?? element.getAttribute('icon')
+        )?.trim();
+        const iconStyle = icon ? this.resolveIconStyle(icon) : undefined;
+        return {
+          element,
+          value: element.value,
+          label: element.textContent?.trim() ?? '',
+          disabled: element.disabled,
+          icon: icon || undefined,
+          iconGlyph: iconStyle?.glyph,
+          iconFontFamily: iconStyle?.fontFamily,
+          tone: element.dataset.tone === 'danger' ? 'danger' : 'default',
+        };
+      }
     );
     if (this.mode === 'select' && !this.value && this.options.length)
       this.value = this.options[0].value;
   };
+  private resolveIconStyle(icon: string) {
+    // Icon libraries commonly supply glyphs through a global `::before` rule.
+    // Shadow-root selectors cannot see that rule, so copy its computed glyph
+    // and font onto the icon rendered inside the popup.
+    const probe = document.createElement('i');
+    probe.className = icon;
+    probe.style.cssText =
+      'position:fixed;visibility:hidden;pointer-events:none;inset:0 auto auto 0';
+    document.body.append(probe);
+    const style = getComputedStyle(probe, '::before');
+    const content = style.content;
+    const fontFamily = style.fontFamily;
+    probe.remove();
+    if (!content || content === 'none' || content === 'normal')
+      return undefined;
+    return {
+      glyph:
+        (content.startsWith('"') && content.endsWith('"')) ||
+        (content.startsWith("'") && content.endsWith("'"))
+          ? content.slice(1, -1)
+          : content,
+      fontFamily,
+    };
+  }
   private addPositionListeners() {
     window.addEventListener('resize', this.positionPopup);
     window.addEventListener('scroll', this.positionPopup, true);

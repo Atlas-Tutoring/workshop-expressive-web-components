@@ -125,6 +125,11 @@ suite('ws-dropdown', () => {
   });
 
   test('supports optional icons on individual choices', async () => {
+    const iconStyles = document.createElement('style');
+    iconStyles.textContent = `
+      .ri-edit-line::before { content: "\\2605"; font-family: serif; }
+    `;
+    document.head.append(iconStyles);
     const el = await fixture<WsDropdown>(html`
       <ws-dropdown aria-label="Course action">
         <option value="edit" data-icon="ri-edit-line">Edit</option>
@@ -151,6 +156,13 @@ suite('ws-dropdown', () => {
       options[0].querySelector('.option-icon')?.getAttribute('part'),
       'option-icon'
     );
+    assert.equal(options[0].querySelector('.option-icon')?.textContent, '★');
+    assert.include(
+      options[0].querySelector<HTMLElement>('.option-icon')?.style.fontFamily ??
+        '',
+      'serif'
+    );
+    iconStyles.remove();
   });
 
   test('supports icon-only triggers and disabling icon rotation', async () => {
