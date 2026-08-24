@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.3.1
+
 ### Added
 
 - Added `primary`, `secondary`, `outlined`, and `text` visual variants to `<ws-dropdown>`, aligned with `<ws-button>`.
