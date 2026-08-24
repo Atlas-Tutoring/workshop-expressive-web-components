@@ -4,7 +4,7 @@
 
 ### Added
 
-- Added `<ws-menu>` and `<ws-menu-item>` for contextual action menus with icon-only or labeled triggers, semantic danger actions, keyboard navigation, outside-click and Escape dismissal, focus restoration, and viewport-safe fixed positioning.
+- Expanded `<ws-dropdown>` with a command-oriented `mode="menu"`, semantic danger actions, configurable checkmarks, keyboard navigation, dismissal, focus restoration, and viewport-safe fixed positioning.
 
 ## 0.3.1
 

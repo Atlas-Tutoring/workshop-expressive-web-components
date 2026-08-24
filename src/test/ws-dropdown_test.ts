@@ -191,4 +191,55 @@ suite('ws-dropdown', () => {
     assert.equal(el.value, '7');
     assert.isTrue(event.composed);
   });
+
+  test('uses menu semantics and emits actions without persisting selection', async () => {
+    const el = await fixture<WsDropdown>(html`
+      <ws-dropdown mode="menu" icon-only aria-label="Course actions">
+        <span slot="icon">more</span>
+        <option value="edit" data-icon="ri-edit-line">Edit</option>
+        <option value="delete" data-tone="danger">Delete</option>
+      </ws-dropdown>
+    `);
+    await el.updateComplete;
+
+    const control =
+      el.shadowRoot!.querySelector<HTMLButtonElement>('.control')!;
+    assert.equal(control.getAttribute('aria-haspopup'), 'menu');
+    assert.equal(
+      el.shadowRoot!.querySelector('.listbox')!.getAttribute('role'),
+      'menu'
+    );
+    assert.equal(
+      el.shadowRoot!.querySelector('.option')!.getAttribute('role'),
+      'menuitem'
+    );
+    assert.notExists(el.shadowRoot!.querySelector('.option-check'));
+
+    control.click();
+    await el.updateComplete;
+    const action = oneEvent(el, 'ws-dropdown-action');
+    el.shadowRoot!.querySelectorAll<HTMLButtonElement>('.option')[1].click();
+    const event = await action;
+    await el.updateComplete;
+
+    assert.equal(event.detail.value, 'delete');
+    assert.equal(event.detail.option.dataset.tone, 'danger');
+    assert.equal(el.value, '');
+    assert.equal(el.shadowRoot!.activeElement, control);
+    assert.equal(
+      el.shadowRoot!.querySelectorAll<HTMLButtonElement>('.option')[1].dataset
+        .tone,
+      'danger'
+    );
+  });
+
+  test('allows selection checkmarks to be hidden', async () => {
+    const el = await fixture<WsDropdown>(html`
+      <ws-dropdown value="7" checkmark="none">
+        <option value="7">7 days</option>
+      </ws-dropdown>
+    `);
+    await el.updateComplete;
+    assert.notExists(el.shadowRoot!.querySelector('.option-check'));
+  });
 });

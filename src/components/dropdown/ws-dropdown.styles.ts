@@ -295,7 +295,10 @@ export const wsDropdownStyles = css`
   }
 
   .listbox {
-    background: var(--ws-color-surface, #fff);
+    background: var(
+      --ws-dropdown-menu-background,
+      var(--ws-color-surface, #fff)
+    );
     border: 1px solid var(--ws-color-outline, #d1d5db);
     border-radius: var(--ws-shape-large, 12px);
     box-shadow: var(--ws-elevation-lg, 0 12px 32px rgb(15 23 42 / 16%));
@@ -303,15 +306,17 @@ export const wsDropdownStyles = css`
     clip-path: inset(0 0 100% 0 round var(--ws-shape-large, 12px));
     display: grid;
     gap: 2px;
-    inline-size: max(100%, var(--ws-dropdown-menu-min-width, 160px));
-    inset-block-start: calc(100% + 6px);
-    inset-inline-start: 0;
+    color: var(--ws-dropdown-menu-color, var(--ws-color-on-surface, #0f172a));
+    inline-size: max(
+      var(--ws-dropdown-trigger-width, 0px),
+      var(--ws-dropdown-menu-min-width, 160px)
+    );
     max-block-size: 280px;
     opacity: 0;
     overflow: auto;
     padding: 6px;
     pointer-events: none;
-    position: absolute;
+    position: fixed;
     transform: translateY(var(--ws-dropdown-menu-closed-offset, -6px))
       scale(var(--ws-dropdown-menu-closed-scale, 0.98));
     transform-origin: top center;
@@ -340,7 +345,7 @@ export const wsDropdownStyles = css`
         );
     visibility: hidden;
     will-change: clip-path, opacity, transform;
-    z-index: 20;
+    z-index: var(--ws-dropdown-menu-z-index, 1000);
   }
 
   .listbox.open {
@@ -406,6 +411,23 @@ export const wsDropdownStyles = css`
 
   .option[aria-selected='true'] {
     font-weight: 650;
+  }
+
+  .option[data-tone='danger'] {
+    color: var(--ws-dropdown-danger-color, var(--ws-color-error, #d93025));
+  }
+
+  .option[data-tone='danger'].active,
+  .option[data-tone='danger']:hover {
+    background: var(
+      --ws-dropdown-danger-hover-background,
+      color-mix(
+        in srgb,
+        var(--ws-dropdown-danger-color, var(--ws-color-error, #d93025)) 10%,
+        transparent
+      )
+    );
+    color: var(--ws-dropdown-danger-color, var(--ws-color-error, #d93025));
   }
 
   .option:disabled {

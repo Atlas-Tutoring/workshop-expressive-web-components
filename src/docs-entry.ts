@@ -18,8 +18,6 @@ import './components/date-picker/ws-date-picker.js';
 import './components/time-picker/ws-time-picker.js';
 import './components/chip/ws-chip.js';
 import './components/dropdown/ws-dropdown.js';
-import './components/menu/ws-menu.js';
-import './components/menu/ws-menu-item.js';
 import './components/badge/ws-badge.js';
 import './components/docs-shell/ws-docs-shell.js';
 import './components/docs-shell/ws-hero.js';
