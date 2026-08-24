@@ -97,19 +97,19 @@ The trigger uses the dropdown arrow by default. Add `icon-only` to make the trig
 
 ## Choice icons
 
-Individual choices may optionally provide a `data-icon` attribute containing one or more icon classes. Choices without `data-icon` stay text-only and do not reserve empty icon space, so icon and non-icon entries can be mixed in the same menu.
+Selectable choices may optionally use `data-icon` to make distinct values easier to scan. The selected checkmark makes sense here because one value is retained. Choices without `data-icon` remain text-only and do not reserve empty icon space.
 
 <div class="demo-panel dropdown-demo">
-  <ws-dropdown value="edit" aria-label="Course action">
-    <option value="edit" data-icon="ri-edit-line">Edit</option>
-    <option value="duplicate" data-icon="ri-file-copy-line">Duplicate</option>
-    <option value="delete" data-icon="ri-delete-bin-6-line">Delete</option>
+  <ws-dropdown value="public" aria-label="Course visibility">
+    <option value="public" data-icon="ri-global-line">Public</option>
+    <option value="unlisted" data-icon="ri-link">Unlisted</option>
+    <option value="private" data-icon="ri-lock-line">Private</option>
   </ws-dropdown>
 </div>
 
 ## Command menu
 
-Command menus can use the same compact icon-only trigger as a contextual overflow menu, or show a normal text trigger when the action group should be more discoverable. Use `trigger-label` for the visible menu-trigger text.
+Command menus are for immediate actions, so they do not show a selected checkmark. They can use the same compact icon-only trigger as a contextual overflow menu, or show a normal text trigger when the action group should be more discoverable. Use `trigger-label` for the visible menu-trigger text.
 
 <div class="demo-panel dropdown-demo">
   <ws-dropdown mode="menu" variant="text" size="small" icon-only rotate-icon="false" aria-label="Course actions">
@@ -163,10 +163,10 @@ Use `data-tone="danger"` for destructive commands. Menu mode uses menu/menuitem 
   <option value="oldest">Oldest first</option>
 </ws-dropdown>
 
-<ws-dropdown value="edit" aria-label="Course action">
-  <option value="edit" data-icon="ri-edit-line">Edit</option>
-  <option value="duplicate" data-icon="ri-file-copy-line">Duplicate</option>
-  <option value="delete" data-icon="ri-delete-bin-6-line">Delete</option>
+<ws-dropdown value="public" aria-label="Course visibility">
+  <option value="public" data-icon="ri-global-line">Public</option>
+  <option value="unlisted" data-icon="ri-link">Unlisted</option>
+  <option value="private" data-icon="ri-lock-line">Private</option>
 </ws-dropdown>
 
 <ws-dropdown
