@@ -109,6 +109,8 @@ Individual choices may optionally provide a `data-icon` attribute containing one
 
 ## Command menu
 
+Command menus can use the same compact icon-only trigger as a contextual overflow menu, or show a normal text trigger when the action group should be more discoverable. Use `trigger-label` for the visible menu-trigger text.
+
 <div class="demo-panel dropdown-demo">
   <ws-dropdown mode="menu" variant="text" size="small" icon-only rotate-icon="false" aria-label="Course actions">
     <i slot="icon" class="ri-more-2-fill" aria-hidden="true"></i>
@@ -118,6 +120,11 @@ Individual choices may optionally provide a `data-icon` attribute containing one
   </ws-dropdown>
   <ws-dropdown mode="menu" variant="text" size="small" icon-only rotate-icon="false" aria-label="Course actions with icons">
     <i slot="icon" class="ri-more-2-fill" aria-hidden="true"></i>
+    <option value="edit" data-icon="ri-edit-line">Edit course</option>
+    <option value="duplicate" data-icon="ri-file-copy-line">Duplicate</option>
+    <option value="delete" data-icon="ri-delete-bin-6-line" data-tone="danger">Delete course</option>
+  </ws-dropdown>
+  <ws-dropdown mode="menu" variant="outlined" size="small" trigger-label="Actions">
     <option value="edit" data-icon="ri-edit-line">Edit course</option>
     <option value="duplicate" data-icon="ri-file-copy-line">Duplicate</option>
     <option value="delete" data-icon="ri-delete-bin-6-line" data-tone="danger">Delete course</option>
@@ -175,23 +182,31 @@ Use `data-tone="danger"` for destructive commands. Menu mode uses menu/menuitem 
     Delete course
   </option>
 </ws-dropdown>
+
+<ws-dropdown mode="menu" trigger-label="Actions" variant="outlined">
+  <option value="edit" data-icon="ri-edit-line">Edit course</option>
+  <option value="delete" data-icon="ri-delete-bin-6-line" data-tone="danger">
+    Delete course
+  </option>
+</ws-dropdown>
 ```
 
 ## API
 
-| Property      | Type                                               | Default      | Description                                       |
-| ------------- | -------------------------------------------------- | ------------ | ------------------------------------------------- |
-| `value`       | `string`                                           | —            | Selected option value.                            |
-| `mode`        | `'select' \| 'menu'`                               | `'select'`   | Persistent selection or immediate commands.       |
-| `checkmark`   | `'auto' \| 'always' \| 'none'`                     | `'auto'`     | Controls selected-option checkmarks.              |
-| `name`        | `string`                                           | —            | Form field name.                                  |
-| `label`       | `string`                                           | —            | Optional visible label.                           |
-| `variant`     | `'primary' \| 'secondary' \| 'outlined' \| 'text'` | `'outlined'` | Trigger visual treatment.                         |
-| `size`        | `'small' \| 'medium' \| 'large'`                   | `'medium'`   | Trigger height aligned with `ws-button`.          |
-| `icon-only`   | `boolean`                                          | `false`      | Shows only the dropdown indicator in the trigger. |
-| `rotate-icon` | `boolean`                                          | `true`       | Rotates the default or custom icon while open.    |
-| `disabled`    | `boolean`                                          | `false`      | Disables selection.                               |
-| `required`    | `boolean`                                          | `false`      | Requires a value in forms.                        |
+| Property        | Type                                               | Default      | Description                                                |
+| --------------- | -------------------------------------------------- | ------------ | ---------------------------------------------------------- |
+| `value`         | `string`                                           | —            | Selected option value.                                     |
+| `mode`          | `'select' \| 'menu'`                               | `'select'`   | Persistent selection or immediate commands.                |
+| `checkmark`     | `'auto' \| 'always' \| 'none'`                     | `'auto'`     | Controls selected-option checkmarks.                       |
+| `name`          | `string`                                           | —            | Form field name.                                           |
+| `label`         | `string`                                           | —            | Optional visible field label.                              |
+| `trigger-label` | `string`                                           | —            | Visible trigger text, primarily for command-menu mode.     |
+| `variant`       | `'primary' \| 'secondary' \| 'outlined' \| 'text'` | `'outlined'` | Trigger visual treatment.                                  |
+| `size`          | `'small' \| 'medium' \| 'large'`                   | `'medium'`   | Trigger height aligned with `ws-button`.                   |
+| `icon-only`     | `boolean`                                          | `false`      | Shows only the dropdown indicator in the trigger.          |
+| `rotate-icon`   | `boolean`                                          | `true`       | Rotates the default or custom icon while open.             |
+| `disabled`      | `boolean`                                          | `false`      | Disables selection or menu commands.                       |
+| `required`      | `boolean`                                          | `false`      | Requires a value in forms when `mode="select"` is active. |
 
 `rotate-icon` defaults to `true`; use `rotate-icon="false"` to opt out in markup.
 
@@ -224,8 +239,9 @@ The default slot accepts `option` elements as a familiar data source. Options ma
 
 ## Accessibility notes
 
-- Provide either a visible `label` or an `aria-label` that describes the choice being made.
-- Always provide `aria-label` for an `icon-only` dropdown unless a visible `label` is present.
+- Provide either a visible `label`, a visible `trigger-label`, or an `aria-label` that describes the control.
+- Always provide `aria-label` for an `icon-only` dropdown unless a visible `label` already provides the accessible name.
+- Use `trigger-label` for command menus when the action group benefits from a visible caption instead of an icon-only overflow trigger.
 - Keep option labels distinct and place the most commonly selected choices first.
 - Choice icons are decorative; the visible option label remains the accessible name.
 - Use `disabled` only when the entire control is unavailable and explain the reason in nearby content.
@@ -234,9 +250,9 @@ The default slot accepts `option` elements as a familiar data source. Options ma
 ## Design notes
 
 - Use `primary` for a strong action-like selector, `secondary` for a softer filled trigger, `outlined` for the familiar field treatment, and `text` for a lightweight value-and-icon action.
-- Use `icon-only` for compact utility selectors where the icon has a clear accessible name.
+- Use `icon-only` for compact contextual menus where the icon has a clear accessible name; use `trigger-label` when the menu should read as a normal text action.
 - Keep rotation enabled for directional indicators such as the default arrow; disable it for icons whose orientation carries its own meaning.
 - Use choice icons only when they improve scanning. They are optional per option and mixed text-only/icon choices are supported.
-- Use a dropdown when only one option can be selected from a list.
+- Use `mode="select"` when one value is selected and retained. Use `mode="menu"` for immediate commands such as Edit, Duplicate, and Delete.
 - Prefer visible choices such as buttons when there are only two or three important options and space permits.
 - Match the dropdown size to adjacent buttons or form controls.
