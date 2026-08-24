@@ -31,24 +31,24 @@ The `value` on each tab associates it with the panel that has the same `value`. 
 
 ### Standard
 
-Standard tabs preserve link semantics. Use `href` when choosing a tab navigates to another page or route; do not add panels to a navigation group.
+Standard tabs preserve link semantics. Use `href` when choosing a tab navigates to another page or route; do not add panels to a navigation group. The live examples below use fragment destinations so they demonstrate selection without leaving this documentation page.
 
 <div class="demo-panel component-demo tabs-demo-grid">
   <div>
     <h3>Horizontal</h3>
     <ws-tabs aria-label="Horizontal sections">
-      <ws-tab selected href="/overview">Overview</ws-tab>
-      <ws-tab href="/components">Components</ws-tab>
-      <ws-tab href="/settings">Settings</ws-tab>
+      <ws-tab selected href="#tabs-demo-overview">Overview</ws-tab>
+      <ws-tab href="#tabs-demo-components">Components</ws-tab>
+      <ws-tab href="#tabs-demo-settings">Settings</ws-tab>
     </ws-tabs>
   </div>
 
   <div>
     <h3>Vertical</h3>
     <ws-tabs orientation="vertical" aria-label="Vertical sections">
-      <ws-tab selected href="/foundation">Foundation</ws-tab>
-      <ws-tab href="/components">Components</ws-tab>
-      <ws-tab href="/patterns">Patterns</ws-tab>
+      <ws-tab selected href="#tabs-demo-foundation">Foundation</ws-tab>
+      <ws-tab href="#tabs-demo-components-vertical">Components</ws-tab>
+      <ws-tab href="#tabs-demo-patterns">Patterns</ws-tab>
     </ws-tabs>
   </div>
 </div>
