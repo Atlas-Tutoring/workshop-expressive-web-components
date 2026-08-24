@@ -156,12 +156,11 @@ suite('ws-dropdown', () => {
       options[0].querySelector('.option-icon')?.getAttribute('part'),
       'option-icon'
     );
-    assert.equal(options[0].querySelector('.option-icon')?.textContent, '★');
-    assert.include(
-      options[0].querySelector<HTMLElement>('.option-icon')?.style.fontFamily ??
-        '',
-      'serif'
-    );
+    const icon = options[0].querySelector<HTMLElement>('.option-icon')!;
+    assert.equal(icon.textContent, '★');
+    assert.include(icon.style.fontFamily, 'serif');
+    assert.equal(icon.style.fontStyle, 'normal');
+    assert.equal(icon.style.fontWeight, 'normal');
     iconStyles.remove();
   });
 
@@ -243,6 +242,26 @@ suite('ws-dropdown', () => {
         .tone,
       'danger'
     );
+  });
+
+  test('supports visible text triggers for command menus', async () => {
+    const el = await fixture<WsDropdown>(html`
+      <ws-dropdown mode="menu" trigger-label="Actions">
+        <option value="edit">Edit</option>
+        <option value="delete" data-tone="danger">Delete</option>
+      </ws-dropdown>
+    `);
+    await el.updateComplete;
+
+    const control =
+      el.shadowRoot!.querySelector<HTMLButtonElement>('.control')!;
+    assert.equal(el.triggerLabel, 'Actions');
+    assert.equal(
+      el.shadowRoot!.querySelector('.value')?.textContent?.trim(),
+      'Actions'
+    );
+    assert.equal(control.getAttribute('aria-label'), 'Actions');
+    assert.exists(el.shadowRoot!.querySelector('.chevron'));
   });
 
   test('allows selection checkmarks to be hidden', async () => {
