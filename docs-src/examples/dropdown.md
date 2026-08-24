@@ -102,7 +102,7 @@ Individual choices may optionally provide a `data-icon` attribute containing one
 <div class="demo-panel dropdown-demo">
   <ws-dropdown value="edit" aria-label="Course action">
     <option value="edit" data-icon="ri-edit-line">Edit</option>
-    <option value="duplicate">Duplicate</option>
+    <option value="duplicate" data-icon="ri-file-copy-line">Duplicate</option>
     <option value="delete" data-icon="ri-delete-bin-6-line">Delete</option>
   </ws-dropdown>
 </div>
@@ -111,6 +111,12 @@ Individual choices may optionally provide a `data-icon` attribute containing one
 
 <div class="demo-panel dropdown-demo">
   <ws-dropdown mode="menu" variant="text" size="small" icon-only rotate-icon="false" aria-label="Course actions">
+    <i slot="icon" class="ri-more-2-fill" aria-hidden="true"></i>
+    <option value="edit">Edit course</option>
+    <option value="duplicate">Duplicate</option>
+    <option value="delete" data-tone="danger">Delete course</option>
+  </ws-dropdown>
+  <ws-dropdown mode="menu" variant="text" size="small" icon-only rotate-icon="false" aria-label="Course actions with icons">
     <i slot="icon" class="ri-more-2-fill" aria-hidden="true"></i>
     <option value="edit" data-icon="ri-edit-line">Edit course</option>
     <option value="duplicate" data-icon="ri-file-copy-line">Duplicate</option>
@@ -152,8 +158,22 @@ Use `data-tone="danger"` for destructive commands. Menu mode uses menu/menuitem 
 
 <ws-dropdown value="edit" aria-label="Course action">
   <option value="edit" data-icon="ri-edit-line">Edit</option>
-  <option value="duplicate">Duplicate</option>
+  <option value="duplicate" data-icon="ri-file-copy-line">Duplicate</option>
   <option value="delete" data-icon="ri-delete-bin-6-line">Delete</option>
+</ws-dropdown>
+
+<ws-dropdown
+  mode="menu"
+  icon-only
+  rotate-icon="false"
+  aria-label="Course actions with icons"
+>
+  <i slot="icon" class="ri-more-2-fill" aria-hidden="true"></i>
+  <option value="edit" data-icon="ri-edit-line">Edit course</option>
+  <option value="duplicate" data-icon="ri-file-copy-line">Duplicate</option>
+  <option value="delete" data-icon="ri-delete-bin-6-line" data-tone="danger">
+    Delete course
+  </option>
 </ws-dropdown>
 ```
 

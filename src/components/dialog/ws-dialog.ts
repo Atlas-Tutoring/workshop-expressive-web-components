@@ -42,13 +42,18 @@ export class WsDialog extends LitElement {
   @state()
   private hasActions = false;
 
+  @state()
+  private closing = false;
+
+  private closeRequest = 0;
+
   override render() {
     const hasHeader = Boolean(this.heading || this.description || this.hasIcon);
     const headingClass = this.hasIcon ? 'heading has-icon' : 'heading';
 
     return html`
       <dialog
-        class="dialog"
+        class=${this.closing ? 'dialog closing' : 'dialog'}
         part="dialog"
         aria-label=${!this.heading && this.accessibleLabel
           ? this.accessibleLabel
@@ -94,6 +99,11 @@ export class WsDialog extends LitElement {
 
   /** Opens the dialog as a modal and moves it into the browser top layer. */
   showModal() {
+    if (this.closing) {
+      this.closeRequest += 1;
+      this.closing = false;
+    }
+
     if (this.open) {
       this.syncOpenState();
       return;
@@ -106,7 +116,7 @@ export class WsDialog extends LitElement {
   close(returnValue = '') {
     const dialog = this.dialogElement;
     if (dialog?.open) {
-      dialog.close(returnValue);
+      void this.animateClose(returnValue);
       return;
     }
 
@@ -127,8 +137,23 @@ export class WsDialog extends LitElement {
     }
 
     if (!this.open && dialog.open) {
-      dialog.close();
+      void this.animateClose();
     }
+  }
+
+  private async animateClose(returnValue = '') {
+    const dialog = this.dialogElement;
+    if (!dialog?.open || this.closing) return;
+
+    const request = ++this.closeRequest;
+    this.closing = true;
+    await this.updateComplete;
+
+    const animations = dialog.getAnimations({subtree: true});
+    await Promise.allSettled(animations.map((animation) => animation.finished));
+
+    if (request !== this.closeRequest || !dialog.open) return;
+    dialog.close(returnValue);
   }
 
   private onIconSlotChange = (event: Event) => {
@@ -157,17 +182,20 @@ export class WsDialog extends LitElement {
     }
   };
 
-  private onNativeCancel = () => {
+  private onNativeCancel = (event: Event) => {
+    event.preventDefault();
     this.dispatchEvent(
       new CustomEvent('ws-dialog-cancel', {
         bubbles: true,
         composed: true,
       })
     );
+    this.close();
   };
 
   private onNativeClose = () => {
     const returnValue = this.dialogElement?.returnValue ?? '';
+    this.closing = false;
     this.open = false;
 
     this.dispatchEvent(

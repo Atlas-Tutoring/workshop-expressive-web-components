@@ -22,20 +22,23 @@ suite('ws-dialog', () => {
 
     await el.updateComplete;
 
-    assert.equal(el.shadowRoot!.querySelector('h2')?.textContent, 'Create course');
+    assert.equal(
+      el.shadowRoot!.querySelector('h2')?.textContent,
+      'Create course'
+    );
     assert.equal(
       el.shadowRoot!.querySelector('#description')?.textContent,
       'Add the course details.'
     );
     assert.equal(
-      el.shadowRoot!
-        .querySelector<HTMLSlotElement>('slot[name="icon"]')!
+      el
+        .shadowRoot!.querySelector<HTMLSlotElement>('slot[name="icon"]')!
         .assignedElements()[0].textContent,
       'school'
     );
     assert.equal(
-      el.shadowRoot!
-        .querySelector<HTMLSlotElement>('slot[name="actions"]')!
+      el
+        .shadowRoot!.querySelector<HTMLSlotElement>('slot[name="actions"]')!
         .assignedElements()[0].id,
       'cancel'
     );
@@ -101,12 +104,18 @@ suite('ws-dialog', () => {
 
     const eventPromise = oneEvent(el, 'ws-dialog-close');
     el.close('saved');
+    await el.updateComplete;
+
+    const dialog = el.shadowRoot!.querySelector('dialog')!;
+    assert.isTrue(dialog.open, 'dialog remains in the top layer while exiting');
+    assert.isTrue(dialog.classList.contains('closing'));
+
     const event = await eventPromise;
     await el.updateComplete;
 
     assert.equal(event.detail.returnValue, 'saved');
     assert.isFalse(el.open);
-    assert.isFalse(el.shadowRoot!.querySelector('dialog')!.open);
+    assert.isFalse(dialog.open);
   });
 
   test('uses the visible heading as the accessible name', async () => {
