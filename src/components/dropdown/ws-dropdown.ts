@@ -6,17 +6,15 @@ import {wsDropdownStyles} from './ws-dropdown.styles.js';
 
 export type WsDropdownVariant = 'primary' | 'secondary' | 'outlined' | 'text';
 export type WsDropdownSize = 'small' | 'medium' | 'large';
+export type WsDropdownMode = 'select' | 'menu';
+export type WsDropdownCheckmark = 'auto' | 'always' | 'none';
+export type WsDropdownOptionTone = 'default' | 'danger';
+export interface WsDropdownActionDetail {
+  value: string;
+  option: HTMLOptionElement;
+}
 
-/**
- * A form-associated Workshop Expressive dropdown.
- *
- * Source `option` elements may provide an optional `data-icon` attribute
- * containing one or more icon classes. Options without it render as text-only
- * choices.
- *
- * @slot - Native `option` elements used to populate the dropdown.
- * @slot icon - Optional trigger indicator icon. Falls back to a chevron.
- */
+/** A selectable dropdown or command menu backed by native `option` elements. */
 @customElement('ws-dropdown')
 export class WsDropdown extends LitElement {
   static override styles = wsDropdownStyles;
@@ -25,20 +23,12 @@ export class WsDropdown extends LitElement {
   @property() value = '';
   @property({reflect: true}) name = '';
   @property() label = '';
-
-  /** Visual treatment matching the Workshop button variants. */
-  @property({reflect: true})
-  variant: WsDropdownVariant = 'outlined';
-
-  /** Dropdown density and trigger height. */
-  @property({reflect: true})
-  size: WsDropdownSize = 'medium';
-
-  /** Shows only the dropdown indicator, matching an icon button. */
-  @property({type: Boolean, reflect: true, attribute: 'icon-only'})
-  iconOnly = false;
-
-  /** Rotates the default or custom indicator while the dropdown is open. */
+  @property({reflect: true}) variant: WsDropdownVariant = 'outlined';
+  @property({reflect: true}) size: WsDropdownSize = 'medium';
+  @property({reflect: true}) mode: WsDropdownMode = 'select';
+  @property({reflect: true}) checkmark: WsDropdownCheckmark = 'auto';
+  @property({type: Boolean, reflect: true, attribute: 'icon-only'}) iconOnly =
+    false;
   @property({
     attribute: 'rotate-icon',
     converter: {
@@ -47,22 +37,23 @@ export class WsDropdown extends LitElement {
     },
   })
   rotateIcon = true;
-
   @property({type: Boolean, reflect: true}) disabled = false;
   @property({type: Boolean, reflect: true}) required = false;
   @property({attribute: 'aria-label'}) accessibleLabel?: string;
 
-  @state() private open = false;
+  @state() open = false;
   @state() private activeIndex = 0;
   @state() private options: Array<{
+    element: HTMLOptionElement;
     value: string;
     label: string;
     disabled: boolean;
     icon?: string;
+    tone: WsDropdownOptionTone;
   }> = [];
 
   private readonly internals = this.attachInternals();
-  private readonly listboxId = `ws-dropdown-listbox-${WsDropdown.nextId++}`;
+  private readonly popupId = `ws-dropdown-popup-${WsDropdown.nextId++}`;
   private defaultValue = '';
   private static nextId = 1;
 
@@ -72,178 +63,299 @@ export class WsDropdown extends LitElement {
     this.syncOptions();
     document.addEventListener('pointerdown', this.handleDocumentPointerDown);
   }
-
   override disconnectedCallback() {
     document.removeEventListener('pointerdown', this.handleDocumentPointerDown);
+    this.removePositionListeners();
     super.disconnectedCallback();
   }
 
   override render() {
     const selected = this.options.find((option) => option.value === this.value);
-    const indicatorClass = this.rotateIcon
-      ? 'indicator rotatable'
-      : 'indicator';
-
-    return html`
-      <div class="field">
-        ${this.label ? html`<span class="label">${this.label}</span>` : nothing}
-        <button
-          class="control"
-          part="control"
-          type="button"
-          ?disabled=${this.disabled}
-          aria-label=${ifDefined(
-            this.accessibleLabel || this.label || undefined
-          )}
-          aria-haspopup="listbox"
-          aria-expanded=${this.open ? 'true' : 'false'}
-          aria-controls=${this.listboxId}
-          @click=${this.toggle}
-          @keydown=${this.handleKeydown}
+    const role = this.mode === 'menu' ? 'menu' : 'listbox';
+    return html`<div class="field">
+      ${this.label ? html`<span class="label">${this.label}</span>` : nothing}
+      <button
+        class="control"
+        part="control"
+        type="button"
+        ?disabled=${this.disabled}
+        aria-label=${ifDefined(this.accessibleLabel || this.label || undefined)}
+        aria-haspopup=${role}
+        aria-expanded=${this.open ? 'true' : 'false'}
+        aria-controls=${this.popupId}
+        aria-activedescendant=${ifDefined(
+          this.open ? `${this.popupId}-option-${this.activeIndex}` : undefined
+        )}
+        @click=${this.toggle}
+        @keydown=${this.handleKeydown}
+      >
+        ${this.iconOnly
+          ? nothing
+          : html`<span class="value"
+              >${this.mode === 'select'
+                ? selected?.label ?? ''
+                : this.label}</span
+            >`}
+        <span
+          class=${this.rotateIcon ? 'indicator rotatable' : 'indicator'}
+          part="icon"
+          aria-hidden="true"
         >
-          ${this.iconOnly
-            ? nothing
-            : html`<span class="value">${selected?.label ?? ''}</span>`}
-          <span class=${indicatorClass} part="icon" aria-hidden="true">
-            <slot name="icon">
-              <svg class="chevron" viewBox="0 0 24 24">
-                <path
-                  d="m7 9.5 5 5 5-5 1.4 1.4-6.4 6.4-6.4-6.4L7 9.5Z"
-                ></path>
-              </svg>
-            </slot>
-          </span>
-        </button>
-        ${this.renderListbox()}
-        <slot class="source-options" @slotchange=${this.syncOptions}></slot>
-      </div>
-    `;
+          <slot name="icon"
+            ><svg class="chevron" viewBox="0 0 24 24">
+              <path
+                d="m7 9.5 5 5 5-5 1.4 1.4-6.4 6.4-6.4-6.4L7 9.5Z"
+              ></path></svg
+          ></slot>
+        </span></button
+      >${this.renderPopup()}<slot
+        class="source-options"
+        @slotchange=${this.syncOptions}
+      ></slot>
+    </div>`;
   }
 
   protected override updated(changed: Map<string, unknown>) {
     if (
       changed.has('value') ||
       changed.has('disabled') ||
-      changed.has('required')
+      changed.has('required') ||
+      changed.has('mode')
     ) {
-      this.internals.setFormValue(this.disabled ? null : this.value);
+      const participates = this.mode === 'select' && !this.disabled;
+      this.internals.setFormValue(participates ? this.value : null);
+      const missing = participates && this.required && !this.value;
       this.internals.setValidity(
-        this.required && !this.value ? {valueMissing: true} : {},
-        this.required && !this.value ? 'Please select an option.' : ''
+        missing ? {valueMissing: true} : {},
+        missing ? 'Please select an option.' : ''
       );
+    }
+    if (changed.has('open')) {
+      if (this.open) {
+        this.addPositionListeners();
+        void this.updateComplete.then(this.positionPopup);
+      } else this.removePositionListeners();
     }
   }
 
-  private renderListbox() {
+  private renderPopup() {
+    const showChecks =
+      this.checkmark === 'always' ||
+      (this.checkmark === 'auto' && this.mode === 'select');
     return html`<div
       class=${this.open ? 'listbox open' : 'listbox'}
       part="listbox"
-      id=${this.listboxId}
-      role="listbox"
+      id=${this.popupId}
+      role=${this.mode === 'menu' ? 'menu' : 'listbox'}
       aria-label=${ifDefined(this.accessibleLabel || this.label || undefined)}
       aria-hidden=${ifDefined(this.open ? undefined : 'true')}
       .inert=${!this.open}
     >
       ${this.options.map(
-        (option, index) => html`
-          <button
-            class="option ${index === this.activeIndex ? 'active' : ''}"
-            part="option"
-            type="button"
-            role="option"
-            ?disabled=${option.disabled}
-            aria-selected=${option.value === this.value ? 'true' : 'false'}
-            @pointerenter=${() => (this.activeIndex = index)}
-            @click=${() => this.selectOption(index)}
+        (option, index) => html`<button
+          id="${this.popupId}-option-${index}"
+          class="option ${index === this.activeIndex ? 'active' : ''}"
+          data-tone=${option.tone}
+          part="option${option.tone === 'danger' ? ' option-danger' : ''}"
+          type="button"
+          role=${this.mode === 'menu' ? 'menuitem' : 'option'}
+          ?disabled=${option.disabled}
+          aria-selected=${ifDefined(
+            this.mode === 'select'
+              ? option.value === this.value
+                ? 'true'
+                : 'false'
+              : undefined
+          )}
+          @pointerenter=${() => (this.activeIndex = index)}
+          @click=${() => this.activateOption(index)}
+        >
+          <span class="option-content"
+            >${option.icon
+              ? html`<i
+                  class="option-icon ${option.icon}"
+                  part="option-icon"
+                  aria-hidden="true"
+                ></i>`
+              : nothing}<span class="option-label">${option.label}</span></span
           >
-            <span class="option-content">
-              ${option.icon
-                ? html`<i
-                    class="option-icon ${option.icon}"
-                    part="option-icon"
-                    aria-hidden="true"
-                  ></i>`
-                : nothing}
-              <span class="option-label">${option.label}</span>
-            </span>
-            ${option.value === this.value
-              ? html`<svg class="option-check" viewBox="0 0 24 24" aria-hidden="true">
-                  <path
-                    d="m9.2 16.2-4.1-4.1-1.4 1.4L9.2 19 21 7.2l-1.4-1.4-10.4 10.4Z"
-                  ></path>
-                </svg>`
-              : nothing}
-          </button>
-        `
+          ${showChecks && option.value === this.value
+            ? html`<svg
+                class="option-check"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  d="m9.2 16.2-4.1-4.1-1.4 1.4L9.2 19 21 7.2l-1.4-1.4-10.4 10.4Z"
+                ></path>
+              </svg>`
+            : nothing}
+        </button>`
       )}
     </div>`;
   }
 
-  private toggle() {
+  private toggle = () => {
     if (this.disabled) return;
     this.open = !this.open;
-    if (this.open)
-      this.activeIndex = Math.max(
-        0,
-        this.options.findIndex((option) => option.value === this.value)
-      );
+    if (this.open) this.activeIndex = this.initialIndex();
+  };
+  private initialIndex() {
+    const selected =
+      this.mode === 'select'
+        ? this.options.findIndex((o) => o.value === this.value && !o.disabled)
+        : -1;
+    return selected >= 0
+      ? selected
+      : Math.max(
+          0,
+          this.options.findIndex((o) => !o.disabled)
+        );
   }
-
-  private handleKeydown(event: KeyboardEvent) {
+  private handleKeydown = (event: KeyboardEvent) => {
     if (event.key === 'Escape') {
-      this.open = false;
+      if (this.open) {
+        event.preventDefault();
+        this.close(true);
+      }
       return;
     }
-    if (!['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(event.key)) return;
+    if (event.key === 'Tab') {
+      this.close(false);
+      return;
+    }
+    if (
+      !['ArrowDown', 'ArrowUp', 'Home', 'End', 'Enter', ' '].includes(event.key)
+    )
+      return;
     event.preventDefault();
     if (!this.open) {
       this.open = true;
+      this.activeIndex =
+        event.key === 'ArrowUp' || event.key === 'End'
+          ? this.lastEnabledIndex()
+          : this.initialIndex();
       return;
     }
     if (event.key === 'Enter' || event.key === ' ') {
-      this.selectOption(this.activeIndex);
+      this.activateOption(this.activeIndex);
       return;
     }
-    const direction = event.key === 'ArrowDown' ? 1 : -1;
-    let next = this.activeIndex;
-    do next = (next + direction + this.options.length) % this.options.length;
-    while (this.options[next]?.disabled && next !== this.activeIndex);
-    this.activeIndex = next;
+    if (event.key === 'Home' || event.key === 'End') {
+      this.activeIndex =
+        event.key === 'Home'
+          ? this.firstEnabledIndex()
+          : this.lastEnabledIndex();
+      return;
+    }
+    this.moveActive(event.key === 'ArrowDown' ? 1 : -1);
+  };
+  private firstEnabledIndex() {
+    return this.options.findIndex((o) => !o.disabled);
   }
-
-  private selectOption(index: number) {
+  private lastEnabledIndex() {
+    for (let i = this.options.length - 1; i >= 0; i--)
+      if (!this.options[i].disabled) return i;
+    return -1;
+  }
+  private moveActive(direction: 1 | -1) {
+    for (
+      let tries = 0, next = this.activeIndex;
+      tries < this.options.length;
+      tries++
+    ) {
+      next = (next + direction + this.options.length) % this.options.length;
+      if (!this.options[next].disabled) {
+        this.activeIndex = next;
+        return;
+      }
+    }
+  }
+  private activateOption(index: number) {
     const option = this.options[index];
     if (!option || option.disabled) return;
-    const changed = this.value !== option.value;
-    this.value = option.value;
-    this.open = false;
-    if (changed)
-      this.dispatchEvent(new Event('change', {bubbles: true, composed: true}));
-    this.updateComplete.then(() =>
-      this.shadowRoot?.querySelector<HTMLButtonElement>('.control')?.focus()
-    );
+    if (this.mode === 'menu')
+      this.dispatchEvent(
+        new CustomEvent<WsDropdownActionDetail>('ws-dropdown-action', {
+          bubbles: true,
+          composed: true,
+          detail: {value: option.value, option: option.element},
+        })
+      );
+    else {
+      const changed = this.value !== option.value;
+      this.value = option.value;
+      if (changed)
+        this.dispatchEvent(
+          new Event('change', {bubbles: true, composed: true})
+        );
+    }
+    this.close(true);
   }
-
+  private close(restoreFocus: boolean) {
+    this.open = false;
+    if (restoreFocus)
+      void this.updateComplete.then(() =>
+        this.shadowRoot?.querySelector<HTMLButtonElement>('.control')?.focus()
+      );
+  }
   private handleDocumentPointerDown = (event: PointerEvent) => {
-    if (!event.composedPath().includes(this)) this.open = false;
+    if (this.open && !event.composedPath().includes(this)) this.close(false);
   };
-
   private syncOptions = () => {
     this.options = Array.from(this.querySelectorAll('option')).map(
-      (option) => ({
-        value: option.value,
-        label: option.textContent?.trim() ?? '',
-        disabled: option.disabled,
+      (element) => ({
+        element,
+        value: element.value,
+        label: element.textContent?.trim() ?? '',
+        disabled: element.disabled,
         icon:
-          (option.dataset.icon ?? option.getAttribute('icon'))?.trim() ||
+          (element.dataset.icon ?? element.getAttribute('icon'))?.trim() ||
           undefined,
+        tone: element.dataset.tone === 'danger' ? 'danger' : 'default',
       })
     );
-    if (!this.value && this.options.length) this.value = this.options[0].value;
+    if (this.mode === 'select' && !this.value && this.options.length)
+      this.value = this.options[0].value;
   };
-
+  private addPositionListeners() {
+    window.addEventListener('resize', this.positionPopup);
+    window.addEventListener('scroll', this.positionPopup, true);
+  }
+  private removePositionListeners() {
+    window.removeEventListener('resize', this.positionPopup);
+    window.removeEventListener('scroll', this.positionPopup, true);
+  }
+  private positionPopup = () => {
+    if (!this.open) return;
+    const control = this.shadowRoot?.querySelector<HTMLElement>('.control');
+    const popup = this.shadowRoot?.querySelector<HTMLElement>('.listbox');
+    if (!control || !popup) return;
+    const anchor = control.getBoundingClientRect();
+    popup.style.minWidth = `${Math.round(anchor.width)}px`;
+    const box = popup.getBoundingClientRect();
+    const margin = 8;
+    const below = anchor.bottom + 6;
+    const above = anchor.top - box.height - 6;
+    const useBelow =
+      below + box.height <= innerHeight - margin || above < margin;
+    const left = Math.min(
+      Math.max(margin, anchor.left),
+      Math.max(margin, innerWidth - box.width - margin)
+    );
+    const top = Math.min(
+      Math.max(margin, useBelow ? below : above),
+      Math.max(margin, innerHeight - box.height - margin)
+    );
+    popup.style.left = `${Math.round(left)}px`;
+    popup.style.top = `${Math.round(top)}px`;
+    popup.style.transformOrigin = `${
+      getComputedStyle(this).direction === 'rtl' ? 'right' : 'left'
+    } ${useBelow ? 'top' : 'bottom'}`;
+  };
   formResetCallback() {
-    this.value = this.defaultValue || this.options[0]?.value || '';
+    if (this.mode === 'select')
+      this.value = this.defaultValue || this.options[0]?.value || '';
   }
 }
 

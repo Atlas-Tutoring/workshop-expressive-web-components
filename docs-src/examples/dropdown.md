@@ -3,11 +3,13 @@ layout: example.11ty.cjs
 title: Workshop Expressive Web Components ⌲ Examples ⌲ Dropdown
 tags: example
 name: Dropdown
-description: Expressive, accessible ws-dropdown selection controls
+description: Expressive, accessible selection and command dropdowns
 order: 13
 ---
 
 <p>Dropdowns let people choose one option from a compact list. Their trigger can use the same visual language and sizes as Workshop buttons.</p>
+
+Set `mode="menu"` when the options are immediate commands rather than persistent choices. Menu mode does not retain a value or participate in forms; it emits `ws-dropdown-action`, closes, and returns focus to its trigger.
 
 ## Live demo
 
@@ -105,10 +107,28 @@ Individual choices may optionally provide a `data-icon` attribute containing one
   </ws-dropdown>
 </div>
 
+## Command menu
+
+<div class="demo-panel dropdown-demo">
+  <ws-dropdown mode="menu" variant="text" size="small" icon-only rotate-icon="false" aria-label="Course actions">
+    <i slot="icon" class="ri-more-2-fill" aria-hidden="true"></i>
+    <option value="edit" data-icon="ri-edit-line">Edit course</option>
+    <option value="duplicate" data-icon="ri-file-copy-line">Duplicate</option>
+    <option value="delete" data-icon="ri-delete-bin-6-line" data-tone="danger">Delete course</option>
+  </ws-dropdown>
+</div>
+
+Use `data-tone="danger"` for destructive commands. Menu mode uses menu/menuitem semantics, omits selection checks by default, and shares the dropdown's viewport positioning, keyboard navigation, animation, and dismissal behavior.
+
 ## Code
 
 ```html
-<ws-dropdown variant="primary" size="medium" value="7" aria-label="Reporting period">
+<ws-dropdown
+  variant="primary"
+  size="medium"
+  value="7"
+  aria-label="Reporting period"
+>
   <option value="1">1 day</option>
   <option value="7">7 days</option>
   <option value="30">30 days</option>
@@ -139,21 +159,23 @@ Individual choices may optionally provide a `data-icon` attribute containing one
 
 ## API
 
-| Property      | Type                                                    | Default      | Description                                      |
-| ------------- | ------------------------------------------------------- | ------------ | ------------------------------------------------ |
-| `value`       | `string`                                                | —            | Selected option value.                           |
-| `name`        | `string`                                                | —            | Form field name.                                 |
-| `label`       | `string`                                                | —            | Optional visible label.                          |
-| `variant`     | `'primary' \| 'secondary' \| 'outlined' \| 'text'`      | `'outlined'` | Trigger visual treatment.                        |
-| `size`        | `'small' \| 'medium' \| 'large'`                        | `'medium'`   | Trigger height aligned with `ws-button`.         |
-| `icon-only`   | `boolean`                                               | `false`      | Shows only the dropdown indicator in the trigger. |
-| `rotate-icon` | `boolean`                                               | `true`       | Rotates the default or custom icon while open.   |
-| `disabled`    | `boolean`                                               | `false`      | Disables selection.                              |
-| `required`    | `boolean`                                               | `false`      | Requires a value in forms.                       |
+| Property      | Type                                               | Default      | Description                                       |
+| ------------- | -------------------------------------------------- | ------------ | ------------------------------------------------- |
+| `value`       | `string`                                           | —            | Selected option value.                            |
+| `mode`        | `'select' \| 'menu'`                               | `'select'`   | Persistent selection or immediate commands.       |
+| `checkmark`   | `'auto' \| 'always' \| 'none'`                     | `'auto'`     | Controls selected-option checkmarks.              |
+| `name`        | `string`                                           | —            | Form field name.                                  |
+| `label`       | `string`                                           | —            | Optional visible label.                           |
+| `variant`     | `'primary' \| 'secondary' \| 'outlined' \| 'text'` | `'outlined'` | Trigger visual treatment.                         |
+| `size`        | `'small' \| 'medium' \| 'large'`                   | `'medium'`   | Trigger height aligned with `ws-button`.          |
+| `icon-only`   | `boolean`                                          | `false`      | Shows only the dropdown indicator in the trigger. |
+| `rotate-icon` | `boolean`                                          | `true`       | Rotates the default or custom icon while open.    |
+| `disabled`    | `boolean`                                          | `false`      | Disables selection.                               |
+| `required`    | `boolean`                                          | `false`      | Requires a value in forms.                        |
 
 `rotate-icon` defaults to `true`; use `rotate-icon="false"` to opt out in markup.
 
-The default slot accepts `option` elements as a familiar data source. Each source option may also use an optional `icon` attribute with CSS icon classes. The component renders the choices in a Workshop Expressive listbox and emits a composed `change` event when the selection changes.
+The default slot accepts `option` elements as a familiar data source. Options may use `data-icon` for CSS icon classes and `data-tone="danger"` for destructive commands.
 
 ## Slots
 
@@ -164,19 +186,21 @@ The default slot accepts `option` elements as a familiar data source. Each sourc
 
 ## CSS parts
 
-| Part          | Description                                      |
-| ------------- | ------------------------------------------------ |
-| `control`     | Native dropdown trigger button.                  |
-| `icon`        | Default or custom trigger indicator wrapper.     |
-| `listbox`     | Popup listbox containing the choices.            |
-| `option`      | Each rendered option button.                     |
-| `option-icon` | Optional leading icon rendered for one choice.   |
+| Part            | Description                                    |
+| --------------- | ---------------------------------------------- |
+| `control`       | Native dropdown trigger button.                |
+| `icon`          | Default or custom trigger indicator wrapper.   |
+| `listbox`       | Popup listbox containing the choices.          |
+| `option`        | Each rendered option button.                   |
+| `option-danger` | A rendered option with `data-tone="danger"`.   |
+| `option-icon`   | Optional leading icon rendered for one choice. |
 
 ## Events
 
-| Event    | Description                                                  |
-| -------- | ------------------------------------------------------------ |
-| `change` | Composed event emitted after the selected value has changed. |
+| Event                | Description                                                          |
+| -------------------- | -------------------------------------------------------------------- |
+| `change`             | Composed event emitted after the selected value has changed.         |
+| `ws-dropdown-action` | Composed event emitted in menu mode with `{ value, option }` detail. |
 
 ## Accessibility notes
 
