@@ -1,46 +1,59 @@
 # Changelog
 
+All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components` are documented in this file.
+
 ## Unreleased
+
+## 0.3.2
 
 ### Added
 
-- Expanded `<ws-dropdown>` with a command-oriented `mode="menu"`, semantic danger actions, configurable checkmarks, keyboard navigation, dismissal, focus restoration, and viewport-safe fixed positioning.
+- Expanded `<ws-dropdown>` with `mode="menu"` for immediate commands that do not retain a selected value or participate in form submission.
+- Added composed `ws-dropdown-action` events, menu/menuitem semantics, keyboard navigation, outside-click and Escape dismissal, focus restoration, and viewport-safe popup positioning for command menus.
+- Added configurable dropdown checkmarks through `checkmark="auto|always|none"` and semantic destructive actions through `data-tone="danger"`.
+- Added `trigger-label` so command menus can use a visible text trigger instead of being limited to icon-only overflow buttons; text triggers can still use the default chevron or a custom trigger icon.
+
+### Changed
+
+- Unified contextual action menus with `<ws-dropdown>` so selection dropdowns and command menus share trigger variants, sizes, popup animation, icon handling, and positioning behavior.
+- Added animated `<ws-dialog>` closing motion for both the dialog surface and backdrop while preserving reduced-motion behavior.
+- Expanded dropdown documentation with text-only choices, icon choices, destructive commands, icon-only command triggers, and labeled command triggers.
+
+### Fixed
+
+- Fixed dropdown choice icons supplied by global icon-font classes so their glyphs and font family remain visible after the choices are rendered inside the component shadow DOM.
+- Fixed dropdown option icons inheriting the browser's default italic `<i>` styling; reconstructed icon-font glyphs now render upright with normal font weight.
 
 ## 0.3.1
 
 ### Added
 
-- Added `primary`, `secondary`, `outlined`, and `text` visual variants to `<ws-dropdown>`, aligned with `<ws-button>`.
-- Added button-aligned small, medium, and large dropdown sizing, animated chevron rotation, reduced-motion handling, and dropdown CSS parts.
-- Added icon-only dropdown triggers, a customizable `icon` slot with the existing arrow as its fallback, and configurable icon rotation through `rotate-icon`.
-- Added optional per-choice dropdown icons through the source `option` element's `icon` attribute, without reserving icon space for text-only choices.
-- Added `contained` tabs for compact local view switching, value-driven button tabs, and the new `<ws-tab-panel>` component with automatic panel synchronization and keyboard navigation.
-- Added `<ws-dialog>` with native modal top-layer behavior, Atlas-style blurred backdrops, composable content and action slots, responsive layout, and close/cancel events.
+- Added `primary`, `secondary`, `outlined`, and `text` visual variants to `<ws-dropdown>`, with button-aligned small, medium, and large sizes.
+- Added icon-only dropdown triggers, customizable trigger icons, configurable icon rotation, and optional per-choice icons without reserving empty icon space for text-only choices.
+- Added `contained` tabs for compact local view switching, value-driven button tabs, and `<ws-tab-panel>` with automatic panel synchronization and keyboard navigation.
+- Added `<ws-dialog>` with native modal top-layer behavior, blurred backdrops, composable content and action slots, responsive layout, and close/cancel events.
 - Added form-associated `<ws-time-picker>` with editable `HH:mm` values, hour/minute selection, configurable minute steps, time ranges, validation, clear behavior, and small, medium, and large sizes.
 - Added editable `<ws-code-block>` mode with live syntax highlighting, synchronized line numbers, native textarea editing, Tab/Shift+Tab indentation, readonly and disabled states, configurable rows and tab size, and composed input/change events.
+- Added an editable code-language picker with configurable `languageOptions` and `ws-code-language-change` events.
 
 ### Changed
 
-- Animated the dropdown menu surface itself when opening and closing, using a clipped expansion, subtle movement, and opacity while preserving reduced-motion behavior.
+- Animated the dropdown popup surface while opening and closing with clipped expansion, subtle movement, opacity, and reduced-motion support.
 - Expanded `<ws-tabs>` beyond navigation-only usage while preserving existing `href`-based tab behavior.
-- Aligned contained-tab geometry and interaction with the Atlas Edit / Preview control, including its compact 3px inset, 11px outer radius, 8px selected surface, and quiet interaction treatment.
-- Kept contained-tab colors tied to semantic Workshop tokens so Atlas dark and light themes provide the bar, selected surface, text, focus, and elevation colors directly.
-- Kept contained-tab surface colors stable during selection motion while synchronizing the selected-label color transition with the moving indicator.
+- Aligned contained-tab geometry, interaction, motion, and semantic colors with the Atlas Edit / Preview control.
 - Added progressive, caret-aware typing to `<ws-date-picker>` and `<ws-time-picker>`, including automatic separators, compact-input and paste normalization, canonical completed values, and omission of incomplete edits from form submission.
-- Standardized component documentation spacing, section hierarchy, demo surfaces, and tables, and removed the redundant tabs panel-switching demo.
-- Aligned `<ws-dialog>` body spacing, typography, desktop action placement, and mobile action layout with the current backend course dialogs.
+- Aligned `<ws-dialog>` body spacing, typography, desktop action placement, and mobile action layout with the backend course dialogs.
+- Standardized component documentation spacing, section hierarchy, demo surfaces, and API tables.
 
 ### Fixed
 
-- Fixed dropdown choice icons supplied by global icon-font classes so their
-  glyphs remain visible after the choices are rendered inside the shadow DOM.
-- Fixed contained-tab switching in the dark documentation theme by giving the secondary selected surface distinct contrast from the contained track.
-- Fixed contained-tab indicator motion so switching uses an explicit measured browser animation instead of depending on theme-sensitive CSS custom-property transition timing, keeping light and dark modes consistent.
-- Prevented contained tabs from changing foreground or background color on hover; hover now inherits the tab's current selected or unselected color.
-- Fixed `<ws-dialog>` action-slot layout so desktop actions reliably stay grouped at the bottom-right instead of depending on slot flattening behavior.
-- Fixed editable `<ws-code-block>` sizing when code grows beyond the configured rows: line numbers no longer expand the visual editor past the textarea viewport, keeping vertical and horizontal scrollbars aligned with the highlighted code layer.
-
-All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components` are documented in this file.
+- Fixed contained-tab contrast in both documentation themes and prevented contained tabs from changing foreground or background color on hover.
+- Made contained-tab indicator motion deterministic, preserved pending animations across resize observation, and kept reverse animations continuous from the indicator's visible position.
+- Fixed `<ws-dialog>` action-slot layout so desktop actions reliably stay grouped at the bottom-right.
+- Fixed editable `<ws-code-block>` sizing when code grows beyond the configured rows so line numbers, syntax highlighting, and both scroll directions stay aligned with the textarea viewport.
+- Preserved the time-picker caret when hour input is normalized during progressive typing.
+- Kept the standard tabs documentation demos on the current page instead of navigating to nonexistent GitHub Pages routes.
+- Updated dependency overrides and lockfile resolutions for reported dependency security advisories.
 
 ## 0.3.0
 
