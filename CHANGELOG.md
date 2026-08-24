@@ -32,6 +32,8 @@
 
 ### Fixed
 
+- Fixed dropdown choice icons supplied by global icon-font classes so their
+  glyphs remain visible after the choices are rendered inside the shadow DOM.
 - Fixed contained-tab switching in the dark documentation theme by giving the secondary selected surface distinct contrast from the contained track.
 - Fixed contained-tab indicator motion so switching uses an explicit measured browser animation instead of depending on theme-sensitive CSS custom-property transition timing, keeping light and dark modes consistent.
 - Prevented contained tabs from changing foreground or background color on hover; hover now inherits the tab's current selected or unselected color.
