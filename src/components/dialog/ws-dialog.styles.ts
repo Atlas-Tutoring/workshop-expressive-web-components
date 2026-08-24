@@ -8,7 +8,10 @@ export const wsDialogStyles = css`
   .dialog {
     inline-size: min(var(--ws-dialog-width, 560px), calc(100vw - 32px));
     max-inline-size: calc(100vw - 32px);
-    max-block-size: min(var(--ws-dialog-max-height, 720px), calc(100dvh - 32px));
+    max-block-size: min(
+      var(--ws-dialog-max-height, 720px),
+      calc(100dvh - 32px)
+    );
     margin: auto;
     overflow: hidden;
     border: 1px solid
@@ -19,7 +22,12 @@ export const wsDialogStyles = css`
     color: var(--ws-dialog-color, var(--ws-color-on-surface));
     background: var(--ws-dialog-background, var(--ws-color-surface));
     box-shadow: var(--ws-dialog-shadow, var(--ws-elevation-md));
-    font-family: var(--ws-font-family, 'Google Sans Flex', system-ui, sans-serif);
+    font-family: var(
+      --ws-font-family,
+      'Google Sans Flex',
+      system-ui,
+      sans-serif
+    );
   }
 
   .dialog[open] {
@@ -38,10 +46,24 @@ export const wsDialogStyles = css`
       var(--ws-motion-easing-standard, ease);
   }
 
+  .dialog.closing {
+    animation: ws-dialog-exit var(--ws-motion-duration-medium, 180ms)
+      var(--ws-motion-easing-standard, ease) forwards;
+    pointer-events: none;
+  }
+
+  .dialog.closing::backdrop {
+    animation: ws-dialog-backdrop-exit var(--ws-motion-duration-medium, 180ms)
+      var(--ws-motion-easing-standard, ease) forwards;
+  }
+
   .surface {
     display: grid;
     gap: var(--ws-dialog-gap, 20px);
-    max-block-size: min(var(--ws-dialog-max-height, 720px), calc(100dvh - 32px));
+    max-block-size: min(
+      var(--ws-dialog-max-height, 720px),
+      calc(100dvh - 32px)
+    );
     overflow-y: auto;
     padding: var(--ws-dialog-padding, 24px);
   }
@@ -152,6 +174,28 @@ export const wsDialogStyles = css`
     }
   }
 
+  @keyframes ws-dialog-exit {
+    from {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    to {
+      opacity: 0;
+      transform: translateY(8px) scale(0.985);
+    }
+  }
+
+  @keyframes ws-dialog-backdrop-exit {
+    from {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+    }
+  }
+
   @media (max-width: 680px) {
     .surface {
       padding: var(--ws-dialog-mobile-padding, 20px);
@@ -169,7 +213,9 @@ export const wsDialogStyles = css`
 
   @media (prefers-reduced-motion: reduce) {
     .dialog[open],
-    .dialog[open]::backdrop {
+    .dialog[open]::backdrop,
+    .dialog.closing,
+    .dialog.closing::backdrop {
       animation: none;
     }
   }
