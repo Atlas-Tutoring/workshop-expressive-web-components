@@ -55,7 +55,7 @@ export const wsTabStyles = css`
         var(--ws-color-primary, #7c5cff);
   }
 
-  .tab:hover {
+  :host-context(ws-tabs:not([variant='contained'])) .tab:hover {
     background: var(
       --ws-tab-hover-background,
       var(--ws-color-primary-container, #f0ecff)
@@ -123,23 +123,8 @@ export const wsTabStyles = css`
     background: transparent;
   }
 
-  /*
-   * Contained tabs hover with a neutral wash rather than the accent. The
-   * moving indicator is the accent-colored element in this variant, so an
-   * accent hover competed with it and made the travel hard to follow.
-   */
   :host([data-ws-variant='contained']) .tab:hover {
-    background: var(
-      --ws-tabs-contained-tab-hover-background,
-      color-mix(in srgb, var(--ws-color-on-surface, #17171c) 7%, transparent)
-    );
-    color: inherit;
-  }
-
-  /* The selected tab already carries the indicator; leave it alone. */
-  :host([data-ws-variant='contained'])[selected] .tab:hover {
     background: transparent;
-    color: inherit;
   }
 
   :host([data-ws-variant='contained']) .tab:active {
