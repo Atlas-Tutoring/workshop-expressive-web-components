@@ -12,7 +12,7 @@ export const wsAppBarStyles = css`
       var(--ws-color-surface, #ffffff) 86%,
       transparent
     );
-    --ws-app-bar-border-color: var(--ws-color-outline-variant, #e2e8f0);
+    --ws-app-bar-border-color: var(--ws-color-outline-variant, #e3e6ed);
     --ws-app-bar-backdrop-filter: blur(18px);
     --ws-app-bar-z-index: 5;
   }

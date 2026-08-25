@@ -2,7 +2,7 @@ import {css} from 'lit';
 
 export const wsTextFieldStyles = css`
   :host {
-    color: var(--ws-color-on-surface, #0f172a);
+    color: var(--ws-color-on-surface, #17171c);
     display: inline-flex;
     flex-direction: column;
     font-family: var(
@@ -25,7 +25,7 @@ export const wsTextFieldStyles = css`
   }
 
   .label {
-    color: var(--ws-color-on-surface, #0f172a);
+    color: var(--ws-color-on-surface, #17171c);
     font: var(
       --ws-text-field-label-font,
       var(
@@ -38,18 +38,18 @@ export const wsTextFieldStyles = css`
   }
 
   .required {
-    color: var(--ws-color-error, #ef4444);
+    color: var(--ws-color-error, #ff4d5e);
   }
 
   .control {
     align-items: center;
-    background: var(--ws-text-field-background, var(--ws-color-surface, #fff));
-    border: var(--ws-text-field-border-width, 1px) solid
-      var(--ws-text-field-border-color, var(--ws-color-outline, #e2e8f0));
-    border-radius: var(
-      --ws-text-field-radius,
-      var(--ws-shape-medium, 8px)
+    background: var(
+      --ws-text-field-background,
+      var(--ws-color-surface, #ffffff)
     );
+    border: var(--ws-text-field-border-width, 1px) solid
+      var(--ws-text-field-border-color, var(--ws-color-outline, #dde1ea));
+    border-radius: var(--ws-text-field-radius, var(--ws-shape-medium, 8px));
     box-sizing: border-box;
     display: flex;
     gap: var(--ws-text-field-icon-gap, var(--ws-spacing-sm, 8px));
@@ -115,37 +115,37 @@ export const wsTextFieldStyles = css`
       --ws-text-field-hover-background,
       color-mix(
         in srgb,
-        var(--ws-color-primary, #6c5cff) 4%,
-        var(--ws-color-surface, #fff)
+        var(--ws-color-primary, #7c5cff) 4%,
+        var(--ws-color-surface, #ffffff)
       )
     );
     border-color: var(
       --ws-text-field-hover-border-color,
       color-mix(
         in srgb,
-        var(--ws-color-primary, #6c5cff) 40%,
-        var(--ws-color-outline, #e2e8f0)
+        var(--ws-color-primary, #7c5cff) 40%,
+        var(--ws-color-outline, #dde1ea)
       )
     );
   }
 
   .control:focus-within:not(.disabled) {
-    border-color: var(--ws-color-primary, #6c5cff);
+    border-color: var(--ws-color-primary, #7c5cff);
     box-shadow: 0 0 0 var(--ws-focus-ring-inner-size, 2px)
-        var(--ws-color-background, #f8fafc),
+        var(--ws-color-background, #f8f9fc),
       0 0 0 var(--ws-focus-ring-outer-size, 5px)
-        color-mix(in srgb, var(--ws-color-primary, #6c5cff) 42%, transparent);
+        color-mix(in srgb, var(--ws-color-primary, #7c5cff) 42%, transparent);
   }
 
   .control.invalid {
-    border-color: var(--ws-color-error, #ef4444);
+    border-color: var(--ws-color-error, #ff4d5e);
   }
 
   .control.invalid:focus-within {
     box-shadow: 0 0 0 var(--ws-focus-ring-inner-size, 2px)
-        var(--ws-color-background, #f8fafc),
+        var(--ws-color-background, #f8f9fc),
       0 0 0 var(--ws-focus-ring-outer-size, 5px)
-        color-mix(in srgb, var(--ws-color-error, #ef4444) 42%, transparent);
+        color-mix(in srgb, var(--ws-color-error, #ff4d5e) 42%, transparent);
   }
 
   .control.disabled {
@@ -158,7 +158,7 @@ export const wsTextFieldStyles = css`
     background: transparent;
     border: 0;
     box-sizing: border-box;
-    color: var(--ws-color-on-surface, #0f172a);
+    color: var(--ws-color-on-surface, #17171c);
     flex: 1 1 auto;
     font: var(
       --ws-text-field-font,
@@ -197,7 +197,7 @@ export const wsTextFieldStyles = css`
   }
 
   .input::placeholder {
-    color: var(--ws-color-on-surface-variant, #64748b);
+    color: var(--ws-color-on-surface-variant, #626875);
     opacity: 0.78;
   }
 
@@ -213,7 +213,7 @@ export const wsTextFieldStyles = css`
   .icon,
   .clear-button {
     align-items: center;
-    color: var(--ws-color-on-surface-variant, #64748b);
+    color: var(--ws-color-on-surface-variant, #626875);
     display: inline-flex;
     flex: 0 0 auto;
     justify-content: center;
@@ -259,12 +259,13 @@ export const wsTextFieldStyles = css`
   }
 
   .clear-button:hover {
-    background: var(--ws-color-primary-container, #f5f3ff);
-    color: var(--ws-color-primary, #6c5cff);
+    background: var(--ws-color-primary-container, #f0ecff);
+    color: var(--ws-color-primary, #7c5cff);
   }
 
   .clear-button:focus-visible {
-    outline: 2px solid var(--ws-color-primary, #6c5cff);
+    outline: var(--ws-focus-ring-inner-size, 2px) solid
+      var(--ws-color-primary, #7c5cff);
     outline-offset: 1px;
   }
 
@@ -279,7 +280,7 @@ export const wsTextFieldStyles = css`
   }
 
   .supporting-text {
-    color: var(--ws-color-on-surface-variant, #64748b);
+    color: var(--ws-color-on-surface-variant, #626875);
     font: var(
       --ws-text-field-supporting-font,
       var(
@@ -293,7 +294,7 @@ export const wsTextFieldStyles = css`
   }
 
   .supporting-text.error {
-    color: var(--ws-color-error, #ef4444);
+    color: var(--ws-color-error, #ff4d5e);
   }
 
   @media (prefers-reduced-motion: reduce) {

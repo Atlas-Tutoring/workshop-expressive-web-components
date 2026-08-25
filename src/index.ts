@@ -20,6 +20,7 @@ import './components/time-picker/ws-time-picker.js';
 import './components/chip/ws-chip.js';
 import './components/dropdown/ws-dropdown.js';
 import './components/badge/ws-badge.js';
+import './components/color-picker/ws-color-picker.js';
 import './components/docs-shell/ws-docs-shell.js';
 import './components/docs-shell/ws-hero.js';
 import './components/docs-shell/ws-footer.js';
@@ -88,5 +89,20 @@ export type {
 
 export {WsBadge} from './components/badge/index.js';
 export type {WsBadgeTone} from './components/badge/index.js';
+
+export {
+  WS_ACCENT_PRESETS,
+  WS_DEFAULT_ACCENT,
+  WsColorPicker,
+  accentForeground,
+  contrastRatio,
+  normalizeHex,
+  relativeLuminance,
+} from './components/color-picker/index.js';
+export type {
+  WsAccentChangeDetail,
+  WsAccentPreset,
+  WsColorPickerApply,
+} from './components/color-picker/index.js';
 
 export {WsDocsShell, WsHero, WsFooter} from './components/docs-shell/index.js';

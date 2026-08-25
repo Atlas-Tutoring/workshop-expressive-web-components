@@ -18,10 +18,39 @@ module.exports = function (data) {
       '/favicon.svg'
     )}" type="image/svg+xml">
     <script>
+      // Applied before first paint so a remembered theme or accent does not
+      // flash the defaults while the component bundle loads.
       (() => {
-        const storedTheme = localStorage.getItem('ws-docs-theme');
-        if (storedTheme === 'light' || storedTheme === 'dark') {
-          document.documentElement.dataset.wsTheme = storedTheme;
+        try {
+          const storedTheme = localStorage.getItem('ws-docs-theme');
+          if (storedTheme === 'light' || storedTheme === 'dark') {
+            document.documentElement.dataset.wsTheme = storedTheme;
+          }
+
+          const storedAccent = localStorage.getItem('ws-docs-accent');
+          if (storedAccent && /^#[0-9a-f]{6}$/i.test(storedAccent)) {
+            const root = document.documentElement.style;
+            root.setProperty('--ws-accent', storedAccent);
+
+            // Mirrors accentForeground() from the color-picker component so
+            // the accent's foreground is right on the very first paint too.
+            const channel = (offset) => {
+              const value =
+                parseInt(storedAccent.substr(offset, 2), 16) / 255;
+              return value <= 0.04045
+                ? value / 12.92
+                : Math.pow((value + 0.055) / 1.055, 2.4);
+            };
+            const luminance =
+              0.2126 * channel(1) + 0.7152 * channel(3) + 0.0722 * channel(5);
+            const lightContrast = 1.001 / (luminance + 0.05);
+            root.setProperty(
+              '--ws-accent-on',
+              lightContrast >= 3 ? '#f7f7fa' : '#17171c'
+            );
+          }
+        } catch {
+          // Storage is unavailable; the defaults apply.
         }
       })();
     </script>
@@ -33,7 +62,6 @@ module.exports = function (data) {
     >
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.9.1/fonts/remixicon.css">
     <link rel="stylesheet" href="${relative(page.url, '/docs.css')}">
-    <link rel="stylesheet" href="${relative(page.url, '/palette.css')}">
     <link rel="stylesheet" href="${relative(page.url, '/component-docs.css')}">
     <script type="module" src="${relative(
       page.url,

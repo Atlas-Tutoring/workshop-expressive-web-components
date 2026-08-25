@@ -1,71 +1,14 @@
+/**
+ * The aggregate Workshop Expressive stylesheet.
+ *
+ * Importing this gives you every foundation token plus the light and dark
+ * scheme overrides. Note that typography.css fetches the Google Sans webfonts;
+ * import the individual stylesheets instead if you host fonts yourself.
+ */
 @import url('./colors.css');
 @import url('./spacing.css');
 @import url('./shapes.css');
 @import url('./typography.css');
 @import url('./motion.css');
 @import url('./elevation.css');
-
-:root {
-  color-scheme: light;
-}
-
-:root[data-ws-theme='dark'],
-[data-ws-theme='dark'] {
-  color-scheme: dark;
-  --ws-color-background: #000000;
-  --ws-color-surface: #0a0a0c;
-  --ws-color-surface-variant: #151519;
-
-  --ws-color-primary-container: #21184a;
-  --ws-color-secondary-container: #1d365a;
-
-  --ws-color-outline: #29292f;
-  --ws-color-outline-variant: #242429;
-
-  --ws-color-on-primary: #f7f7fa;
-  --ws-color-on-background: #f7f7fa;
-  --ws-color-on-surface: #f7f7fa;
-  --ws-color-on-surface-variant: #a4a4af;
-  --ws-color-on-secondary-container: #f7f7fa;
-}
-
-:root[data-ws-theme='light'],
-[data-ws-theme='light'] {
-  color-scheme: light;
-  --ws-color-background: #f8f9fc;
-  --ws-color-surface: #ffffff;
-  --ws-color-surface-variant: #f0f2f7;
-
-  --ws-color-primary-container: #f0ecff;
-  --ws-color-secondary-container: #e2edff;
-
-  --ws-color-outline: #dde1ea;
-  --ws-color-outline-variant: #e3e6ed;
-
-  --ws-color-on-primary: #f7f7fa;
-  --ws-color-on-background: #17171c;
-  --ws-color-on-surface: #17171c;
-  --ws-color-on-surface-variant: #626875;
-  --ws-color-on-secondary-container: #17171c;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-ws-theme='light']) {
-    color-scheme: dark;
-    --ws-color-background: #000000;
-    --ws-color-surface: #0a0a0c;
-    --ws-color-surface-variant: #151519;
-
-    --ws-color-primary-container: #21184a;
-    --ws-color-secondary-container: #1d365a;
-
-    --ws-color-outline: #29292f;
-    --ws-color-outline-variant: #242429;
-
-    --ws-color-on-primary: #f7f7fa;
-    --ws-color-on-background: #f7f7fa;
-    --ws-color-on-surface: #f7f7fa;
-    --ws-color-on-surface-variant: #a4a4af;
-    --ws-color-on-secondary-container: #f7f7fa;
-  }
-}
+@import url('./schemes.css');

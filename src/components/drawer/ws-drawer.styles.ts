@@ -25,11 +25,11 @@ export const wsDrawerStyles = css`
     );
     block-size: var(--ws-drawer-height, 100%);
     border: 1px solid
-      color-mix(in srgb, var(--ws-color-outline, #e2e8f0) 72%, transparent);
+      color-mix(in srgb, var(--ws-color-outline, #dde1ea) 72%, transparent);
     border-radius: var(--ws-drawer-radius, var(--ws-shape-medium, 8px));
     box-shadow: var(--ws-drawer-elevation, var(--ws-elevation-none, none));
     box-sizing: border-box;
-    color: var(--ws-color-on-surface, #0f172a);
+    color: var(--ws-color-on-surface, #17171c);
     display: flex;
     flex-direction: column;
     gap: var(--ws-spacing-lg, 16px);

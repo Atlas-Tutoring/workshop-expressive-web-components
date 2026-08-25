@@ -4,7 +4,7 @@ export const wsCardStyles = css`
   :host {
     display: block;
     background: var(--ws-color-surface, #ffffff);
-    border: 1px solid var(--ws-color-outline-variant, #e2e8f0);
+    border: 1px solid var(--ws-color-outline-variant, #e3e6ed);
     border-radius: var(--ws-shape-large, 12px);
     padding: var(--ws-card-padding, var(--ws-spacing-lg, 16px));
     box-shadow: var(--ws-elevation-sm, 0 1px 2px rgb(15 23 42 / 8%));
@@ -14,12 +14,12 @@ export const wsCardStyles = css`
       system-ui,
       sans-serif
     );
-    color: var(--ws-color-on-surface, #0f172a);
+    color: var(--ws-color-on-surface, #17171c);
   }
 
   :host(:focus-visible) {
     outline: var(--ws-focus-ring-inner-size, 2px) solid
-      var(--ws-color-primary, #6c5cff);
+      var(--ws-color-primary, #7c5cff);
     outline-offset: var(--ws-spacing-xs, 4px);
   }
 
@@ -31,6 +31,6 @@ export const wsCardStyles = css`
 
   ::slotted(p) {
     margin: 0;
-    color: var(--ws-color-on-surface-variant, #64748b);
+    color: var(--ws-color-on-surface-variant, #626875);
   }
 `;

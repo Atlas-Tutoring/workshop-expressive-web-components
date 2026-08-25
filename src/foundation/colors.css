@@ -1,30 +1,128 @@
+/**
+ * Workshop Expressive color foundation.
+ *
+ * Everything accent-flavoured derives from a single seed token, `--ws-accent`.
+ * Set that one property and the whole system re-themes: primary, hover,
+ * containers, focus rings, gradients, and the brand mark all follow.
+ * `<ws-color-picker>` does exactly that at runtime.
+ *
+ * Custom properties are substituted where they are *declared*, not where they
+ * are used, so a role declared on `:root` always resolves against `:root`'s
+ * seed. To re-theme a subtree, the derived roles have to be declared again
+ * inside it -- that is what `[data-ws-accent-scope]` below is for, and what
+ * `<ws-color-picker>` marks a non-root target with.
+ *
+ * The `--ws-accent-on` companion token carries the readable foreground for the
+ * accent. CSS cannot pick a contrasting color on its own yet, so the default
+ * suits the shipped purple and `<ws-color-picker>` recomputes it whenever the
+ * accent changes.
+ */
 :root {
-  --ws-purple: #7c5cff;
-  --ws-purple-dark: #6547f5;
+  /* Accent seed. Override this to re-theme. */
+  --ws-accent: #7c5cff;
+  --ws-accent-on: #f7f7fa;
+
+  /* Fixed brand hues used for informational roles, independent of accent. */
   --ws-blue: #2f80ff;
   --ws-green: #19c98b;
   --ws-orange: #ffa62b;
   --ws-red: #ff4d5e;
 
+  /* Legacy alias kept so existing overrides keep working. */
+  --ws-purple: var(--ws-accent);
+
   --ws-color-background: #f8f9fc;
   --ws-color-surface: #ffffff;
   --ws-color-surface-variant: #f0f2f7;
 
-  --ws-color-primary: #7c5cff;
-  --ws-color-secondary: #2f80ff;
-  --ws-color-tertiary: #19c98b;
-
-  --ws-color-primary-container: #f0ecff;
-  --ws-color-secondary-container: #e2edff;
+  --ws-color-secondary: var(--ws-blue);
+  --ws-color-tertiary: var(--ws-green);
+  --ws-color-secondary-container: color-mix(
+    in srgb,
+    var(--ws-blue) 12%,
+    #ffffff
+  );
 
   --ws-color-outline: #dde1ea;
   --ws-color-outline-variant: #e3e6ed;
 
-  --ws-color-error: #ff4d5e;
+  --ws-color-error: var(--ws-red);
+  --ws-color-warning: var(--ws-orange);
+  --ws-color-success: var(--ws-green);
 
-  --ws-color-on-primary: #f7f7fa;
   --ws-color-on-background: #17171c;
   --ws-color-on-surface: #17171c;
   --ws-color-on-surface-variant: #626875;
   --ws-color-on-secondary-container: #17171c;
+
+  /* Focus affordance shared by every interactive component. */
+  --ws-focus-ring-inner-size: 2px;
+  --ws-focus-ring-outer-size: 5px;
+
+  /* Syntax highlighting, shared by <ws-code-block> and the docs Prism theme. */
+  --ws-color-code-background: #ffffff;
+  --ws-color-code-on-background: #17171c;
+  --ws-color-code-border: #e3e6ed;
+  --ws-color-code-muted: #626875;
+  --ws-color-code-button: #f0f2f7;
+  --ws-color-code-button-hover: #e3e6ed;
+  --ws-color-code-gutter: #f8f9fc;
+  --ws-color-code-selection: color-mix(
+    in srgb,
+    var(--ws-color-primary) 24%,
+    transparent
+  );
+  --ws-color-code-caret: var(--ws-color-primary);
+  --ws-color-code-token-comment: #626875;
+  --ws-color-code-token-keyword: #5b3ce0;
+  --ws-color-code-token-string: #0f8a5f;
+  --ws-color-code-token-number: #b45a09;
+  --ws-color-code-token-tag: #1a5fd0;
+  --ws-color-code-token-attr: #d02a3d;
+  --ws-color-code-token-punctuation: #4a505d;
+  --ws-color-code-token-operator: #9333d6;
+}
+
+/**
+ * The accent-derived roles, in the light scheme.
+ *
+ * Repeated on `[data-ws-accent-scope]` so a subtree carrying its own
+ * `--ws-accent` re-derives them locally instead of inheriting the values
+ * already computed at `:root`.
+ */
+:root,
+[data-ws-accent-scope] {
+  --ws-color-primary: var(--ws-accent);
+  --ws-color-primary-hover: color-mix(in srgb, var(--ws-accent) 84%, #000000);
+  --ws-color-primary-container: color-mix(
+    in srgb,
+    var(--ws-accent) 10%,
+    #ffffff
+  );
+  --ws-color-on-primary: var(--ws-accent-on);
+  --ws-color-on-primary-container: color-mix(
+    in srgb,
+    var(--ws-accent) 72%,
+    #17171c
+  );
+
+  /* Legacy alias for the hover role. */
+  --ws-purple-dark: var(--ws-color-primary-hover);
+
+  --ws-focus-ring-color: color-mix(
+    in srgb,
+    var(--ws-color-primary) 45%,
+    transparent
+  );
+
+  /* Accent gradient used by the brand mark, hero, and emphasis surfaces. */
+  --ws-accent-gradient-start: color-mix(in srgb, var(--ws-accent) 82%, #ff6ad5);
+  --ws-accent-gradient-mid: var(--ws-accent);
+  --ws-accent-gradient-end: color-mix(in srgb, var(--ws-accent) 74%, #1b1bd6);
+  --ws-accent-gradient: linear-gradient(
+    135deg,
+    var(--ws-accent-gradient-start) 0%,
+    var(--ws-accent-gradient-mid) 50%,
+    var(--ws-accent-gradient-end) 100%
+  );
 }

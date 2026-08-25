@@ -2,6 +2,8 @@
   --ws-motion-duration-fast: 120ms;
   --ws-motion-duration-medium: 180ms;
   --ws-motion-duration-slow: 240ms;
+  --ws-motion-duration-extra-slow: 800ms;
   --ws-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
   --ws-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1.2);
+  --ws-motion-easing-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
 }

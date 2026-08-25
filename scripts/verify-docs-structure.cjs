@@ -26,7 +26,7 @@ const addCheck = (filePath, description, pattern) => {
 };
 
 const requiredCssSelectors = [
-  ':root[data-ws-theme',
+  "@import url('./foundation/theme.css')",
   'body',
   '.docs-content code:not([class])',
   ".docs-content pre[class*='language-']",
@@ -56,6 +56,41 @@ for (const selector of requiredCssSelectors) {
   addCheck('docs-src/docs.css', `docs CSS contains ${selector}`, selector);
 }
 
+// The palette lives in the foundation only; the docs must not fork it.
+const requiredSchemeSelectors = [
+  ':root[data-ws-theme',
+  '@media (prefers-color-scheme: dark)',
+  '--ws-accent',
+  '--ws-color-code-background',
+  '[data-ws-accent-scope]',
+];
+
+for (const selector of requiredSchemeSelectors) {
+  addCheck(
+    'src/foundation/schemes.css',
+    `foundation schemes contain ${selector}`,
+    selector
+  );
+}
+
+addCheck(
+  'src/foundation/theme.css',
+  'aggregate theme imports the scheme overrides',
+  "@import url('./schemes.css')"
+);
+
+addCheck(
+  'src/foundation/colors.css',
+  'every primary role derives from the accent seed',
+  '--ws-color-primary: var(--ws-accent)'
+);
+
+addCheck(
+  'src/foundation/colors.css',
+  'a scoped subtree re-derives the accent roles',
+  '[data-ws-accent-scope]'
+);
+
 const requiredHomeSource = [
   '<h1 class="home-title">',
   '<span class="home-title-shop">Shop</span>',
@@ -79,6 +114,7 @@ const requiredPageTemplate = [
   'data-theme-toggle',
   "localStorage.getItem('ws-docs-theme')",
   "localStorage.setItem('ws-docs-theme'",
+  "localStorage.getItem('ws-docs-accent')",
   'footer(data)',
 ];
 
@@ -96,6 +132,8 @@ const requiredNavTemplate = [
   '<a class="site-logo" slot="leading"',
   '<ws-brand-mark mark-only size="40px"',
   '<ws-switch slot="trailing" class="theme-switch"',
+  '<ws-color-picker',
+  'storage-key="ws-docs-accent"',
   'https://mihaicristiancondrea.github.io/workshop-expressive-web-components/',
   "{url: siteUrl, route: '/', label: 'Home'",
   "url: new URL('examples/', siteUrl).href",
@@ -237,6 +275,7 @@ const requiredBundledElements = [
   'ws-tabs',
   'ws-text-field',
   'ws-badge',
+  'ws-color-picker',
 ];
 
 for (const elementName of requiredBundledElements) {

@@ -4,6 +4,34 @@ All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components
 
 ## Unreleased
 
+### Added
+
+- Added `<ws-color-picker>` for choosing the accent color at runtime: preset swatches, a custom color input, compact popover mode, `localStorage` persistence, and `ws-accent-change` events.
+- Added the `--ws-accent` seed token. Every primary role — `--ws-color-primary`, `--ws-color-primary-hover`, `--ws-color-primary-container`, `--ws-color-on-primary-container` — now derives from it, so overriding one pair re-themes the whole system in both schemes.
+- Added `--ws-accent-on`, computed from WCAG relative luminance so type stays readable on any accent.
+- Added the accent color picker to the documentation app bar, with the choice remembered and applied before first paint.
+- Added `foundation/schemes.css`, the light and dark scheme overrides split out of `theme.css`, so the palette can be loaded without `typography.css` and its webfont request.
+- Added `data-ws-accent-scope`, which re-declares the accent-derived roles inside a subtree so a scoped `--ws-accent` actually takes effect. `<ws-color-picker>` sets it on any non-root target.
+- Added `target` to `<ws-color-picker>`, a CSS selector for the element to theme.
+- Added tokens that components referenced but the foundation never defined: `--ws-typography-display-large/medium/small`, `--ws-motion-duration-extra-slow`, `--ws-motion-easing-decelerate`, `--ws-focus-ring-*`, `--ws-color-warning`, and `--ws-color-success`.
+
+### Changed
+
+- Dark mode now overrides the accent roles instead of reusing the light ones, lightening the accent and its containers so they stay legible on near-black surfaces, and using shadows tuned for those surfaces.
+- The hero gradient and the brand mark's SVG gradients now derive from the accent instead of a fixed cyan-to-violet ramp.
+- Syntax highlighting tokens moved into the foundation theme, so `<ws-code-block>` picks up the dark scheme through inherited custom properties.
+- Consolidated the documentation palette: `docs-src/palette.css` and the palette block in `docs-src/docs.css` both forked the token set with different values, and were removed in favour of `foundation/theme.css`.
+
+### Fixed
+
+- Fixed component color fallbacks across the library. They used an older slate palette (`#6c5cff`, `#0f172a`, `#e2e8f0`, `#64748b`, `#f5f3ff`, `#f1f5f9`, `#3b82f6`) that no longer matched the foundation tokens, so any component rendered without the theme stylesheet drew from a different palette than one rendered with it.
+- Fixed `<ws-code-block>` staying on its light scheme in Firefox and Safari; its dark colors were applied through `:host-context()`, which neither browser supports.
+- Fixed `<ws-badge>` tone foregrounds being hardcoded light-theme hues, which left them unreadable on dark surfaces and mismatched against their own backgrounds.
+- Fixed the `secondary` button variant falling back to the surface-variant color instead of the secondary container.
+- Fixed primary button and dropdown hover states staying purple when the accent changed, by deriving them from `--ws-color-primary-hover`.
+- Fixed elevation and motion fallbacks that disagreed with the tokens they were shadowing.
+- Component tests now load the foundation stylesheets, so token-dependent behavior is exercised against real values rather than resolving to nothing.
+
 ## 0.3.2
 
 ### Added

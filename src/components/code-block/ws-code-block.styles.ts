@@ -9,44 +9,33 @@ export const wsCodeBlockStyles = css`
       ui-monospace,
       monospace
     );
-    --ws-color-code-background: #ffffff;
-    --ws-color-code-on-background: #0f172a;
-    --ws-color-code-border: #e2e8f0;
-    --ws-color-code-muted: #64748b;
-    --ws-color-code-button: #f1f5f9;
-    --ws-color-code-button-hover: #e2e8f0;
-    --ws-color-code-gutter: #f8fafc;
-    --ws-color-code-selection: rgb(108 92 255 / 24%);
-    --ws-color-code-caret: #6c5cff;
-    --ws-color-code-token-comment: #64748b;
-    --ws-color-code-token-keyword: #7c3aed;
-    --ws-color-code-token-string: #047857;
-    --ws-color-code-token-number: #c2410c;
-    --ws-color-code-token-tag: #2563eb;
-    --ws-color-code-token-attr: #be123c;
-    --ws-color-code-token-punctuation: #475569;
-    --ws-color-code-token-operator: #9333ea;
-  }
 
-  :host-context(:root[data-ws-theme='dark']),
-  :host-context([data-ws-theme='dark']) {
-    --ws-color-code-background: #030304;
-    --ws-color-code-on-background: #f7f7fa;
-    --ws-color-code-border: #1c1c20;
-    --ws-color-code-muted: #8f8f9b;
-    --ws-color-code-button: #101014;
-    --ws-color-code-button-hover: #18181d;
-    --ws-color-code-gutter: #08080a;
-    --ws-color-code-selection: rgb(155 135 255 / 28%);
-    --ws-color-code-caret: #c6b8ff;
-    --ws-color-code-token-comment: #8f8f9b;
-    --ws-color-code-token-keyword: #c6b8ff;
-    --ws-color-code-token-string: #72e0b1;
-    --ws-color-code-token-number: #ffbd73;
-    --ws-color-code-token-tag: #82baff;
-    --ws-color-code-token-attr: #ff9daa;
-    --ws-color-code-token-punctuation: #b8b8c2;
-    --ws-color-code-token-operator: #e7a8ff;
+    /*
+     * Private aliases so the shared code tokens can be themed from :root
+     * (see foundation/colors.css) while still allowing a per-instance
+     * override of --ws-color-code-*. The fallbacks keep the block legible
+     * when the foundation stylesheet is not loaded.
+     */
+    --_code-background: var(--ws-color-code-background, #ffffff);
+    --_code-on-background: var(--ws-color-code-on-background, #17171c);
+    --_code-border: var(--ws-color-code-border, #e3e6ed);
+    --_code-muted: var(--ws-color-code-muted, #626875);
+    --_code-button: var(--ws-color-code-button, #f0f2f7);
+    --_code-button-hover: var(--ws-color-code-button-hover, #e3e6ed);
+    --_code-gutter: var(--ws-color-code-gutter, #f8f9fc);
+    --_code-selection: var(
+      --ws-color-code-selection,
+      color-mix(in srgb, var(--ws-color-primary, #7c5cff) 24%, transparent)
+    );
+    --_code-caret: var(--ws-color-code-caret, var(--ws-color-primary, #7c5cff));
+    --_code-token-comment: var(--ws-color-code-token-comment, #626875);
+    --_code-token-keyword: var(--ws-color-code-token-keyword, #5b3ce0);
+    --_code-token-string: var(--ws-color-code-token-string, #0f8a5f);
+    --_code-token-number: var(--ws-color-code-token-number, #b45a09);
+    --_code-token-tag: var(--ws-color-code-token-tag, #1a5fd0);
+    --_code-token-attr: var(--ws-color-code-token-attr, #d02a3d);
+    --_code-token-punctuation: var(--ws-color-code-token-punctuation, #4a505d);
+    --_code-token-operator: var(--ws-color-code-token-operator, #9333d6);
   }
 
   :host([hidden]) {
@@ -60,16 +49,19 @@ export const wsCodeBlockStyles = css`
   .code-block {
     margin: 0;
     overflow: visible;
-    border: 1px solid var(--ws-color-code-border);
+    border: 1px solid var(--_code-border);
     border-radius: var(--ws-code-block-radius, var(--ws-shape-large, 12px));
-    background: var(--ws-color-code-background);
+    background: var(--_code-background);
     box-shadow: var(--ws-elevation-sm, 0 1px 2px rgb(15 23 42 / 8%));
   }
 
   :host([editable]:focus-within) .code-block {
-    border-color: var(--ws-code-editor-focus-color, var(--ws-color-primary, #6c5cff));
+    border-color: var(
+      --ws-code-editor-focus-color,
+      var(--ws-color-primary, #7c5cff)
+    );
     box-shadow: 0 0 0 1px
-      var(--ws-code-editor-focus-color, var(--ws-color-primary, #6c5cff));
+      var(--ws-code-editor-focus-color, var(--ws-color-primary, #7c5cff));
   }
 
   :host([disabled]) .code-block {
@@ -82,13 +74,13 @@ export const wsCodeBlockStyles = css`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid var(--ws-color-code-border);
+    border-bottom: 1px solid var(--_code-border);
     position: relative;
     z-index: 3;
   }
 
   .language {
-    color: var(--ws-color-code-muted);
+    color: var(--_code-muted);
     font: var(--ws-typography-label-small);
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -104,7 +96,7 @@ export const wsCodeBlockStyles = css`
   }
 
   .language-picker::part(control) {
-    color: var(--ws-color-code-muted);
+    color: var(--_code-muted);
     font: var(--ws-typography-label-small);
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -140,14 +132,14 @@ export const wsCodeBlockStyles = css`
 
   code {
     white-space: pre;
-    color: var(--ws-color-code-on-background);
+    color: var(--_code-on-background);
   }
 
   .editor-shell {
     position: relative;
     min-inline-size: 0;
     overflow: hidden;
-    background: var(--ws-color-code-background);
+    background: var(--_code-background);
     border-end-start-radius: var(
       --ws-code-block-radius,
       var(--ws-shape-large, 12px)
@@ -183,7 +175,7 @@ export const wsCodeBlockStyles = css`
     position: absolute;
     inset: 0;
     pointer-events: none;
-    color: var(--ws-color-code-on-background);
+    color: var(--_code-on-background);
     background: transparent;
     scrollbar-width: none;
   }
@@ -200,17 +192,17 @@ export const wsCodeBlockStyles = css`
     outline: 0;
     background: transparent;
     color: transparent;
-    caret-color: var(--ws-color-code-caret);
+    caret-color: var(--_code-caret);
     -webkit-text-fill-color: transparent;
   }
 
   .editor::selection {
-    background: var(--ws-color-code-selection);
+    background: var(--_code-selection);
   }
 
   .editor::placeholder {
-    color: var(--ws-color-code-muted);
-    -webkit-text-fill-color: var(--ws-color-code-muted);
+    color: var(--_code-muted);
+    -webkit-text-fill-color: var(--_code-muted);
     opacity: 0.82;
   }
 
@@ -232,39 +224,39 @@ export const wsCodeBlockStyles = css`
     min-inline-size: 0;
     margin: 0;
     overflow: hidden;
-    border-inline-end: 1px solid var(--ws-color-code-border);
+    border-inline-end: 1px solid var(--_code-border);
     padding: var(--ws-code-editor-padding, var(--ws-spacing-lg, 16px))
       var(--ws-spacing-sm, 8px);
-    color: var(--ws-color-code-muted);
-    background: var(--ws-color-code-gutter);
+    color: var(--_code-muted);
+    background: var(--_code-gutter);
     text-align: end;
     user-select: none;
     pointer-events: none;
   }
 
   .token.comment {
-    color: var(--ws-color-code-token-comment);
+    color: var(--_code-token-comment);
   }
   .token.keyword {
-    color: var(--ws-color-code-token-keyword);
+    color: var(--_code-token-keyword);
   }
   .token.string {
-    color: var(--ws-color-code-token-string);
+    color: var(--_code-token-string);
   }
   .token.number {
-    color: var(--ws-color-code-token-number);
+    color: var(--_code-token-number);
   }
   .token.tag {
-    color: var(--ws-color-code-token-tag);
+    color: var(--_code-token-tag);
   }
   .token.attr {
-    color: var(--ws-color-code-token-attr);
+    color: var(--_code-token-attr);
   }
   .token.punctuation {
-    color: var(--ws-color-code-token-punctuation);
+    color: var(--_code-token-punctuation);
   }
   .token.operator {
-    color: var(--ws-color-code-token-operator);
+    color: var(--_code-token-operator);
   }
 
   .copy-button {
@@ -273,8 +265,8 @@ export const wsCodeBlockStyles = css`
     padding: var(--ws-code-copy-padding-block, var(--ws-spacing-xs, 4px))
       var(--ws-code-copy-padding-inline, var(--ws-spacing-md, 12px));
     cursor: pointer;
-    color: var(--ws-color-code-on-background);
-    background: var(--ws-color-code-button);
+    color: var(--_code-on-background);
+    background: var(--_code-button);
     font: var(--ws-typography-label-small);
     transition: background-color var(--ws-motion-duration-fast, 120ms)
         var(--ws-motion-easing-standard, ease),
@@ -284,12 +276,12 @@ export const wsCodeBlockStyles = css`
 
   .copy-button:focus-visible {
     outline: var(--ws-focus-ring-inner-size, 2px) solid
-      var(--ws-color-code-on-background);
+      var(--_code-on-background);
     outline-offset: var(--ws-spacing-xs, 4px);
   }
 
   .copy-button:hover:not(:disabled) {
-    background: var(--ws-color-code-button-hover);
+    background: var(--_code-button-hover);
   }
 
   .copy-button:active:not(:disabled) {

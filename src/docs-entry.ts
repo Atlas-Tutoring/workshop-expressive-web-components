@@ -19,6 +19,7 @@ import './components/time-picker/ws-time-picker.js';
 import './components/chip/ws-chip.js';
 import './components/dropdown/ws-dropdown.js';
 import './components/badge/ws-badge.js';
+import './components/color-picker/ws-color-picker.js';
 import './components/docs-shell/ws-docs-shell.js';
 import './components/docs-shell/ws-hero.js';
 import './components/docs-shell/ws-footer.js';

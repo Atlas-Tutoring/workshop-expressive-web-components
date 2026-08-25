@@ -2,7 +2,7 @@ import {css} from 'lit';
 
 export const wsDatePickerStyles = css`
   :host {
-    color: var(--ws-color-on-surface, #0f172a);
+    color: var(--ws-color-on-surface, #17171c);
     display: inline-flex;
     flex-direction: column;
     font-family: var(
@@ -26,7 +26,7 @@ export const wsDatePickerStyles = css`
   }
 
   .label {
-    color: var(--ws-color-on-surface, #0f172a);
+    color: var(--ws-color-on-surface, #17171c);
     font: var(
       --ws-date-picker-label-font,
       var(
@@ -39,14 +39,17 @@ export const wsDatePickerStyles = css`
   }
 
   .required {
-    color: var(--ws-color-error, #ef4444);
+    color: var(--ws-color-error, #ff4d5e);
   }
 
   .control {
     align-items: center;
-    background: var(--ws-date-picker-background, var(--ws-color-surface, #fff));
+    background: var(
+      --ws-date-picker-background,
+      var(--ws-color-surface, #ffffff)
+    );
     border: var(--ws-date-picker-border-width, 1px) solid
-      var(--ws-date-picker-border-color, var(--ws-color-outline, #e2e8f0));
+      var(--ws-date-picker-border-color, var(--ws-color-outline, #dde1ea));
     border-radius: var(--ws-date-picker-radius, var(--ws-shape-medium, 8px));
     box-sizing: border-box;
     display: flex;
@@ -91,34 +94,34 @@ export const wsDatePickerStyles = css`
       --ws-date-picker-hover-background,
       color-mix(
         in srgb,
-        var(--ws-color-primary, #6c5cff) 4%,
-        var(--ws-color-surface, #fff)
+        var(--ws-color-primary, #7c5cff) 4%,
+        var(--ws-color-surface, #ffffff)
       )
     );
     border-color: color-mix(
       in srgb,
-      var(--ws-color-primary, #6c5cff) 40%,
-      var(--ws-color-outline, #e2e8f0)
+      var(--ws-color-primary, #7c5cff) 40%,
+      var(--ws-color-outline, #dde1ea)
     );
   }
 
   .control:focus-within:not(.disabled) {
-    border-color: var(--ws-color-primary, #6c5cff);
+    border-color: var(--ws-color-primary, #7c5cff);
     box-shadow: 0 0 0 var(--ws-focus-ring-inner-size, 2px)
-        var(--ws-color-background, #f8fafc),
+        var(--ws-color-background, #f8f9fc),
       0 0 0 var(--ws-focus-ring-outer-size, 5px)
-        color-mix(in srgb, var(--ws-color-primary, #6c5cff) 42%, transparent);
+        color-mix(in srgb, var(--ws-color-primary, #7c5cff) 42%, transparent);
   }
 
   .control.invalid {
-    border-color: var(--ws-color-error, #ef4444);
+    border-color: var(--ws-color-error, #ff4d5e);
   }
 
   .control.invalid:focus-within {
     box-shadow: 0 0 0 var(--ws-focus-ring-inner-size, 2px)
-        var(--ws-color-background, #f8fafc),
+        var(--ws-color-background, #f8f9fc),
       0 0 0 var(--ws-focus-ring-outer-size, 5px)
-        color-mix(in srgb, var(--ws-color-error, #ef4444) 42%, transparent);
+        color-mix(in srgb, var(--ws-color-error, #ff4d5e) 42%, transparent);
   }
 
   .control.disabled {
@@ -130,7 +133,7 @@ export const wsDatePickerStyles = css`
     background: transparent;
     border: 0;
     box-sizing: border-box;
-    color: var(--ws-color-on-surface, #0f172a);
+    color: var(--ws-color-on-surface, #17171c);
     flex: 1 1 auto;
     font: var(
       --ws-date-picker-font,
@@ -181,10 +184,10 @@ export const wsDatePickerStyles = css`
   .calendar {
     animation: ws-date-picker-enter var(--ws-motion-duration-medium, 180ms)
       var(--ws-motion-easing-standard, ease) both;
-    background: var(--ws-color-surface, #fff);
-    border: 1px solid var(--ws-color-outline, #d1d5db);
+    background: var(--ws-color-surface, #ffffff);
+    border: 1px solid var(--ws-color-outline, #dde1ea);
     border-radius: var(--ws-shape-large, 12px);
-    box-shadow: var(--ws-elevation-lg, 0 16px 40px rgb(15 23 42 / 18%));
+    box-shadow: var(--ws-elevation-lg, 0 16px 48px rgb(15 23 42 / 16%));
     box-sizing: border-box;
     inline-size: min(100%, 340px);
     inset-block-start: calc(var(--ws-date-picker-medium-height, 44px) + 26px);
@@ -237,7 +240,7 @@ export const wsDatePickerStyles = css`
   .day {
     background: transparent;
     border: 0;
-    color: var(--ws-color-on-surface, #0f172a);
+    color: var(--ws-color-on-surface, #17171c);
     cursor: pointer;
     font: inherit;
     outline: none;
@@ -250,7 +253,7 @@ export const wsDatePickerStyles = css`
   }
 
   .weekday {
-    color: var(--ws-color-on-surface-variant, #64748b);
+    color: var(--ws-color-on-surface-variant, #626875);
     font: var(
       --ws-typography-label-small,
       600 10px / 16px var(--ws-font-family, sans-serif)
@@ -270,16 +273,16 @@ export const wsDatePickerStyles = css`
 
   .day:hover:not(:disabled),
   .day:focus-visible {
-    background: var(--ws-color-primary-container, #f5f3ff);
-    color: var(--ws-color-primary, #6c5cff);
+    background: var(--ws-color-primary-container, #f0ecff);
+    color: var(--ws-color-primary, #7c5cff);
   }
 
   .day.today {
-    box-shadow: inset 0 0 0 1px var(--ws-color-primary, #6c5cff);
+    box-shadow: inset 0 0 0 1px var(--ws-color-primary, #7c5cff);
   }
   .day[aria-selected='true'] {
-    background: var(--ws-color-primary, #6c5cff);
-    color: var(--ws-color-on-primary, #fff);
+    background: var(--ws-color-primary, #7c5cff);
+    color: var(--ws-color-on-primary, #f7f7fa);
     font-weight: 700;
   }
   .day:disabled {
@@ -294,7 +297,7 @@ export const wsDatePickerStyles = css`
     border: 0;
     border-radius: var(--ws-shape-full, 999px);
     block-size: 28px;
-    color: var(--ws-color-on-surface-variant, #64748b);
+    color: var(--ws-color-on-surface-variant, #626875);
     cursor: pointer;
     display: inline-flex;
     flex: 0 0 28px;
@@ -315,13 +318,14 @@ export const wsDatePickerStyles = css`
 
   .clear-button:hover:not(:disabled),
   .picker-button:hover:not(:disabled) {
-    background: var(--ws-color-primary-container, #f5f3ff);
-    color: var(--ws-color-primary, #6c5cff);
+    background: var(--ws-color-primary-container, #f0ecff);
+    color: var(--ws-color-primary, #7c5cff);
   }
 
   .clear-button:focus-visible,
   .picker-button:focus-visible {
-    outline: 2px solid var(--ws-color-primary, #6c5cff);
+    outline: var(--ws-focus-ring-inner-size, 2px) solid
+      var(--ws-color-primary, #7c5cff);
     outline-offset: 1px;
   }
 
@@ -344,7 +348,7 @@ export const wsDatePickerStyles = css`
   }
 
   .supporting-text {
-    color: var(--ws-color-on-surface-variant, #64748b);
+    color: var(--ws-color-on-surface-variant, #626875);
     font: var(
       --ws-date-picker-supporting-font,
       var(
@@ -358,7 +362,7 @@ export const wsDatePickerStyles = css`
   }
 
   .supporting-text.error {
-    color: var(--ws-color-error, #ef4444);
+    color: var(--ws-color-error, #ff4d5e);
   }
 
   @media (prefers-reduced-motion: reduce) {

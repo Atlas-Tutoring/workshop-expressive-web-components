@@ -13,6 +13,7 @@ The package includes these custom elements:
 - `<ws-card>`
 - `<ws-chip>`
 - `<ws-code-block>`
+- `<ws-color-picker>`
 - `<ws-date-picker>`
 - `<ws-docs-shell>`
 - `<ws-drawer>` and `<ws-drawer-item>`
@@ -152,6 +153,7 @@ Available stylesheet exports:
 
 - `@mihaicristiancondrea/workshop-expressive-web-components/foundation/theme.css`
 - `@mihaicristiancondrea/workshop-expressive-web-components/foundation/colors.css`
+- `@mihaicristiancondrea/workshop-expressive-web-components/foundation/schemes.css`
 - `@mihaicristiancondrea/workshop-expressive-web-components/foundation/spacing.css`
 - `@mihaicristiancondrea/workshop-expressive-web-components/foundation/shapes.css`
 - `@mihaicristiancondrea/workshop-expressive-web-components/foundation/typography.css`
@@ -162,10 +164,66 @@ You can override tokens globally in your site CSS:
 
 ```css
 :root {
-  --ws-color-primary: #2563eb;
+  --ws-color-primary: #2f80ff;
   --ws-shape-medium: 10px;
 }
 ```
+
+## Accent color
+
+Every primary role derives from one seed token, `--ws-accent`. Override that pair
+and the whole system re-themes — buttons, focus rings, containers, the brand
+mark, and the hero — in both light and dark schemes:
+
+```css
+:root {
+  --ws-accent: #12b5a5; /* the seed */
+  --ws-accent-on: #17171c; /* readable foreground for that accent */
+}
+```
+
+Read the derived roles rather than the seed, so dark mode can lighten the accent
+to stay legible on near-black surfaces:
+
+```css
+.promo {
+  background: var(--ws-color-primary);
+  color: var(--ws-color-on-primary);
+  border: 1px solid var(--ws-color-primary-hover);
+}
+```
+
+`<ws-color-picker>` writes those two properties at runtime, so you can let people
+choose the accent themselves:
+
+```html
+<!-- Re-theme the document and remember the choice. -->
+<ws-color-picker storage-key="app-accent"></ws-color-picker>
+
+<!-- Re-theme only one region. -->
+<ws-color-picker target="#preview"></ws-color-picker>
+```
+
+It computes `--ws-accent-on` from WCAG relative luminance, preferring light type
+while it clears 3:1 — the threshold for UI components and large text. Accents
+used behind small body copy should still be checked by hand.
+
+### Theming a subtree
+
+Custom properties are substituted where they are _declared_, not where they are
+used, so a role declared on `:root` always resolves against `:root`'s seed.
+Setting `--ws-accent` on a subtree alone will not re-theme it. Mark the subtree
+with `data-ws-accent-scope` so the foundation re-declares the derived roles
+inside it:
+
+```html
+<section data-ws-accent-scope style="--ws-accent: #12b5a5">
+  <!-- primary, hover, containers and focus rings re-derive here -->
+</section>
+```
+
+`<ws-color-picker>` adds that attribute automatically for any target other than
+the document root.
 
 ## Themes
 

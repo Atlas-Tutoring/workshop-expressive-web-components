@@ -60,11 +60,11 @@ export const wsButtonStyles = css`
 
   .button:focus-visible {
     box-shadow: 0 0 0 var(--ws-focus-ring-inner-size, 2px)
-        var(--ws-color-background, #f8fafc),
+        var(--ws-color-background, #f8f9fc),
       0 0 0 var(--ws-focus-ring-outer-size, 5px)
         color-mix(
           in srgb,
-          var(--ws-button-focus-color, var(--ws-color-primary, #6c5cff)) 45%,
+          var(--ws-button-focus-color, var(--ws-color-primary, #7c5cff)) 45%,
           transparent
         );
   }
@@ -75,58 +75,58 @@ export const wsButtonStyles = css`
 
   :host([variant='primary']) .button,
   :host(:not([variant])) .button {
-    --ws-button-focus-color: var(--ws-color-primary, #6c5cff);
-    background: var(--ws-color-primary, #6c5cff);
+    --ws-button-focus-color: var(--ws-color-primary, #7c5cff);
+    background: var(--ws-color-primary, #7c5cff);
     box-shadow: var(--ws-elevation-sm, 0 1px 2px rgb(15 23 42 / 8%));
-    color: var(--ws-color-on-primary, #f8fafc);
+    color: var(--ws-color-on-primary, #f7f7fa);
   }
 
   :host([variant='primary']) .button:not(:disabled):hover,
   :host(:not([variant])) .button:not(:disabled):hover {
-    background: var(--ws-purple-dark, #4f46e5);
+    background: var(--ws-color-primary-hover, #6547f5);
     box-shadow: var(--ws-elevation-md, 0 8px 24px rgb(15 23 42 / 12%));
   }
 
   :host([variant='secondary']) .button {
-    --ws-button-focus-color: var(--ws-color-secondary, #3b82f6);
-    background: var(--ws-color-secondary-container, #f1f5f9);
-    border-color: var(--ws-color-outline-variant, #e2e8f0);
-    color: var(--ws-color-on-secondary-container, #0f172a);
+    --ws-button-focus-color: var(--ws-color-secondary, #2f80ff);
+    background: var(--ws-color-secondary-container, #e2edff);
+    border-color: var(--ws-color-outline-variant, #e3e6ed);
+    color: var(--ws-color-on-secondary-container, #17171c);
   }
 
   :host([variant='secondary']) .button:not(:disabled):hover {
     background: color-mix(
       in srgb,
-      var(--ws-color-secondary, #3b82f6) 14%,
-      var(--ws-color-secondary-container, #f1f5f9)
+      var(--ws-color-secondary, #2f80ff) 14%,
+      var(--ws-color-secondary-container, #e2edff)
     );
     border-color: color-mix(
       in srgb,
-      var(--ws-color-secondary, #3b82f6) 26%,
-      var(--ws-color-outline-variant, #e2e8f0)
+      var(--ws-color-secondary, #2f80ff) 26%,
+      var(--ws-color-outline-variant, #e3e6ed)
     );
   }
 
   :host([variant='outlined']) .button {
-    --ws-button-focus-color: var(--ws-color-primary, #6c5cff);
+    --ws-button-focus-color: var(--ws-color-primary, #7c5cff);
     background: transparent;
-    border-color: var(--ws-color-outline, #e2e8f0);
-    color: var(--ws-color-primary, #6c5cff);
+    border-color: var(--ws-color-outline, #dde1ea);
+    color: var(--ws-color-primary, #7c5cff);
   }
 
   :host([variant='outlined']) .button:not(:disabled):hover {
-    background: var(--ws-color-primary-container, #f5f3ff);
-    border-color: var(--ws-color-primary, #6c5cff);
+    background: var(--ws-color-primary-container, #f0ecff);
+    border-color: var(--ws-color-primary, #7c5cff);
   }
 
   :host([variant='text']) .button {
-    --ws-button-focus-color: var(--ws-color-primary, #6c5cff);
+    --ws-button-focus-color: var(--ws-color-primary, #7c5cff);
     background: transparent;
-    color: var(--ws-color-primary, #6c5cff);
+    color: var(--ws-color-primary, #7c5cff);
   }
 
   :host([variant='text']) .button:not(:disabled):hover {
-    background: var(--ws-color-primary-container, #f5f3ff);
+    background: var(--ws-color-primary-container, #f0ecff);
   }
 
   :host([size='small']) .button {

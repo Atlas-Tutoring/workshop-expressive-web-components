@@ -3,6 +3,9 @@
 :root {
   --ws-font-family: 'Google Sans Flex', system-ui, sans-serif;
 
+  --ws-typography-display-large: 800 57px / 64px var(--ws-font-family);
+  --ws-typography-display-medium: 800 44px / 52px var(--ws-font-family);
+  --ws-typography-display-small: 700 36px / 44px var(--ws-font-family);
   --ws-typography-headline-large: 700 32px / 40px var(--ws-font-family);
   --ws-typography-headline-medium: 700 28px / 36px var(--ws-font-family);
   --ws-typography-title-large: 700 22px / 28px var(--ws-font-family);

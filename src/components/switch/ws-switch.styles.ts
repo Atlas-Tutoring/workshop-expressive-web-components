@@ -36,7 +36,7 @@ export const wsSwitchStyles = css`
 
   .switch:focus-visible {
     outline: var(--ws-focus-ring-inner-size, 2px) solid
-      var(--ws-color-primary, #6c5cff);
+      var(--ws-color-primary, #7c5cff);
     outline-offset: var(--ws-spacing-xs, 4px);
     border-radius: 999px;
   }
@@ -47,12 +47,12 @@ export const wsSwitchStyles = css`
     box-sizing: border-box;
     width: var(--_track-width);
     height: var(--_track-height);
-    border: 2px solid var(--ws-color-outline, #e2e8f0);
+    border: 2px solid var(--ws-color-outline, #dde1ea);
     border-radius: 999px;
-    background: var(--ws-color-surface-variant, #f1f5f9);
-    transition: background-color var(--ws-motion-duration-medium, 220ms)
+    background: var(--ws-color-surface-variant, #f0f2f7);
+    transition: background-color var(--ws-motion-duration-medium, 180ms)
         var(--ws-motion-easing-standard, ease),
-      border-color var(--ws-motion-duration-medium, 220ms)
+      border-color var(--ws-motion-duration-medium, 180ms)
         var(--ws-motion-easing-standard, ease);
   }
 
@@ -65,11 +65,14 @@ export const wsSwitchStyles = css`
     border-radius: 50%;
     display: grid;
     place-items: center;
-    color: var(--ws-color-primary, #6c5cff);
+    color: var(--ws-color-primary, #7c5cff);
     background: var(--ws-color-surface, #ffffff);
-    box-shadow: 0 2px 6px rgb(15 23 42 / 24%);
+    box-shadow: var(
+      --ws-switch-handle-shadow,
+      var(--ws-elevation-sm, 0 1px 2px rgb(15 23 42 / 8%))
+    );
     transform: translateY(-50%);
-    transition: transform var(--ws-motion-duration-medium, 260ms)
+    transition: transform var(--ws-motion-duration-medium, 180ms)
         cubic-bezier(0.2, 0, 0, 1),
       color var(--ws-motion-duration-fast, 120ms)
         var(--ws-motion-easing-standard, ease),
@@ -78,8 +81,8 @@ export const wsSwitchStyles = css`
   }
 
   :host([checked]) .track {
-    border-color: var(--ws-color-primary, #6c5cff);
-    background: var(--ws-color-primary-container, #f5f3ff);
+    border-color: var(--ws-color-primary, #7c5cff);
+    background: var(--ws-color-primary-container, #f0ecff);
   }
 
   :host([checked]) .handle {
@@ -100,7 +103,7 @@ export const wsSwitchStyles = css`
     transform: rotate(0deg) scale(1);
     transition: opacity var(--ws-motion-duration-medium, 180ms)
         var(--ws-motion-easing-standard, ease),
-      transform var(--ws-motion-duration-medium, 220ms)
+      transform var(--ws-motion-duration-medium, 180ms)
         cubic-bezier(0.2, 0, 0, 1);
   }
 
