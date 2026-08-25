@@ -138,3 +138,111 @@ suite('ws-dialog', () => {
     assert.isNull(dialog.getAttribute('aria-labelledby'));
   });
 });
+
+suite('ws-dialog backdrop dismissal', () => {
+  /**
+   * The backdrop is the <dialog> box itself; content lives in .surface. A
+   * point outside the surface bounds but targeting the dialog is a backdrop
+   * hit.
+   */
+  const backdropPoint = (el: WsDialog) => {
+    const dialog = el.shadowRoot!.querySelector('dialog')!;
+    const bounds = dialog.getBoundingClientRect();
+    return {dialog, clientX: bounds.left - 20, clientY: bounds.top - 20};
+  };
+
+  const surfacePoint = (el: WsDialog) => {
+    const dialog = el.shadowRoot!.querySelector('dialog')!;
+    const bounds = dialog.getBoundingClientRect();
+    return {
+      dialog,
+      clientX: bounds.left + bounds.width / 2,
+      clientY: bounds.top + bounds.height / 2,
+    };
+  };
+
+  /**
+   * Resolves true when the dialog dispatches ws-dialog-close within the
+   * window. `open` alone is not enough: it stays true for the length of the
+   * exit animation, so a dismissed dialog still looks open moments later.
+   */
+  const closesWithin = (el: WsDialog, ms: number) =>
+    new Promise<boolean>((resolve) => {
+      const timer = globalThis.setTimeout(() => resolve(false), ms);
+      el.addEventListener(
+        'ws-dialog-close',
+        () => {
+          globalThis.clearTimeout(timer);
+          resolve(true);
+        },
+        {once: true}
+      );
+    });
+
+  const openDialog = async () => {
+    const el = await fixture<WsDialog>(
+      html`<ws-dialog heading="Selectable"><p>Body copy</p></ws-dialog>`
+    );
+    el.showModal();
+    await el.updateComplete;
+    return el;
+  };
+
+  const press = (
+    dialog: HTMLElement,
+    point: {clientX: number; clientY: number}
+  ) =>
+    dialog.dispatchEvent(
+      new PointerEvent('pointerdown', {bubbles: true, composed: true, ...point})
+    );
+
+  const release = (
+    dialog: HTMLElement,
+    point: {clientX: number; clientY: number}
+  ) =>
+    dialog.dispatchEvent(
+      new MouseEvent('click', {bubbles: true, composed: true, ...point})
+    );
+
+  test('a press and release on the backdrop dismisses', async () => {
+    const el = await openDialog();
+    const point = backdropPoint(el);
+    // Closing runs through the exit animation before `open` flips.
+    const closed = oneEvent(el, 'ws-dialog-close');
+
+    press(point.dialog, point);
+    release(point.dialog, point);
+    await closed;
+
+    assert.isFalse(el.open);
+  });
+
+  /*
+   * Selecting text inside the surface and releasing over the backdrop
+   * produces a click on the <dialog> with coordinates outside the surface.
+   * That must not dismiss, or the selection gesture kills the dialog.
+   */
+  test('a selection drag released over the backdrop does not dismiss', async () => {
+    const el = await openDialog();
+    const start = surfacePoint(el);
+    const end = backdropPoint(el);
+
+    press(start.dialog, start);
+    release(end.dialog, end);
+
+    assert.isFalse(await closesWithin(el, 400));
+    assert.isTrue(el.open);
+  });
+
+  test('a press on the backdrop released over the surface does not dismiss', async () => {
+    const el = await openDialog();
+    const start = backdropPoint(el);
+    const end = surfacePoint(el);
+
+    press(start.dialog, start);
+    release(end.dialog, end);
+
+    assert.isFalse(await closesWithin(el, 400));
+    assert.isTrue(el.open);
+  });
+});

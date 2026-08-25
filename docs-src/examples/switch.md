@@ -49,6 +49,28 @@ order: 3
 | `disabled`   | `boolean` | `false` | Prevents interaction.                           |
 | `aria-label` | `string`  | —       | Required when the switch has no external label. |
 
+The track and handle colors are exposed so a switch can be retinted without
+restyling its internals. The defaults resolve from the foundation tokens, so
+both schemes are handled already.
+
+| CSS custom property                 | Default                         | Description                    |
+| ----------------------------------- | ------------------------------- | ------------------------------ |
+| `--ws-switch-track-width`           | `52px`                          | Track width.                   |
+| `--ws-switch-track-height`          | `32px`                          | Track height.                  |
+| `--ws-switch-handle-size`           | `24px`                          | Handle diameter at full scale. |
+| `--ws-switch-track-off-background`  | `--ws-color-surface-variant`    | Track fill when off.           |
+| `--ws-switch-track-off-border`      | `--ws-color-outline`            | Track border when off.         |
+| `--ws-switch-handle-off-background` | `--ws-color-on-surface-variant` | Handle fill when off.          |
+| `--ws-switch-handle-off-color`      | `--ws-color-surface`            | Icon color when off.           |
+| `--ws-switch-track-on-background`   | `--ws-color-primary`            | Track fill when on.            |
+| `--ws-switch-track-on-border`       | `--ws-color-primary`            | Track border when on.          |
+| `--ws-switch-handle-on-background`  | `--ws-color-on-primary`         | Handle fill when on.           |
+| `--ws-switch-handle-on-color`       | `--ws-color-primary`            | Icon color when on.            |
+| `--ws-switch-handle-off-scale`      | `0.82`                          | Handle scale when off.         |
+| `--ws-switch-handle-pressed-scale`  | `1.12`                          | Handle scale while pressed.    |
+| `--ws-switch-state-layer-opacity`   | `0.12`                          | Hover and focus halo strength. |
+| `--ws-switch-disabled-opacity`      | `0.5`                           | Opacity while disabled.        |
+
 ## Slots
 
 | Slot             | Description                                      |
@@ -72,3 +94,5 @@ order: 3
 
 - Pair icon switches with nearby text when the setting is not obvious.
 - Disabled switches should explain why the setting cannot be changed in surrounding help text.
+- On and off differ in weight, not only hue: the track fills and the handle grows. That keeps the state readable without relying on color alone, and it survives the accent being changed.
+- The handle takes a foreground token rather than a surface one, so it stays visible on near-black surfaces where a surface-colored handle would vanish into the track.

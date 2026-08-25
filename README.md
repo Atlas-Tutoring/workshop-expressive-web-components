@@ -272,6 +272,9 @@ The `package.json` `exports` map exposes the package root and foundation CSS fil
 
 ## Development
 
+Contributor and agent conventions — including the changelog requirement for
+every user-visible change — are in [AGENTS.md](AGENTS.md).
+
 Install dependencies:
 
 ```bash

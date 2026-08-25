@@ -14,6 +14,10 @@ All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components
 - Added `data-ws-accent-scope`, which re-declares the accent-derived roles inside a subtree so a scoped `--ws-accent` actually takes effect. `<ws-color-picker>` sets it on any non-root target.
 - Added `target` to `<ws-color-picker>`, a CSS selector for the element to theme.
 - Added tokens that components referenced but the foundation never defined: `--ws-typography-display-large/medium/small`, `--ws-motion-duration-extra-slow`, `--ws-motion-easing-decelerate`, `--ws-focus-ring-*`, `--ws-color-warning`, and `--ws-color-success`.
+- Added a Changelog section to the documentation site at `/changelog/`, generated at build time from this file so there is no second copy to drift.
+- Added a GitHub link to the documentation app bar.
+- Added `AGENTS.md`, documenting which version is in flight, the requirement that every user-visible change adds an `## Unreleased` entry here, and the project's component, color, and dismissal conventions.
+- Added themeable switch parts: `--ws-switch-track-off-background`, `--ws-switch-track-off-border`, `--ws-switch-handle-off-background`, `--ws-switch-handle-off-color`, `--ws-switch-track-on-background`, `--ws-switch-track-on-border`, `--ws-switch-handle-on-background`, `--ws-switch-handle-on-color`, `--ws-switch-handle-off-scale`, `--ws-switch-handle-pressed-scale`, `--ws-switch-state-layer-opacity`, and `--ws-switch-disabled-opacity`.
 
 ### Changed
 
@@ -21,6 +25,8 @@ All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components
 - The hero gradient and the brand mark's SVG gradients now derive from the accent instead of a fixed cyan-to-violet ramp.
 - Syntax highlighting tokens moved into the foundation theme, so `<ws-code-block>` picks up the dark scheme through inherited custom properties.
 - Consolidated the documentation palette: `docs-src/palette.css` and the palette block in `docs-src/docs.css` both forked the token set with different values, and were removed in favour of `foundation/theme.css`.
+- Reworked `<ws-switch>`: the track fills with the primary color when on and the handle grows, so on and off differ in weight rather than only hue. The handle picks up a hover and focus halo and swells while pressed.
+- `<ws-color-picker>` now flips its compact popover to the trigger's inline start when it would otherwise open past the viewport edge.
 
 ### Fixed
 
@@ -30,6 +36,9 @@ All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components
 - Fixed the `secondary` button variant falling back to the surface-variant color instead of the secondary container.
 - Fixed primary button and dropdown hover states staying purple when the accent changed, by deriving them from `--ws-color-primary-hover`.
 - Fixed elevation and motion fallbacks that disagreed with the tokens they were shadowing.
+- Fixed `<ws-switch>` being nearly unreadable in dark mode: the handle used a surface token, which put a near-black handle on a near-black track under a shadow that was itself black on black.
+- Fixed `<ws-color-picker>`'s popover closing when a drag that began inside it ended outside — selecting text in the panel dismissed it mid-gesture. Dismissal now keys off `pointerdown`, matching `<ws-dropdown>`.
+- Fixed `<ws-dialog>` dismissing when a text selection started on the dialog surface and was released over the backdrop. Dismissal now requires the press and the release to both land on the backdrop.
 - Component tests now load the foundation stylesheets, so token-dependent behavior is exercised against real values rather than resolving to nothing.
 
 ## 0.3.2

@@ -48,6 +48,9 @@ const requiredCssSelectors = [
   '.component-demo',
   '.tabs-demo-grid',
   '.lit-link',
+  '.site-github',
+  '.changelog',
+  '.release-nav',
   '--ws-color-code-background',
   '@media (max-width: 760px)',
 ];
@@ -134,6 +137,9 @@ const requiredNavTemplate = [
   '<ws-switch slot="trailing" class="theme-switch"',
   '<ws-color-picker',
   'storage-key="ws-docs-accent"',
+  'class="site-github"',
+  'https://github.com/MihaiCristianCondrea/workshop-expressive-web-components',
+  "label: 'Changelog'",
   'https://mihaicristiancondrea.github.io/workshop-expressive-web-components/',
   "{url: siteUrl, route: '/', label: 'Home'",
   "url: new URL('examples/', siteUrl).href",
@@ -290,6 +296,36 @@ addCheck(
   'src/docs-entry.ts',
   'docs entry imports ws-dialog',
   "import './components/dialog/ws-dialog.js';"
+);
+
+// The changelog page is generated from the repo-root file, not a docs copy.
+addCheck(
+  'docs-src/changelog.11ty.cjs',
+  'changelog reads the repo-root CHANGELOG.md',
+  "path.join(__dirname, '..', 'CHANGELOG.md')"
+);
+
+const requiredChangelogPage = [
+  '<ws-app-bar class="site-nav"',
+  '<section class="changelog">',
+  '<aside class="release-nav"',
+  '<h1>Changelog</h1>',
+  'id="unreleased"',
+  '<ws-footer>',
+];
+
+for (const snippet of requiredChangelogPage) {
+  addCheck(
+    'docs/changelog/index.html',
+    `generated changelog contains ${snippet}`,
+    snippet
+  );
+}
+
+addCheck(
+  'CHANGELOG.md',
+  'changelog keeps an Unreleased section for in-flight work',
+  '## Unreleased'
 );
 
 addCheck(

@@ -1,24 +1,11 @@
-const markdownIt = require('markdown-it');
-
-const escapeAttribute = (value) =>
-  String(value)
-    .replace(/&/g, '&amp;')
-    .replace(/"/g, '&quot;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+const {markdown} = require('./docs-src/_includes/markdown.cjs');
 
 module.exports = function (eleventyConfig) {
-  const markdown = markdownIt({html: true});
-  markdown.renderer.rules.fence = (tokens, idx) => {
-    const token = tokens[idx];
-    const language = token.info.trim().split(/\s+/)[0] || 'text';
-
-    return `<ws-code-block language="${escapeAttribute(
-      language
-    )}" copy code="${escapeAttribute(token.content)}"></ws-code-block>\n`;
-  };
-
   eleventyConfig.setLibrary('md', markdown);
+
+  // The changelog is generated from the repo-root CHANGELOG.md, so rebuild the
+  // docs when it changes during `docs:gen:watch`.
+  eleventyConfig.addWatchTarget('./CHANGELOG.md');
   eleventyConfig.addPassthroughCopy('docs-src/docs.css');
   eleventyConfig.addPassthroughCopy('docs-src/component-docs.css');
   eleventyConfig.addPassthroughCopy('docs-src/favicon.svg');
