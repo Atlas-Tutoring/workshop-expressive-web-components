@@ -47,6 +47,18 @@ export class WsDialog extends LitElement {
 
   private closeRequest = 0;
 
+  /**
+   * Whether the in-flight pointer gesture began on the backdrop.
+   *
+   * A click is dispatched on the common ancestor of its mousedown and mouseup
+   * targets, so selecting text inside the surface and releasing over the
+   * backdrop reports the <dialog> itself as the click target with mouseup
+   * coordinates outside the surface -- which dismissed the dialog mid
+   * selection. Requiring the press to have started on the backdrop too keeps
+   * the gesture intact.
+   */
+  private pressedOnBackdrop = false;
+
   override render() {
     const hasHeader = Boolean(this.heading || this.description || this.hasIcon);
     const headingClass = this.hasIcon ? 'heading has-icon' : 'heading';
@@ -60,6 +72,7 @@ export class WsDialog extends LitElement {
           : nothing}
         aria-labelledby=${this.heading ? 'heading' : nothing}
         aria-describedby=${this.description ? 'description' : nothing}
+        @pointerdown=${this.onDialogPointerDown}
         @click=${this.onDialogClick}
         @cancel=${this.onNativeCancel}
         @close=${this.onNativeClose}
@@ -166,21 +179,36 @@ export class WsDialog extends LitElement {
     this.hasActions = slot.assignedElements({flatten: true}).length > 0;
   };
 
+  private onDialogPointerDown = (event: PointerEvent) => {
+    this.pressedOnBackdrop = this.isOnBackdrop(event);
+  };
+
   private onDialogClick = (event: MouseEvent) => {
-    const dialog = this.dialogElement;
-    if (!dialog || event.target !== dialog) return;
+    const startedOnBackdrop = this.pressedOnBackdrop;
+    this.pressedOnBackdrop = false;
 
-    const bounds = dialog.getBoundingClientRect();
-    const outsideSurface =
-      event.clientX < bounds.left ||
-      event.clientX > bounds.right ||
-      event.clientY < bounds.top ||
-      event.clientY > bounds.bottom;
-
-    if (outsideSurface) {
+    if (startedOnBackdrop && this.isOnBackdrop(event)) {
       this.close('dismiss');
     }
   };
+
+  /**
+   * A pointer event counts as being on the backdrop when it targets the
+   * <dialog> box itself -- content sits in the nested .surface -- and lands
+   * outside the rendered surface bounds.
+   */
+  private isOnBackdrop(event: MouseEvent) {
+    const dialog = this.dialogElement;
+    if (!dialog || event.target !== dialog) return false;
+
+    const bounds = dialog.getBoundingClientRect();
+    return (
+      event.clientX < bounds.left ||
+      event.clientX > bounds.right ||
+      event.clientY < bounds.top ||
+      event.clientY > bounds.bottom
+    );
+  }
 
   private onNativeCancel = (event: Event) => {
     event.preventDefault();

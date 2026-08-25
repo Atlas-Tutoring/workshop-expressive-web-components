@@ -240,6 +240,12 @@ export const wsColorPickerStyles = css`
       var(--ws-motion-easing-emphasized, ease);
   }
 
+  .popover.align-start {
+    inset-inline-start: 0;
+    inset-inline-end: auto;
+    transform-origin: top left;
+  }
+
   .popover[hidden] {
     display: none;
   }

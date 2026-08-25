@@ -396,3 +396,70 @@ suite('ws-color-picker derived roles', () => {
     assert.equal(primaryOf(document.documentElement), '#2f80ff');
   });
 });
+
+suite('ws-color-picker dismissal', () => {
+  const popoverHidden = (el: WsColorPicker) =>
+    el.shadowRoot!.querySelector('.popover')!.hasAttribute('hidden');
+
+  const pointerDown = (target: EventTarget) =>
+    target.dispatchEvent(
+      new PointerEvent('pointerdown', {bubbles: true, composed: true})
+    );
+
+  test('a pointer press outside closes the popover', async () => {
+    const el = await fixture<WsColorPicker>(
+      html`<ws-color-picker apply="none" compact></ws-color-picker>`
+    );
+    el.show();
+    await el.updateComplete;
+    assert.isFalse(popoverHidden(el));
+
+    pointerDown(document.body);
+    await el.updateComplete;
+
+    assert.isTrue(popoverHidden(el));
+  });
+
+  test('a press inside the popover keeps it open', async () => {
+    const el = await fixture<WsColorPicker>(
+      html`<ws-color-picker
+        apply="none"
+        compact
+        legend="Accent"
+      ></ws-color-picker>`
+    );
+    el.show();
+    await el.updateComplete;
+
+    pointerDown(el.shadowRoot!.querySelector('.legend')!);
+    await el.updateComplete;
+
+    assert.isFalse(popoverHidden(el));
+  });
+
+  /*
+   * A click is dispatched on the common ancestor of its mousedown and mouseup
+   * targets, so a drag that starts inside the popover and ends outside used to
+   * report an outside target and close it mid text selection.
+   */
+  test('a drag from inside the popover to outside keeps it open', async () => {
+    const el = await fixture<WsColorPicker>(
+      html`<ws-color-picker
+        apply="none"
+        compact
+        legend="Accent"
+      ></ws-color-picker>`
+    );
+    el.show();
+    await el.updateComplete;
+
+    pointerDown(el.shadowRoot!.querySelector('.legend')!);
+    // The release lands outside, so the resulting click targets the document.
+    document.body.dispatchEvent(
+      new MouseEvent('click', {bubbles: true, composed: true})
+    );
+    await el.updateComplete;
+
+    assert.isFalse(popoverHidden(el));
+  });
+});

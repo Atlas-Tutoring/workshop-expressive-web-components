@@ -94,6 +94,14 @@ export class WsColorPicker extends LitElement {
   @state()
   private open = false;
 
+  /**
+   * Set when the popover would overflow the viewport's inline-start edge, so
+   * it anchors to the trigger's start instead. Without this a picker placed
+   * anywhere but near the inline-end edge opens off-screen.
+   */
+  @state()
+  private alignStart = false;
+
   /** The readable foreground for the current accent. */
   get onColor() {
     return accentForeground(this.value);
@@ -104,12 +112,20 @@ export class WsColorPicker extends LitElement {
     const stored = this.readStoredAccent();
     if (stored) this.value = stored;
     this.applyAccent();
-    document.addEventListener('click', this.handleDocumentClick, true);
+    document.addEventListener(
+      'pointerdown',
+      this.handleDocumentPointerDown,
+      true
+    );
     this.addEventListener('keydown', this.handleKeydown);
   }
 
   override disconnectedCallback() {
-    document.removeEventListener('click', this.handleDocumentClick, true);
+    document.removeEventListener(
+      'pointerdown',
+      this.handleDocumentPointerDown,
+      true
+    );
     this.removeEventListener('keydown', this.handleKeydown);
     super.disconnectedCallback();
   }
@@ -144,10 +160,37 @@ export class WsColorPicker extends LitElement {
       >
         <span class="trigger-dot" aria-hidden="true"></span>
       </button>
-      <div class="popover" style=${hostStyles} ?hidden=${!this.open}>
+      <div
+        class=${classMap({popover: true, 'align-start': this.alignStart})}
+        style=${hostStyles}
+        ?hidden=${!this.open}
+      >
         ${this.renderPanel()}
       </div>
     `;
+  }
+
+  override updated(changed: Map<string, unknown>) {
+    if (changed.has('open') && this.open) this.keepPopoverOnScreen();
+  }
+
+  /** Flips the popover's anchor when it would open past the viewport edge. */
+  private keepPopoverOnScreen() {
+    const popover = this.renderRoot.querySelector<HTMLElement>('.popover');
+    if (!popover) return;
+
+    // Measure from the default anchor so the check is not self-reinforcing.
+    this.alignStart = false;
+    const bounds = popover.getBoundingClientRect();
+
+    if (bounds.left < POPOVER_VIEWPORT_MARGIN) {
+      this.alignStart = true;
+    } else if (
+      bounds.right >
+      this.ownerDocument.documentElement.clientWidth - POPOVER_VIEWPORT_MARGIN
+    ) {
+      this.alignStart = false;
+    }
   }
 
   /** Opens the compact popover. No-op outside compact mode. */
@@ -332,7 +375,15 @@ export class WsColorPicker extends LitElement {
     }
   }
 
-  private handleDocumentClick = (event: MouseEvent) => {
+  /*
+   * Dismissal keys off pointerdown, not click. A click is dispatched on the
+   * common ancestor of its mousedown and mouseup targets, so a drag that
+   * starts inside the popover and ends outside it reports a target outside
+   * the picker -- which closed the popover mid text selection. pointerdown
+   * only fires where the gesture starts, which is what "outside" means here.
+   * <ws-dropdown> dismisses the same way.
+   */
+  private handleDocumentPointerDown = (event: PointerEvent) => {
     if (!this.open) return;
     if (event.composedPath().includes(this)) return;
 
@@ -364,6 +415,9 @@ export class WsColorPicker extends LitElement {
     next?.click();
   };
 }
+
+/** Breathing room kept between the popover and the viewport edge. */
+const POPOVER_VIEWPORT_MARGIN = 8;
 
 /** Arrow keys move the roving focus within the swatch radiogroup. */
 const ARROW_STEPS: Record<string, number | undefined> = {
