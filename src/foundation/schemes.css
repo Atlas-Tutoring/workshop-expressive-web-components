@@ -1,0 +1,243 @@
+/**
+ * Light and dark scheme token overrides.
+ *
+ * Split out of theme.css so token consumers can load the palette without
+ * pulling in typography.css, which fetches webfonts over the network.
+ *
+ * Each scheme is declared twice: once for the scheme root, and once for any
+ * `[data-ws-accent-scope]` inside it. The second selector only repeats the
+ * accent-derived roles -- see the note in colors.css for why a subtree has to
+ * re-derive them rather than inherit them.
+ */
+:root {
+  color-scheme: light;
+}
+
+/* --- Dark scheme -------------------------------------------------------- */
+
+:root[data-ws-theme='dark'],
+[data-ws-theme='dark'] {
+  color-scheme: dark;
+  --ws-color-background: #000000;
+  --ws-color-surface: #0a0a0c;
+  --ws-color-surface-variant: #151519;
+
+  --ws-color-secondary: color-mix(in srgb, var(--ws-blue) 78%, #ffffff);
+  --ws-color-tertiary: color-mix(in srgb, var(--ws-green) 82%, #ffffff);
+  --ws-color-secondary-container: color-mix(
+    in srgb,
+    var(--ws-blue) 26%,
+    #0a0a0c
+  );
+
+  --ws-color-outline: #29292f;
+  --ws-color-outline-variant: #242429;
+
+  --ws-color-error: color-mix(in srgb, var(--ws-red) 80%, #ffffff);
+  --ws-color-warning: color-mix(in srgb, var(--ws-orange) 88%, #ffffff);
+  --ws-color-success: color-mix(in srgb, var(--ws-green) 82%, #ffffff);
+
+  --ws-color-on-background: #f7f7fa;
+  --ws-color-on-surface: #f7f7fa;
+  --ws-color-on-surface-variant: #a4a4af;
+  --ws-color-on-secondary-container: #f7f7fa;
+
+  /* Syntax highlighting, shared by <ws-code-block> and the docs Prism theme. */
+  --ws-color-code-background: #030304;
+  --ws-color-code-on-background: #f7f7fa;
+  --ws-color-code-border: #1c1c20;
+  --ws-color-code-muted: #8f8f9b;
+  --ws-color-code-button: #101014;
+  --ws-color-code-button-hover: #18181d;
+  --ws-color-code-gutter: #08080a;
+  --ws-color-code-selection: color-mix(
+    in srgb,
+    var(--ws-color-primary) 28%,
+    transparent
+  );
+  --ws-color-code-caret: var(--ws-color-primary);
+  --ws-color-code-token-comment: #8f8f9b;
+  --ws-color-code-token-keyword: #c6b8ff;
+  --ws-color-code-token-string: #72e0b1;
+  --ws-color-code-token-number: #ffbd73;
+  --ws-color-code-token-tag: #82baff;
+  --ws-color-code-token-attr: #ff9daa;
+  --ws-color-code-token-punctuation: #b8b8c2;
+  --ws-color-code-token-operator: #e7a8ff;
+
+  /* Drop shadows tuned for near-black surfaces. */
+  --ws-elevation-sm: 0 1px 2px rgb(0 0 0 / 56%);
+  --ws-elevation-md: 0 8px 24px rgb(0 0 0 / 64%);
+  --ws-elevation-lg: 0 16px 48px rgb(0 0 0 / 72%);
+}
+
+:root[data-ws-theme='dark'],
+[data-ws-theme='dark'],
+[data-ws-theme='dark'] [data-ws-accent-scope] {
+  /* Lift the accent off pure black so it stays legible as a foreground. */
+  --ws-color-primary: color-mix(in srgb, var(--ws-accent) 74%, #ffffff);
+  --ws-color-primary-hover: color-mix(in srgb, var(--ws-accent) 52%, #ffffff);
+  --ws-color-primary-container: color-mix(
+    in srgb,
+    var(--ws-accent) 26%,
+    #0a0a0c
+  );
+
+  /* On dark, the accent is already lightened, so type on it goes dark. */
+  --ws-color-on-primary: #0a0a0c;
+  --ws-color-on-primary-container: color-mix(
+    in srgb,
+    var(--ws-accent) 42%,
+    #f7f7fa
+  );
+}
+
+/* --- Light scheme ------------------------------------------------------- */
+
+:root[data-ws-theme='light'],
+[data-ws-theme='light'] {
+  color-scheme: light;
+  --ws-color-background: #f8f9fc;
+  --ws-color-surface: #ffffff;
+  --ws-color-surface-variant: #f0f2f7;
+
+  --ws-color-secondary: var(--ws-blue);
+  --ws-color-tertiary: var(--ws-green);
+  --ws-color-secondary-container: color-mix(
+    in srgb,
+    var(--ws-blue) 12%,
+    #ffffff
+  );
+
+  --ws-color-outline: #dde1ea;
+  --ws-color-outline-variant: #e3e6ed;
+
+  --ws-color-error: var(--ws-red);
+  --ws-color-warning: var(--ws-orange);
+  --ws-color-success: var(--ws-green);
+
+  --ws-color-on-background: #17171c;
+  --ws-color-on-surface: #17171c;
+  --ws-color-on-surface-variant: #626875;
+  --ws-color-on-secondary-container: #17171c;
+
+  /* Syntax highlighting, shared by <ws-code-block> and the docs Prism theme. */
+  --ws-color-code-background: #ffffff;
+  --ws-color-code-on-background: #17171c;
+  --ws-color-code-border: #e3e6ed;
+  --ws-color-code-muted: #626875;
+  --ws-color-code-button: #f0f2f7;
+  --ws-color-code-button-hover: #e3e6ed;
+  --ws-color-code-gutter: #f8f9fc;
+  --ws-color-code-selection: color-mix(
+    in srgb,
+    var(--ws-color-primary) 24%,
+    transparent
+  );
+  --ws-color-code-caret: var(--ws-color-primary);
+  --ws-color-code-token-comment: #626875;
+  --ws-color-code-token-keyword: #5b3ce0;
+  --ws-color-code-token-string: #0f8a5f;
+  --ws-color-code-token-number: #b45a09;
+  --ws-color-code-token-tag: #1a5fd0;
+  --ws-color-code-token-attr: #d02a3d;
+  --ws-color-code-token-punctuation: #4a505d;
+  --ws-color-code-token-operator: #9333d6;
+
+  --ws-elevation-sm: 0 1px 2px rgb(15 23 42 / 8%);
+  --ws-elevation-md: 0 8px 24px rgb(15 23 42 / 12%);
+  --ws-elevation-lg: 0 16px 48px rgb(15 23 42 / 16%);
+}
+
+:root[data-ws-theme='light'],
+[data-ws-theme='light'],
+[data-ws-theme='light'] [data-ws-accent-scope] {
+  --ws-color-primary: var(--ws-accent);
+  --ws-color-primary-hover: color-mix(in srgb, var(--ws-accent) 84%, #000000);
+  --ws-color-primary-container: color-mix(
+    in srgb,
+    var(--ws-accent) 10%,
+    #ffffff
+  );
+  --ws-color-on-primary: var(--ws-accent-on);
+  --ws-color-on-primary-container: color-mix(
+    in srgb,
+    var(--ws-accent) 72%,
+    #17171c
+  );
+}
+
+/* --- Dark scheme by system preference ----------------------------------- */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-ws-theme='light']) {
+    color-scheme: dark;
+    --ws-color-background: #000000;
+    --ws-color-surface: #0a0a0c;
+    --ws-color-surface-variant: #151519;
+
+    --ws-color-secondary: color-mix(in srgb, var(--ws-blue) 78%, #ffffff);
+    --ws-color-tertiary: color-mix(in srgb, var(--ws-green) 82%, #ffffff);
+    --ws-color-secondary-container: color-mix(
+      in srgb,
+      var(--ws-blue) 26%,
+      #0a0a0c
+    );
+
+    --ws-color-outline: #29292f;
+    --ws-color-outline-variant: #242429;
+
+    --ws-color-error: color-mix(in srgb, var(--ws-red) 80%, #ffffff);
+    --ws-color-warning: color-mix(in srgb, var(--ws-orange) 88%, #ffffff);
+    --ws-color-success: color-mix(in srgb, var(--ws-green) 82%, #ffffff);
+
+    --ws-color-on-background: #f7f7fa;
+    --ws-color-on-surface: #f7f7fa;
+    --ws-color-on-surface-variant: #a4a4af;
+    --ws-color-on-secondary-container: #f7f7fa;
+
+    --ws-color-code-background: #030304;
+    --ws-color-code-on-background: #f7f7fa;
+    --ws-color-code-border: #1c1c20;
+    --ws-color-code-muted: #8f8f9b;
+    --ws-color-code-button: #101014;
+    --ws-color-code-button-hover: #18181d;
+    --ws-color-code-gutter: #08080a;
+    --ws-color-code-selection: color-mix(
+      in srgb,
+      var(--ws-color-primary) 28%,
+      transparent
+    );
+    --ws-color-code-caret: var(--ws-color-primary);
+    --ws-color-code-token-comment: #8f8f9b;
+    --ws-color-code-token-keyword: #c6b8ff;
+    --ws-color-code-token-string: #72e0b1;
+    --ws-color-code-token-number: #ffbd73;
+    --ws-color-code-token-tag: #82baff;
+    --ws-color-code-token-attr: #ff9daa;
+    --ws-color-code-token-punctuation: #b8b8c2;
+    --ws-color-code-token-operator: #e7a8ff;
+
+    --ws-elevation-sm: 0 1px 2px rgb(0 0 0 / 56%);
+    --ws-elevation-md: 0 8px 24px rgb(0 0 0 / 64%);
+    --ws-elevation-lg: 0 16px 48px rgb(0 0 0 / 72%);
+  }
+
+  :root:not([data-ws-theme='light']),
+  :root:not([data-ws-theme='light']) [data-ws-accent-scope] {
+    --ws-color-primary: color-mix(in srgb, var(--ws-accent) 74%, #ffffff);
+    --ws-color-primary-hover: color-mix(in srgb, var(--ws-accent) 52%, #ffffff);
+    --ws-color-primary-container: color-mix(
+      in srgb,
+      var(--ws-accent) 26%,
+      #0a0a0c
+    );
+
+    --ws-color-on-primary: #0a0a0c;
+    --ws-color-on-primary-container: color-mix(
+      in srgb,
+      var(--ws-accent) 42%,
+      #f7f7fa
+    );
+  }
+}

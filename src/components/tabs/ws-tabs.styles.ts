@@ -42,7 +42,7 @@ export const wsTabsStyles = css`
   }
 
   .indicator {
-    background: var(--ws-color-primary, #6c5cff);
+    background: var(--ws-color-primary, #7c5cff);
     block-size: var(--ws-tabs-indicator-block-size);
     border-radius: var(--ws-tab-indicator-radius, var(--ws-shape-full, 999px));
     inline-size: var(--ws-tabs-indicator-inline-size);

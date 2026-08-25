@@ -4,7 +4,7 @@ export const wsBreadcrumbsStyles = css`
   :host {
     color: var(
       --ws-breadcrumbs-color,
-      var(--ws-color-on-surface-variant, #64748b)
+      var(--ws-color-on-surface-variant, #626875)
     );
     display: block;
     font-family: var(
@@ -48,13 +48,13 @@ export const wsBreadcrumbsStyles = css`
   a.crumb:hover,
   a.crumb:focus-visible,
   a.crumb.active {
-    background: var(--ws-color-primary-container, #f5f3ff);
-    color: var(--ws-color-primary, #6c5cff);
+    background: var(--ws-color-primary-container, #f0ecff);
+    color: var(--ws-color-primary, #7c5cff);
   }
 
   a.crumb:focus-visible {
     outline: var(--ws-focus-ring-inner-size, 2px) solid
-      var(--ws-color-primary, #6c5cff);
+      var(--ws-color-primary, #7c5cff);
     outline-offset: 2px;
   }
 
@@ -63,7 +63,7 @@ export const wsBreadcrumbsStyles = css`
   }
 
   .crumb[aria-current='page'] {
-    color: var(--ws-color-on-surface, #0f172a);
+    color: var(--ws-color-on-surface, #17171c);
     font-weight: 600;
   }
 

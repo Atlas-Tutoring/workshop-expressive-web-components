@@ -102,6 +102,7 @@
     },
     "./foundation/theme.css": "./dist/foundation/theme.css",
     "./foundation/colors.css": "./dist/foundation/colors.css",
+    "./foundation/schemes.css": "./dist/foundation/schemes.css",
     "./foundation/spacing.css": "./dist/foundation/spacing.css",
     "./foundation/shapes.css": "./dist/foundation/shapes.css",
     "./foundation/typography.css": "./dist/foundation/typography.css",

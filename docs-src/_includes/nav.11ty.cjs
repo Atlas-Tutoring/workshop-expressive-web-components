@@ -36,6 +36,15 @@ module.exports = function ({page}) {
   <ws-tabs class="site-tabs" aria-label="Documentation sections">
   ${links}
   </ws-tabs>
+  <ws-color-picker
+    slot="trailing"
+    class="accent-picker"
+    compact
+    aria-label="Accent color"
+    legend="Accent color"
+    storage-key="ws-docs-accent"
+    data-accent-picker
+  ></ws-color-picker>
   <ws-switch slot="trailing" class="theme-switch" aria-label="Use dark theme" data-theme-toggle>
     <i slot="unchecked-icon" class="ri-sun-line" aria-hidden="true"></i>
     <i slot="checked-icon" class="ri-moon-line" aria-hidden="true"></i>

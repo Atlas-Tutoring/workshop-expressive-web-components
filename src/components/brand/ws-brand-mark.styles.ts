@@ -4,7 +4,26 @@ export const wsBrandMarkStyles = css`
   :host {
     --ws-brand-mark-size: var(--ws-spacing-xxl, 32px);
     --ws-brand-mark-gradient: var(--ws-color-surface, #ffffff);
-    color: var(--ws-color-on-surface, #0f172a);
+
+    /*
+     * The logo's SVG gradients read these, so the mark follows the accent.
+     * The dot keeps its warm complement, derived from the accent's opposite
+     * end of the ramp rather than a fixed pink.
+     */
+    --ws-brand-mark-start: var(--ws-accent-gradient-start, #aa42ff);
+    --ws-brand-mark-mid: var(--ws-accent, #7c5cff);
+    --ws-brand-mark-end: var(--ws-accent-gradient-end, #4b3bff);
+    --ws-brand-mark-dot-start: color-mix(
+      in srgb,
+      var(--ws-accent, #7c5cff) 26%,
+      #ff94a5
+    );
+    --ws-brand-mark-dot-end: color-mix(
+      in srgb,
+      var(--ws-accent, #7c5cff) 26%,
+      #de7283
+    );
+    color: var(--ws-color-on-surface, #17171c);
     display: inline-block;
     font-family: var(
       --ws-font-family,
@@ -33,7 +52,7 @@ export const wsBrandMarkStyles = css`
     block-size: var(--ws-brand-mark-size);
     border-radius: var(--ws-brand-mark-radius, var(--ws-shape-large, 12px));
     box-sizing: border-box;
-    color: var(--ws-color-primary, #6c5cff);
+    color: var(--ws-color-primary, #7c5cff);
     display: inline-flex;
     flex: 0 0 auto;
     font-size: calc(var(--ws-brand-mark-size) * 0.42);
@@ -259,12 +278,12 @@ export const wsBrandMarkStyles = css`
   }
 
   .title {
-    color: var(--ws-color-on-surface, #0f172a);
+    color: var(--ws-color-on-surface, #17171c);
     font: var(--ws-typography-title-medium);
   }
 
   .subtitle {
-    color: var(--ws-color-on-surface-variant, #64748b);
+    color: var(--ws-color-on-surface-variant, #626875);
     font: var(--ws-typography-label-medium);
   }
 `;

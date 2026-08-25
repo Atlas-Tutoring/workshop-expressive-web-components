@@ -14,7 +14,7 @@ export const wsDrawerCategoryStyles = css`
   h2 {
     color: var(
       --ws-drawer-category-color,
-      var(--ws-color-on-surface-variant, #64748b)
+      var(--ws-color-on-surface-variant, #626875)
     );
     font: var(
       --ws-typography-label-small,

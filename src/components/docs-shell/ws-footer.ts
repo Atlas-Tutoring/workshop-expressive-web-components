@@ -9,12 +9,17 @@ export class WsFooter extends LitElement {
       width: min(100% - 32px, 1120px);
       margin: 56px auto 24px;
       padding: 24px;
-      border: 1px solid var(--ws-color-outline-variant, #e2e8f0);
+      border: 1px solid var(--ws-color-outline-variant, #e3e6ed);
       border-radius: var(--ws-shape-large, 12px);
       background: var(--ws-color-surface, #ffffff);
       box-shadow: var(--ws-elevation-sm, 0 1px 2px rgb(15 23 42 / 8%));
-      font-family: var(--ws-font-family, 'Google Sans Flex', system-ui, sans-serif);
-      color: var(--ws-color-on-surface-variant, #64748b);
+      font-family: var(
+        --ws-font-family,
+        'Google Sans Flex',
+        system-ui,
+        sans-serif
+      );
+      color: var(--ws-color-on-surface-variant, #626875);
     }
 
     .footer-inner {

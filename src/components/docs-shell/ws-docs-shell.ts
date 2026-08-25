@@ -8,8 +8,13 @@ export class WsDocsShell extends LitElement {
       display: flex;
       flex-direction: column;
       min-height: 100vh;
-      font-family: var(--ws-font-family, 'Google Sans Flex', system-ui, sans-serif);
-      background: var(--ws-color-background, #f8fafc);
+      font-family: var(
+        --ws-font-family,
+        'Google Sans Flex',
+        system-ui,
+        sans-serif
+      );
+      background: var(--ws-color-background, #f8f9fc);
     }
 
     #main-wrapper {

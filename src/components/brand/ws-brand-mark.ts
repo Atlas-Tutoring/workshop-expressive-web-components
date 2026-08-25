@@ -100,21 +100,27 @@ export class WsBrandMark extends LitElement {
             y2="76"
             gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0%" stop-color="#AA42FF"></stop>
-            <stop offset="50%" stop-color="#7066F5"></stop>
-            <stop offset="100%" stop-color="#4B3BFF"></stop>
+            <stop offset="0%" stop-color="var(--ws-brand-mark-start)"></stop>
+            <stop offset="50%" stop-color="var(--ws-brand-mark-mid)"></stop>
+            <stop offset="100%" stop-color="var(--ws-brand-mark-end)"></stop>
           </linearGradient>
           <linearGradient id="wGradLeft" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#AA42FF"></stop>
-            <stop offset="100%" stop-color="#7066F5"></stop>
+            <stop offset="0%" stop-color="var(--ws-brand-mark-start)"></stop>
+            <stop offset="100%" stop-color="var(--ws-brand-mark-mid)"></stop>
           </linearGradient>
           <linearGradient id="wGradRight" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#7066F5"></stop>
-            <stop offset="100%" stop-color="#4B3BFF"></stop>
+            <stop offset="0%" stop-color="var(--ws-brand-mark-mid)"></stop>
+            <stop offset="100%" stop-color="var(--ws-brand-mark-end)"></stop>
           </linearGradient>
           <linearGradient id="dotGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#FF94A5"></stop>
-            <stop offset="100%" stop-color="#DE7283"></stop>
+            <stop
+              offset="0%"
+              stop-color="var(--ws-brand-mark-dot-start)"
+            ></stop>
+            <stop
+              offset="100%"
+              stop-color="var(--ws-brand-mark-dot-end)"
+            ></stop>
           </linearGradient>
         </defs>
         <circle

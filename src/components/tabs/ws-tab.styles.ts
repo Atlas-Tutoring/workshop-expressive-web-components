@@ -2,7 +2,7 @@ import {css} from 'lit';
 
 export const wsTabStyles = css`
   :host {
-    color: var(--ws-color-on-surface-variant, #64748b);
+    color: var(--ws-color-on-surface-variant, #626875);
     display: inline-flex;
     font-family: var(
       --ws-font-family,
@@ -52,15 +52,15 @@ export const wsTabStyles = css`
     box-shadow: 0 0 0 var(--ws-focus-ring-inner-size, 2px)
         var(--ws-color-surface, #ffffff),
       0 0 0 var(--ws-focus-ring-outer-size, 4px)
-        var(--ws-color-primary, #6c5cff);
+        var(--ws-color-primary, #7c5cff);
   }
 
   .tab:hover {
     background: var(
       --ws-tab-hover-background,
-      var(--ws-color-primary-container, #f5f3ff)
+      var(--ws-color-primary-container, #f0ecff)
     );
-    color: var(--ws-tab-hover-color, var(--ws-color-primary, #6c5cff));
+    color: var(--ws-tab-hover-color, var(--ws-color-primary, #7c5cff));
   }
 
   .tab:active {
@@ -68,13 +68,13 @@ export const wsTabStyles = css`
   }
 
   :host([selected]) {
-    color: var(--ws-color-primary, #6c5cff);
+    color: var(--ws-color-primary, #7c5cff);
   }
 
   :host([selected]) .tab {
     background: color-mix(
       in srgb,
-      var(--ws-color-primary, #6c5cff) 12%,
+      var(--ws-color-primary, #7c5cff) 12%,
       transparent
     );
   }
@@ -97,10 +97,7 @@ export const wsTabStyles = css`
   }
 
   :host-context(ws-tabs[variant='contained']) {
-    color: var(
-      --ws-tabs-contained-color,
-      var(--ws-color-on-surface-variant)
-    );
+    color: var(--ws-tabs-contained-color, var(--ws-color-on-surface-variant));
   }
 
   :host-context(ws-tabs[variant='contained']) .tab {
@@ -138,7 +135,7 @@ export const wsTabStyles = css`
 
   :host-context(ws-tabs[variant='contained']) .tab:focus-visible {
     box-shadow: none;
-    outline: 2px solid
+    outline: var(--ws-focus-ring-inner-size, 2px) solid
       var(--ws-tabs-contained-focus-color, var(--ws-color-primary));
     outline-offset: 2px;
   }

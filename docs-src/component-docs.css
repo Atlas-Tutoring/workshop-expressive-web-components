@@ -1,14 +1,14 @@
 .example-content > p:first-of-type {
   max-inline-size: 72ch;
   margin: 0 0 30px;
-  color: var(--ws-color-on-surface-variant, #64748b);
+  color: var(--ws-color-on-surface-variant, #626875);
   font-size: 1.02rem;
   line-height: 1.7;
 }
 
 .example-content > h2 {
   margin: 48px 0 14px;
-  color: var(--ws-color-on-surface, #0f172a);
+  color: var(--ws-color-on-surface, #17171c);
   font-size: clamp(1.3rem, 2vw, 1.55rem);
   line-height: 1.25;
 }
@@ -19,7 +19,7 @@
 
 .example-content > h3 {
   margin: 30px 0 12px;
-  color: var(--ws-color-on-surface, #0f172a);
+  color: var(--ws-color-on-surface, #17171c);
   font-size: 1.05rem;
   line-height: 1.35;
 }
@@ -38,15 +38,15 @@
   margin: 16px 0 30px;
   border-color: color-mix(
     in srgb,
-    var(--ws-color-outline-variant, #e2e8f0) 82%,
-    var(--ws-color-primary, #6c5cff)
+    var(--ws-color-outline-variant, #e3e6ed) 82%,
+    var(--ws-color-primary, #7c5cff)
   );
-  border-radius: var(--ws-shape-extra-large, 18px);
+  border-radius: var(--ws-shape-extra-large, 16px);
   padding: clamp(20px, 3vw, 30px);
   background: color-mix(
     in srgb,
     var(--ws-color-surface, #ffffff) 96%,
-    var(--ws-color-primary, #6c5cff) 4%
+    var(--ws-color-primary, #7c5cff) 4%
   );
   box-shadow: var(--ws-elevation-sm, 0 1px 2px rgb(15 23 42 / 8%));
 }
@@ -65,7 +65,7 @@
 
 .component-demo h3 {
   margin: 0;
-  color: var(--ws-color-on-surface-variant, #64748b);
+  color: var(--ws-color-on-surface-variant, #626875);
   font-size: 0.92rem;
   font-weight: 650;
   letter-spacing: -0.01em;
@@ -81,7 +81,7 @@
 }
 
 .example-content td {
-  color: var(--ws-color-on-surface-variant, #64748b);
+  color: var(--ws-color-on-surface-variant, #626875);
   vertical-align: top;
 }
 

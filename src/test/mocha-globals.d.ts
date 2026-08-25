@@ -6,3 +6,5 @@ declare namespace Mocha {
 
 declare function suite(name: string, callback: () => void): void;
 declare function test(name: string, callback: () => void | Promise<void>): void;
+declare function setup(callback: () => void | Promise<void>): void;
+declare function teardown(callback: () => void | Promise<void>): void;

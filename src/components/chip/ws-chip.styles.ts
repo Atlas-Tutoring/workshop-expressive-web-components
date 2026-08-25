@@ -37,11 +37,11 @@ export const wsChipStyles = css`
   }
 
   .chip {
-    background: var(--ws-chip-background, var(--ws-color-surface, #fff));
+    background: var(--ws-chip-background, var(--ws-color-surface, #ffffff));
     border: 1px solid
-      var(--ws-chip-border-color, var(--ws-color-outline, #e2e8f0));
+      var(--ws-chip-border-color, var(--ws-color-outline, #dde1ea));
     border-radius: var(--ws-shape-full, 999px);
-    color: var(--ws-chip-color, var(--ws-color-on-surface, #0f172a));
+    color: var(--ws-chip-color, var(--ws-color-on-surface, #17171c));
     gap: var(--ws-chip-gap, var(--ws-spacing-xs, 4px));
     max-inline-size: 100%;
     min-inline-size: 0;
@@ -101,14 +101,14 @@ export const wsChipStyles = css`
       --ws-chip-hover-background,
       color-mix(
         in srgb,
-        var(--ws-color-primary, #6c5cff) 8%,
-        var(--ws-color-surface, #fff)
+        var(--ws-color-primary, #7c5cff) 8%,
+        var(--ws-color-surface, #ffffff)
       )
     );
     border-color: color-mix(
       in srgb,
-      var(--ws-color-primary, #6c5cff) 36%,
-      var(--ws-color-outline, #e2e8f0)
+      var(--ws-color-primary, #7c5cff) 36%,
+      var(--ws-color-outline, #dde1ea)
     );
   }
 
@@ -119,19 +119,19 @@ export const wsChipStyles = css`
   button.chip:focus-visible,
   .remove-button:focus-visible {
     box-shadow: 0 0 0 var(--ws-focus-ring-inner-size, 2px)
-        var(--ws-color-background, #f8fafc),
+        var(--ws-color-background, #f8f9fc),
       0 0 0 var(--ws-focus-ring-outer-size, 5px)
-        color-mix(in srgb, var(--ws-color-primary, #6c5cff) 42%, transparent);
+        color-mix(in srgb, var(--ws-color-primary, #7c5cff) 42%, transparent);
   }
 
   :host([variant='filter'][selected]) .chip {
-    --ws-chip-background: var(--ws-color-primary-container, #f5f3ff);
+    --ws-chip-background: var(--ws-color-primary-container, #f0ecff);
     --ws-chip-border-color: color-mix(
       in srgb,
-      var(--ws-color-primary, #6c5cff) 44%,
-      var(--ws-color-outline, #e2e8f0)
+      var(--ws-color-primary, #7c5cff) 44%,
+      var(--ws-color-outline, #dde1ea)
     );
-    --ws-chip-color: var(--ws-color-primary, #6c5cff);
+    --ws-chip-color: var(--ws-color-primary, #7c5cff);
   }
 
   :host([removable]) .chip,
@@ -143,83 +143,83 @@ export const wsChipStyles = css`
   }
 
   :host([variant='input']) .chip {
-    --ws-chip-background: var(--ws-color-surface-variant, #f1f5f9);
+    --ws-chip-background: var(--ws-color-surface-variant, #f0f2f7);
   }
 
   :host([variant='status']) .chip {
-    --ws-chip-background: var(--ws-color-surface-variant, #f1f5f9);
+    --ws-chip-background: var(--ws-color-surface-variant, #f0f2f7);
     --ws-chip-border-color: transparent;
   }
 
   :host([tone='info']) .chip {
     --ws-chip-background: color-mix(
       in srgb,
-      var(--ws-blue, #3b82f6) 14%,
-      var(--ws-color-surface, #fff)
+      var(--ws-blue, #2f80ff) 14%,
+      var(--ws-color-surface, #ffffff)
     );
     --ws-chip-border-color: color-mix(
       in srgb,
-      var(--ws-blue, #3b82f6) 28%,
+      var(--ws-blue, #2f80ff) 28%,
       transparent
     );
     --ws-chip-color: color-mix(
       in srgb,
-      var(--ws-blue, #3b82f6) 76%,
-      var(--ws-color-on-surface, #0f172a)
+      var(--ws-blue, #2f80ff) 76%,
+      var(--ws-color-on-surface, #17171c)
     );
   }
 
   :host([tone='success']) .chip {
     --ws-chip-background: color-mix(
       in srgb,
-      var(--ws-green, #10b981) 14%,
-      var(--ws-color-surface, #fff)
+      var(--ws-green, #19c98b) 14%,
+      var(--ws-color-surface, #ffffff)
     );
     --ws-chip-border-color: color-mix(
       in srgb,
-      var(--ws-green, #10b981) 28%,
+      var(--ws-green, #19c98b) 28%,
       transparent
     );
     --ws-chip-color: color-mix(
       in srgb,
-      var(--ws-green, #10b981) 76%,
-      var(--ws-color-on-surface, #0f172a)
+      var(--ws-green, #19c98b) 76%,
+      var(--ws-color-on-surface, #17171c)
     );
   }
 
   :host([tone='warning']) .chip {
     --ws-chip-background: color-mix(
       in srgb,
-      var(--ws-orange, #f59e0b) 17%,
-      var(--ws-color-surface, #fff)
+      var(--ws-orange, #ffa62b) 17%,
+      var(--ws-color-surface, #ffffff)
     );
     --ws-chip-border-color: color-mix(
       in srgb,
-      var(--ws-orange, #f59e0b) 34%,
+      var(--ws-orange, #ffa62b) 34%,
       transparent
     );
     --ws-chip-color: color-mix(
       in srgb,
-      var(--ws-orange, #f59e0b) 72%,
-      var(--ws-color-on-surface, #0f172a)
+      var(--ws-orange, #ffa62b) 72%,
+      var(--ws-color-on-surface, #17171c)
     );
   }
 
   :host([tone='error']) .chip {
     --ws-chip-background: color-mix(
       in srgb,
-      var(--ws-red, #ef4444) 13%,
-      var(--ws-color-surface, #fff)
+      var(--ws-red, #ff4d5e) 13%,
+      var(--ws-color-surface, #ffffff)
     );
     --ws-chip-border-color: color-mix(
       in srgb,
-      var(--ws-red, #ef4444) 28%,
+      var(--ws-red, #ff4d5e) 28%,
       transparent
     );
     --ws-chip-color: color-mix(
       in srgb,
-      var(--ws-red, #ef4444) 78%,
-      var(--ws-color-on-surface, #0f172a)
+      var(--ws-red, #ff4d5e) 78%,
+      var(--ws-color-on-surface, #17171c)
     );
   }
 
@@ -272,13 +272,13 @@ export const wsChipStyles = css`
 
   .remove-button {
     align-self: stretch;
-    background: var(--ws-color-surface-variant, #f1f5f9);
-    border: 1px solid var(--ws-color-outline, #e2e8f0);
+    background: var(--ws-color-surface-variant, #f0f2f7);
+    border: 1px solid var(--ws-color-outline, #dde1ea);
     border-radius: var(--ws-shape-full, 999px);
     border-end-start-radius: 0;
     border-inline-start: 0;
     border-start-start-radius: 0;
-    color: var(--ws-color-on-surface-variant, #64748b);
+    color: var(--ws-color-on-surface-variant, #626875);
     cursor: pointer;
     inline-size: var(--ws-chip-remove-width, 30px);
     margin-inline-start: -1px;
@@ -299,8 +299,8 @@ export const wsChipStyles = css`
   }
 
   .remove-button:hover:not(:disabled) {
-    background: var(--ws-color-primary-container, #f5f3ff);
-    color: var(--ws-color-primary, #6c5cff);
+    background: var(--ws-color-primary-container, #f0ecff);
+    color: var(--ws-color-primary, #7c5cff);
   }
 
   .remove-button svg,

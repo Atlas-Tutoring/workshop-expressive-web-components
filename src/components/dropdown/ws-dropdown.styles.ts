@@ -32,7 +32,7 @@ export const wsDropdownStyles = css`
   }
 
   .label {
-    color: var(--ws-color-on-surface, #0f172a);
+    color: var(--ws-color-on-surface, #17171c);
     font: var(
       --ws-typography-label-medium,
       600 12px / 16px var(--ws-font-family, sans-serif)
@@ -84,11 +84,11 @@ export const wsDropdownStyles = css`
 
   .control:focus-visible {
     box-shadow: 0 0 0 var(--ws-focus-ring-inner-size, 2px)
-        var(--ws-color-background, #f8fafc),
+        var(--ws-color-background, #f8f9fc),
       0 0 0 var(--ws-focus-ring-outer-size, 5px)
         color-mix(
           in srgb,
-          var(--ws-dropdown-focus-color, var(--ws-color-primary, #6c5cff)) 45%,
+          var(--ws-dropdown-focus-color, var(--ws-color-primary, #7c5cff)) 45%,
           transparent
         );
   }
@@ -98,64 +98,64 @@ export const wsDropdownStyles = css`
   }
 
   :host([variant='primary']) .control {
-    --ws-dropdown-focus-color: var(--ws-color-primary, #6c5cff);
-    background: var(--ws-color-primary, #6c5cff);
+    --ws-dropdown-focus-color: var(--ws-color-primary, #7c5cff);
+    background: var(--ws-color-primary, #7c5cff);
     box-shadow: var(--ws-elevation-sm, 0 1px 2px rgb(15 23 42 / 8%));
-    color: var(--ws-color-on-primary, #f8fafc);
+    color: var(--ws-color-on-primary, #f7f7fa);
   }
 
   :host([variant='primary']) .control:not(:disabled):hover,
   :host([variant='primary']) .control[aria-expanded='true'] {
-    background: var(--ws-purple-dark, #4f46e5);
+    background: var(--ws-color-primary-hover, #6547f5);
     box-shadow: var(--ws-elevation-md, 0 8px 24px rgb(15 23 42 / 12%));
   }
 
   :host([variant='secondary']) .control {
-    --ws-dropdown-focus-color: var(--ws-color-secondary, #3b82f6);
-    background: var(--ws-color-secondary-container, #f1f5f9);
-    border-color: var(--ws-color-outline-variant, #e2e8f0);
-    color: var(--ws-color-on-secondary-container, #0f172a);
+    --ws-dropdown-focus-color: var(--ws-color-secondary, #2f80ff);
+    background: var(--ws-color-secondary-container, #e2edff);
+    border-color: var(--ws-color-outline-variant, #e3e6ed);
+    color: var(--ws-color-on-secondary-container, #17171c);
   }
 
   :host([variant='secondary']) .control:not(:disabled):hover,
   :host([variant='secondary']) .control[aria-expanded='true'] {
     background: color-mix(
       in srgb,
-      var(--ws-color-secondary, #3b82f6) 14%,
-      var(--ws-color-secondary-container, #f1f5f9)
+      var(--ws-color-secondary, #2f80ff) 14%,
+      var(--ws-color-secondary-container, #e2edff)
     );
     border-color: color-mix(
       in srgb,
-      var(--ws-color-secondary, #3b82f6) 26%,
-      var(--ws-color-outline-variant, #e2e8f0)
+      var(--ws-color-secondary, #2f80ff) 26%,
+      var(--ws-color-outline-variant, #e3e6ed)
     );
   }
 
   :host([variant='outlined']) .control,
   :host(:not([variant])) .control {
-    --ws-dropdown-focus-color: var(--ws-color-primary, #6c5cff);
+    --ws-dropdown-focus-color: var(--ws-color-primary, #7c5cff);
     background: transparent;
-    border-color: var(--ws-color-outline, #e2e8f0);
-    color: var(--ws-color-primary, #6c5cff);
+    border-color: var(--ws-color-outline, #dde1ea);
+    color: var(--ws-color-primary, #7c5cff);
   }
 
   :host([variant='outlined']) .control:not(:disabled):hover,
   :host([variant='outlined']) .control[aria-expanded='true'],
   :host(:not([variant])) .control:not(:disabled):hover,
   :host(:not([variant])) .control[aria-expanded='true'] {
-    background: var(--ws-color-primary-container, #f5f3ff);
-    border-color: var(--ws-color-primary, #6c5cff);
+    background: var(--ws-color-primary-container, #f0ecff);
+    border-color: var(--ws-color-primary, #7c5cff);
   }
 
   :host([variant='text']) .control {
-    --ws-dropdown-focus-color: var(--ws-color-primary, #6c5cff);
+    --ws-dropdown-focus-color: var(--ws-color-primary, #7c5cff);
     background: transparent;
-    color: var(--ws-color-primary, #6c5cff);
+    color: var(--ws-color-primary, #7c5cff);
   }
 
   :host([variant='text']) .control:not(:disabled):hover,
   :host([variant='text']) .control[aria-expanded='true'] {
-    background: var(--ws-color-primary-container, #f5f3ff);
+    background: var(--ws-color-primary-container, #f0ecff);
   }
 
   :host([size='small']) {
@@ -297,16 +297,16 @@ export const wsDropdownStyles = css`
   .listbox {
     background: var(
       --ws-dropdown-menu-background,
-      var(--ws-color-surface, #fff)
+      var(--ws-color-surface, #ffffff)
     );
-    border: 1px solid var(--ws-color-outline, #d1d5db);
+    border: 1px solid var(--ws-color-outline, #dde1ea);
     border-radius: var(--ws-shape-large, 12px);
-    box-shadow: var(--ws-elevation-lg, 0 12px 32px rgb(15 23 42 / 16%));
+    box-shadow: var(--ws-elevation-lg, 0 16px 48px rgb(15 23 42 / 16%));
     box-sizing: border-box;
     clip-path: inset(0 0 100% 0 round var(--ws-shape-large, 12px));
     display: grid;
     gap: 2px;
-    color: var(--ws-dropdown-menu-color, var(--ws-color-on-surface, #0f172a));
+    color: var(--ws-dropdown-menu-color, var(--ws-color-on-surface, #17171c));
     inline-size: max(
       var(--ws-dropdown-trigger-width, 0px),
       var(--ws-dropdown-menu-min-width, 160px)
@@ -362,7 +362,7 @@ export const wsDropdownStyles = css`
     background: transparent;
     border: 0;
     border-radius: var(--ws-shape-small, 6px);
-    color: var(--ws-color-on-surface, #0f172a);
+    color: var(--ws-color-on-surface, #17171c);
     cursor: pointer;
     display: flex;
     font: var(
@@ -405,8 +405,8 @@ export const wsDropdownStyles = css`
 
   .option.active,
   .option:hover {
-    background: var(--ws-color-primary-container, #f5f3ff);
-    color: var(--ws-color-primary, #6c5cff);
+    background: var(--ws-color-primary-container, #f0ecff);
+    color: var(--ws-color-primary, #7c5cff);
   }
 
   .option[aria-selected='true'] {
@@ -414,7 +414,7 @@ export const wsDropdownStyles = css`
   }
 
   .option[data-tone='danger'] {
-    color: var(--ws-dropdown-danger-color, var(--ws-color-error, #d93025));
+    color: var(--ws-dropdown-danger-color, var(--ws-color-error, #ff4d5e));
   }
 
   .option[data-tone='danger'].active,
@@ -423,11 +423,11 @@ export const wsDropdownStyles = css`
       --ws-dropdown-danger-hover-background,
       color-mix(
         in srgb,
-        var(--ws-dropdown-danger-color, var(--ws-color-error, #d93025)) 10%,
+        var(--ws-dropdown-danger-color, var(--ws-color-error, #ff4d5e)) 10%,
         transparent
       )
     );
-    color: var(--ws-dropdown-danger-color, var(--ws-color-error, #d93025));
+    color: var(--ws-dropdown-danger-color, var(--ws-color-error, #ff4d5e));
   }
 
   .option:disabled {

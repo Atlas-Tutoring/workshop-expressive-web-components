@@ -94,6 +94,21 @@ export default {
   nodeResolve: {exportConditions: mode === 'dev' ? ['development'] : []},
   preserveSymlinks: true,
   browsers: commandLineBrowsers ?? Object.values(browsers),
+  // Load the foundation theme so tests exercise the real token values, and
+  // pin the scheme so computed colors do not depend on the runner's
+  // prefers-color-scheme.
+  testRunnerHtml: (testFramework) => `
+    <!doctype html>
+    <html data-ws-theme="light">
+      <head>
+        <link rel="stylesheet" href="/dist/foundation/colors.css">
+        <link rel="stylesheet" href="/dist/foundation/schemes.css">
+      </head>
+      <body>
+        <script type="module" src="${testFramework}"></script>
+      </body>
+    </html>
+  `,
   testFramework: {
     // https://mochajs.org/api/mocha
     config: {

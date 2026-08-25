@@ -10,7 +10,7 @@ export const wsDrawerItemStyles = css`
     );
     --ws-drawer-item-depth: 0;
     display: block;
-    color: var(--ws-color-on-surface, #0f172a);
+    color: var(--ws-color-on-surface, #17171c);
   }
 
   :host([hidden]) {
@@ -18,7 +18,7 @@ export const wsDrawerItemStyles = css`
   }
 
   :host([selected]) {
-    color: var(--ws-color-on-primary, #f8fafc);
+    color: var(--ws-color-on-primary, #f7f7fa);
   }
 
   .item {
@@ -53,21 +53,21 @@ export const wsDrawerItemStyles = css`
   :host([selected]) .item {
     background: linear-gradient(
       90deg,
-      var(--ws-purple, #6c5cff),
-      var(--ws-purple-dark, #4f46e5)
+      var(--ws-color-primary, #7c5cff),
+      var(--ws-color-primary-hover, #6547f5)
     );
     box-shadow: var(--ws-elevation-sm, 0 1px 2px rgb(15 23 42 / 8%));
   }
 
   :host(:not([selected]):not([disabled])) .item:hover {
-    background: var(--ws-color-surface-variant, #f1f5f9);
+    background: var(--ws-color-surface-variant, #f0f2f7);
   }
 
   .item:focus-visible {
     box-shadow: 0 0 0 var(--ws-focus-ring-inner-size, 2px)
         var(--ws-color-surface, #ffffff),
       0 0 0 var(--ws-focus-ring-outer-size, 4px)
-        var(--ws-color-primary, #6c5cff);
+        var(--ws-color-primary, #7c5cff);
   }
 
   :host([disabled]) .item {
@@ -85,7 +85,7 @@ export const wsDrawerItemStyles = css`
   .bullet,
   .arrow {
     align-items: center;
-    color: var(--ws-color-on-surface-variant, #64748b);
+    color: var(--ws-color-on-surface-variant, #626875);
     display: inline-flex;
     flex: 0 0 auto;
     justify-content: center;
@@ -177,7 +177,7 @@ export const wsDrawerItemStyles = css`
   }
 
   .subtitle {
-    color: var(--ws-color-on-surface-variant, #64748b);
+    color: var(--ws-color-on-surface-variant, #626875);
     font: var(--ws-typography-label-small);
   }
 
@@ -188,11 +188,11 @@ export const wsDrawerItemStyles = css`
   .badge {
     background: color-mix(
       in srgb,
-      var(--ws-color-primary, #6c5cff) 12%,
+      var(--ws-color-primary, #7c5cff) 12%,
       transparent
     );
     border-radius: var(--ws-shape-extra-small, 4px);
-    color: var(--ws-color-primary, #6c5cff);
+    color: var(--ws-color-primary, #7c5cff);
     flex: 0 0 auto;
     font: var(--ws-typography-label-small);
     font-weight: 700;
@@ -250,7 +250,7 @@ export const wsDrawerItemStyles = css`
   .complete-icon {
     align-items: center;
     block-size: var(--ws-drawer-complete-icon-size, 18px);
-    color: var(--ws-color-success, #16a34a);
+    color: var(--ws-color-success, #19c98b);
     display: inline-flex;
     flex: 0 0 auto;
     inline-size: var(--ws-drawer-complete-icon-size, 18px);
@@ -269,7 +269,7 @@ export const wsDrawerItemStyles = css`
   }
 
   .progress-track {
-    background: var(--ws-color-surface-variant, #f1f5f9);
+    background: var(--ws-color-surface-variant, #f0f2f7);
     border-radius: var(--ws-shape-full, 999px);
     block-size: var(--ws-drawer-progress-height, 4px);
     inline-size: 100%;
@@ -278,7 +278,7 @@ export const wsDrawerItemStyles = css`
   }
 
   .progress-fill {
-    background: var(--ws-color-primary, #6c5cff);
+    background: var(--ws-color-primary, #7c5cff);
     block-size: 100%;
     border-radius: inherit;
     transition: inline-size var(--ws-motion-duration-medium, 180ms)
