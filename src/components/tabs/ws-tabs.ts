@@ -94,6 +94,7 @@ export class WsTabs extends LitElement {
 
   override firstUpdated() {
     this.observeTabs();
+    this.syncTabPresentation();
     this.initializeSelection();
     this.updateIndicator({animate: false});
   }
@@ -109,6 +110,7 @@ export class WsTabs extends LitElement {
       changedProperties.has('orientation') ||
       changedProperties.has('variant')
     ) {
+      this.syncTabPresentation();
       this.scheduleIndicatorUpdate({animate: false});
     }
   }
@@ -428,8 +430,25 @@ export class WsTabs extends LitElement {
 
   private handleSlotChange() {
     this.observeTabs();
+    this.syncTabPresentation();
     this.initializeSelection();
     this.scheduleIndicatorUpdate();
+  }
+
+  /**
+   * Mirrors the group's presentation onto each tab.
+   *
+   * A tab cannot see its parent's attributes from inside its own shadow root.
+   * `:host-context()` would express it in CSS alone, but only Chromium
+   * implements it -- everywhere else the contained and vertical rules were
+   * dropped entirely, which left contained tabs falling back to the standard
+   * accent hover.
+   */
+  private syncTabPresentation() {
+    for (const tab of this.tabs) {
+      tab.setAttribute('data-ws-variant', this.variant);
+      tab.setAttribute('data-ws-orientation', this.orientation);
+    }
   }
 
   private handlePanelSlotChange() {

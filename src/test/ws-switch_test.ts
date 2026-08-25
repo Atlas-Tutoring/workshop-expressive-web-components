@@ -72,3 +72,159 @@ suite('ws-switch', () => {
     );
   });
 });
+
+suite('ws-switch geometry', () => {
+  const parts = (el: WsSwitch) => {
+    const track = el
+      .shadowRoot!.querySelector('.track')!
+      .getBoundingClientRect();
+    const handle = el
+      .shadowRoot!.querySelector('.handle')!
+      .getBoundingClientRect();
+    const round = (value: number) => Math.round(value * 100) / 100;
+
+    return {
+      left: round(handle.left - track.left),
+      right: round(track.right - handle.right),
+      top: round(handle.top - track.top),
+      bottom: round(track.bottom - handle.bottom),
+    };
+  };
+
+  /*
+   * The thumb used to sit flush against the track's inner edge when checked
+   * while keeping padding at the top and bottom, so it read as misaligned.
+   */
+  test('the thumb keeps an equal inset from every track edge', async () => {
+    const off = await fixture<WsSwitch>(
+      html`<ws-switch aria-label="Off"></ws-switch>`
+    );
+    const offBox = parts(off);
+    assert.equal(offBox.left, offBox.top);
+    assert.equal(offBox.left, offBox.bottom);
+
+    const on = await fixture<WsSwitch>(
+      html`<ws-switch checked aria-label="On"></ws-switch>`
+    );
+    const onBox = parts(on);
+    assert.equal(onBox.right, onBox.top);
+    assert.equal(onBox.right, onBox.bottom);
+  });
+
+  test('the travel is symmetric between the two ends', async () => {
+    const off = await fixture<WsSwitch>(
+      html`<ws-switch aria-label="Off"></ws-switch>`
+    );
+    const on = await fixture<WsSwitch>(
+      html`<ws-switch checked aria-label="On"></ws-switch>`
+    );
+
+    assert.equal(parts(off).left, parts(on).right);
+    assert.equal(parts(off).right, parts(on).left);
+  });
+
+  test('the geometry follows the size tokens', async () => {
+    const el = await fixture<WsSwitch>(html`
+      <ws-switch
+        aria-label="Large"
+        style="--ws-switch-track-width: 72px; --ws-switch-track-height: 44px; --ws-switch-handle-size: 34px"
+      ></ws-switch>
+    `);
+    const box = parts(el);
+
+    // (44 - 2 * 2px border - 34) / 2 + 2px border = 5
+    assert.equal(box.left, 5);
+    assert.equal(box.top, 5);
+    assert.equal(box.bottom, 5);
+  });
+});
+
+suite('ws-switch icons', () => {
+  const iconMarkup = html`
+    <svg slot="unchecked-icon" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="6" />
+    </svg>
+    <svg slot="checked-icon" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="6" />
+    </svg>
+  `;
+
+  test('reflects has-icon only when a glyph is slotted', async () => {
+    const bare = await fixture<WsSwitch>(
+      html`<ws-switch aria-label="Bare"></ws-switch>`
+    );
+    assert.isFalse(bare.hasAttribute('has-icon'));
+
+    const withIcon = await fixture<WsSwitch>(
+      html`<ws-switch aria-label="Iconed">${iconMarkup}</ws-switch>`
+    );
+    await withIcon.updateComplete;
+    assert.isTrue(withIcon.hasAttribute('has-icon'));
+  });
+
+  /*
+   * The thumb scales, and a slotted SVG used to scale with it, so the glyph
+   * shrank in the off state. Icons now keep the thumb at full size.
+   */
+  test('keeps the thumb at full size so the glyph has room', async () => {
+    const el = await fixture<WsSwitch>(
+      html`<ws-switch aria-label="Iconed">${iconMarkup}</ws-switch>`
+    );
+    await el.updateComplete;
+
+    const handle = el.shadowRoot!.querySelector('.handle')!;
+    const thumb = getComputedStyle(handle, '::before');
+
+    assert.equal(thumb.transform, 'matrix(1, 0, 0, 1, 0, 0)');
+  });
+
+  test('centres the glyph in the thumb', async () => {
+    const el = await fixture<WsSwitch>(
+      html`<ws-switch aria-label="Iconed">${iconMarkup}</ws-switch>`
+    );
+    await el.updateComplete;
+
+    const handle = el
+      .shadowRoot!.querySelector('.handle')!
+      .getBoundingClientRect();
+    const icon = el
+      .querySelector('[slot="unchecked-icon"]')!
+      .getBoundingClientRect();
+
+    assert.closeTo(
+      icon.left + icon.width / 2,
+      handle.left + handle.width / 2,
+      0.5
+    );
+    assert.closeTo(
+      icon.top + icon.height / 2,
+      handle.top + handle.height / 2,
+      0.5
+    );
+  });
+
+  test('defaults to the rotating swap and supports a fade', async () => {
+    const rotate = await fixture<WsSwitch>(
+      html`<ws-switch aria-label="Rotate">${iconMarkup}</ws-switch>`
+    );
+    await rotate.updateComplete;
+    assert.equal(rotate.iconTransition, 'rotate');
+    assert.notEqual(
+      getComputedStyle(rotate.shadowRoot!.querySelector('.checked-icon')!)
+        .transform,
+      'none'
+    );
+
+    const fade = await fixture<WsSwitch>(
+      html`<ws-switch aria-label="Fade" icon-transition="fade"
+        >${iconMarkup}</ws-switch
+      >`
+    );
+    await fade.updateComplete;
+    assert.equal(
+      getComputedStyle(fade.shadowRoot!.querySelector('.checked-icon')!)
+        .transform,
+      'none'
+    );
+  });
+});

@@ -96,11 +96,11 @@ export const wsTabStyles = css`
     line-height: 1;
   }
 
-  :host-context(ws-tabs[variant='contained']) {
+  :host([data-ws-variant='contained']) {
     color: var(--ws-tabs-contained-color, var(--ws-color-on-surface-variant));
   }
 
-  :host-context(ws-tabs[variant='contained']) .tab {
+  :host([data-ws-variant='contained']) .tab {
     border-radius: var(--ws-tabs-contained-tab-radius, 8px);
     font: inherit;
     font-weight: var(--ws-tabs-contained-tab-font-weight, 500);
@@ -112,46 +112,59 @@ export const wsTabStyles = css`
       var(--ws-motion-easing-standard, ease);
   }
 
-  :host-context(ws-tabs[variant='contained'])[selected] {
+  :host([data-ws-variant='contained'])[selected] {
     color: var(
       --ws-tabs-contained-selected-color,
       var(--ws-color-on-secondary-container)
     );
   }
 
-  :host-context(ws-tabs[variant='contained'])[selected] .tab {
+  :host([data-ws-variant='contained'])[selected] .tab {
     background: transparent;
   }
 
-  :host-context(ws-tabs[variant='contained']) .tab:hover,
-  :host-context(ws-tabs[variant='contained'])[selected] .tab:hover {
+  /*
+   * Contained tabs hover with a neutral wash rather than the accent. The
+   * moving indicator is the accent-colored element in this variant, so an
+   * accent hover competed with it and made the travel hard to follow.
+   */
+  :host([data-ws-variant='contained']) .tab:hover {
+    background: var(
+      --ws-tabs-contained-tab-hover-background,
+      color-mix(in srgb, var(--ws-color-on-surface, #17171c) 7%, transparent)
+    );
+    color: inherit;
+  }
+
+  /* The selected tab already carries the indicator; leave it alone. */
+  :host([data-ws-variant='contained'])[selected] .tab:hover {
     background: transparent;
     color: inherit;
   }
 
-  :host-context(ws-tabs[variant='contained']) .tab:active {
+  :host([data-ws-variant='contained']) .tab:active {
     transform: none;
   }
 
-  :host-context(ws-tabs[variant='contained']) .tab:focus-visible {
+  :host([data-ws-variant='contained']) .tab:focus-visible {
     box-shadow: none;
     outline: var(--ws-focus-ring-inner-size, 2px) solid
       var(--ws-tabs-contained-focus-color, var(--ws-color-primary));
     outline-offset: 2px;
   }
 
-  :host-context(ws-tabs[orientation='vertical']) {
+  :host([data-ws-orientation='vertical']) {
     display: flex;
     inline-size: 100%;
   }
 
-  :host-context(ws-tabs[orientation='vertical']) .tab {
+  :host([data-ws-orientation='vertical']) .tab {
     justify-content: flex-start;
     min-block-size: var(--ws-tab-vertical-height, 44px);
     text-align: start;
   }
 
-  :host-context(ws-tabs[variant='contained'][orientation='vertical']) .tab {
+  :host([data-ws-variant='contained'][data-ws-orientation='vertical']) .tab {
     min-block-size: 0;
   }
 `;

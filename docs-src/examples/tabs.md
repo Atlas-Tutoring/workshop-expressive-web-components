@@ -66,6 +66,7 @@ Contained tabs stay in the current context. Give every `ws-tab` and its correspo
     <ws-tab-panel value="details">Course details</ws-tab-panel>
     <ws-tab-panel value="raw">Raw course data</ws-tab-panel>
     <ws-tab-panel value="history">Revision history</ws-tab-panel>
+
   </ws-tabs>
 </div>
 
@@ -199,7 +200,7 @@ The selected surface uses `--ws-elevation-sm` by default. Selection motion only 
 - Use `standard` tabs for peer navigation and section-level movement.
 - Use `contained` tabs for compact local view changes such as Edit / Preview, Visual / Code, or Details / Raw.
 - Contained tabs are intentionally compact. Do not increase their radius or height just because the surrounding application uses larger shape tokens.
-- Contained tabs do not change color on hover; selection and focus are the meaningful states.
+- Contained tabs hover with a neutral wash, never the accent. The moving indicator is the accent-colored element in this variant, so an accent hover competes with it and makes the travel hard to follow.
 - Let the application theme provide the contained colors through the shared `--ws-color-*` tokens instead of hardcoding a second component palette.
 - Icons are supported, but do not add them unless they improve recognition. Simple Edit / Preview labels are usually clear without them.
 - Keep panel presentation outside of the tab component. `ws-tab-panel` controls visibility and semantics, not the visual design of the editor or preview inside it.

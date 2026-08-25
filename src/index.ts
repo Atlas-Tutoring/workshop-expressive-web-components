@@ -55,6 +55,7 @@ export {WsPage} from './components/page/index.js';
 export {WsCodeBlock} from './components/code-block/index.js';
 export type {WsCodeLanguageOption} from './components/code-block/index.js';
 export {WsSwitch} from './components/switch/index.js';
+export type {WsSwitchIconTransition} from './components/switch/index.js';
 
 export {WsTextField} from './components/text-field/index.js';
 export type {

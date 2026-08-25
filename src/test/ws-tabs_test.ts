@@ -424,3 +424,84 @@ suite('ws-tabs', () => {
     assert.isTrue(nestedSecond.selected);
   });
 });
+
+suite('ws-tabs presentation sync', () => {
+  /*
+   * A tab cannot see its parent's attributes from inside its own shadow root.
+   * This was expressed with :host-context(), which only Chromium implements,
+   * so elsewhere contained tabs fell back to the standard accent hover. The
+   * group now mirrors its presentation onto each tab instead.
+   */
+  test('mirrors variant and orientation onto every tab', async () => {
+    const el = await fixture<WsTabs>(html`
+      <ws-tabs variant="contained" orientation="vertical" aria-label="Views">
+        <ws-tab selected>One</ws-tab>
+        <ws-tab>Two</ws-tab>
+      </ws-tabs>
+    `);
+    await el.updateComplete;
+
+    for (const tab of el.querySelectorAll('ws-tab')) {
+      assert.equal(tab.getAttribute('data-ws-variant'), 'contained');
+      assert.equal(tab.getAttribute('data-ws-orientation'), 'vertical');
+    }
+  });
+
+  test('updates the mirrored attributes when the group changes', async () => {
+    const el = await fixture<WsTabs>(html`
+      <ws-tabs aria-label="Views">
+        <ws-tab selected>One</ws-tab>
+      </ws-tabs>
+    `);
+    await el.updateComplete;
+    assert.equal(
+      el.querySelector('ws-tab')!.getAttribute('data-ws-variant'),
+      'standard'
+    );
+
+    el.variant = 'contained';
+    await el.updateComplete;
+
+    assert.equal(
+      el.querySelector('ws-tab')!.getAttribute('data-ws-variant'),
+      'contained'
+    );
+  });
+
+  test('mirrors onto tabs added after the first render', async () => {
+    const el = await fixture<WsTabs>(html`
+      <ws-tabs variant="contained" aria-label="Views">
+        <ws-tab selected>One</ws-tab>
+      </ws-tabs>
+    `);
+    await el.updateComplete;
+
+    const added = document.createElement('ws-tab');
+    added.textContent = 'Two';
+    el.append(added);
+    await el.updateComplete;
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+
+    assert.equal(added.getAttribute('data-ws-variant'), 'contained');
+  });
+
+  test('contained tab styling does not rely on :host-context', async () => {
+    const el = await fixture<WsTabs>(html`
+      <ws-tabs variant="contained" aria-label="Views">
+        <ws-tab selected>One</ws-tab>
+      </ws-tabs>
+    `);
+    await el.updateComplete;
+
+    const tab = el.querySelector('ws-tab')!;
+    const usesHostContext = tab
+      .shadowRoot!.adoptedStyleSheets.flatMap((sheet) =>
+        Array.from(sheet.cssRules)
+      )
+      .some((rule) =>
+        (rule as CSSStyleRule).selectorText?.includes(':host-context')
+      );
+
+    assert.isFalse(usesHostContext);
+  });
+});

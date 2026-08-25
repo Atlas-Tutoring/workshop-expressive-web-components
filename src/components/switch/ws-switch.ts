@@ -1,8 +1,11 @@
 import {LitElement, html} from 'lit';
-import {customElement, property} from 'lit/decorators.js';
+import {customElement, property, state} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
 
 import {wsSwitchStyles} from './ws-switch.styles.js';
+
+/** How the switch swaps between its two icons. */
+export type WsSwitchIconTransition = 'rotate' | 'fade';
 
 /**
  * Workshop switch primitive for binary settings.
@@ -30,6 +33,21 @@ export class WsSwitch extends LitElement {
   @property({attribute: 'aria-label'})
   accessibleLabel?: string;
 
+  /**
+   * How the two icons swap: `rotate` twists the outgoing glyph away, `fade`
+   * cross-fades them in place.
+   */
+  @property({attribute: 'icon-transition', reflect: true})
+  iconTransition: WsSwitchIconTransition = 'rotate';
+
+  /**
+   * Reflected as `has-icon` so the styles can keep the thumb at full size when
+   * a glyph needs the room. Slot content is not visible to CSS from inside the
+   * shadow root, so it is tracked here.
+   */
+  @state()
+  private hasIcon = false;
+
   override render() {
     return html`
       <button
@@ -45,13 +63,32 @@ export class WsSwitch extends LitElement {
         <span class="track" part="track" aria-hidden="true">
           <span class="handle" part="handle">
             <span class="unchecked-icon"
-              ><slot name="unchecked-icon"></slot
+              ><slot
+                name="unchecked-icon"
+                @slotchange=${this.onIconSlotChange}
+              ></slot
             ></span>
-            <span class="checked-icon"><slot name="checked-icon"></slot></span>
+            <span class="checked-icon"
+              ><slot
+                name="checked-icon"
+                @slotchange=${this.onIconSlotChange}
+              ></slot
+            ></span>
           </span>
         </span>
       </button>
     `;
+  }
+
+  private onIconSlotChange() {
+    const slots = this.renderRoot.querySelectorAll<HTMLSlotElement>(
+      'slot[name$="-icon"]'
+    );
+
+    this.hasIcon = Array.from(slots).some(
+      (slot) => slot.assignedNodes({flatten: true}).length > 0
+    );
+    this.toggleAttribute('has-icon', this.hasIcon);
   }
 
   private toggleChecked() {
