@@ -2,6 +2,8 @@
 
 All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components` are documented in this file.
 
+## Unreleased
+
 ## 0.3.2
 
 ### Added
