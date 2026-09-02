@@ -46,4 +46,26 @@ suite('ws-tabs indicator layering', () => {
       'contained indicator must stay behind the tab label and focus content'
     );
   });
+
+  test('applies contained selected styles before hover', async () => {
+    const el = await fixture<WsTabs>(html`
+      <ws-tabs
+        variant="contained"
+        value="edit"
+        aria-label="Markdown mode"
+        style="--ws-tabs-contained-selected-color: rgb(1 2 3); --ws-color-primary: rgb(10 20 30)"
+      >
+        <ws-tab value="edit">Edit</ws-tab>
+        <ws-tab value="preview">Preview</ws-tab>
+      </ws-tabs>
+    `);
+    const edit = el.querySelector<WsTab>('ws-tab')!;
+
+    await el.updateComplete;
+    await edit.updateComplete;
+
+    const control = edit.shadowRoot!.querySelector<HTMLElement>('.tab')!;
+    assert.equal(getComputedStyle(edit).color, 'rgb(1, 2, 3)');
+    assert.equal(getComputedStyle(control).backgroundColor, 'rgba(0, 0, 0, 0)');
+  });
 });
