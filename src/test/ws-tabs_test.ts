@@ -485,15 +485,16 @@ suite('ws-tabs presentation sync', () => {
     assert.equal(added.getAttribute('data-ws-variant'), 'contained');
   });
 
-  test('contained tab styling does not rely on :host-context', async () => {
+  test('tab styling does not rely on :host-context', async () => {
     const el = await fixture<WsTabs>(html`
-      <ws-tabs variant="contained" aria-label="Views">
+      <ws-tabs aria-label="Views">
         <ws-tab selected>One</ws-tab>
       </ws-tabs>
     `);
     await el.updateComplete;
 
     const tab = el.querySelector('ws-tab')!;
+    assert.equal(tab.getAttribute('data-ws-variant'), 'standard');
     const usesHostContext = tab
       .shadowRoot!.adoptedStyleSheets.flatMap((sheet) =>
         Array.from(sheet.cssRules)
@@ -503,5 +504,31 @@ suite('ws-tabs presentation sync', () => {
       );
 
     assert.isFalse(usesHostContext);
+  });
+
+  test('scopes color-changing hover feedback to standard tabs', async () => {
+    const tab = await fixture<WsTab>(html`<ws-tab>One</ws-tab>`);
+    const rules = tab.shadowRoot!.adoptedStyleSheets.flatMap((sheet) =>
+      Array.from(sheet.cssRules)
+    ) as CSSStyleRule[];
+    const standardHover = rules.find(
+      (rule) =>
+        rule.selectorText?.includes('data-ws-variant') &&
+        rule.selectorText.includes('standard') &&
+        rule.selectorText.includes('.tab:hover')
+    );
+    const containedHover = rules.find(
+      (rule) =>
+        rule.selectorText?.includes('data-ws-variant') &&
+        rule.selectorText.includes('contained') &&
+        rule.selectorText.includes('.tab:hover')
+    );
+
+    assert.exists(standardHover);
+    assert.isNotEmpty(standardHover!.style.background);
+    assert.isNotEmpty(standardHover!.style.color);
+    assert.exists(containedHover);
+    assert.equal(containedHover!.style.background, 'transparent');
+    assert.isEmpty(containedHover!.style.color);
   });
 });

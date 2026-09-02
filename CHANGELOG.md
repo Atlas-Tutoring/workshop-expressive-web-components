@@ -9,7 +9,6 @@ All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components
 - Added `icon-transition` to `<ws-switch>`, choosing between the rotating icon swap (`rotate`, the default) and a straight cross-fade (`fade`).
 - Added `--ws-switch-icon-size`, applied to slotted icons so an inline SVG and an icon-font `<i>` render at the same size.
 - Added a reflected `has-icon` attribute on `<ws-switch>`, set while either icon slot has content.
-- Added `--ws-tabs-contained-tab-hover-background` for the contained tab hover wash.
 - Added `<ws-color-picker>` for choosing the accent color at runtime: preset swatches, a custom color input, compact popover mode, `localStorage` persistence, and `ws-accent-change` events.
 - Added the `--ws-accent` seed token. Every primary role — `--ws-color-primary`, `--ws-color-primary-hover`, `--ws-color-primary-container`, `--ws-color-on-primary-container` — now derives from it, so overriding one pair re-themes the whole system in both schemes.
 - Added `--ws-accent-on`, computed from WCAG relative luminance so type stays readable on any accent.
@@ -25,7 +24,7 @@ All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components
 
 ### Changed
 
-- Contained tabs now hover with a neutral wash instead of the accent color, so the moving indicator stays the only accent-colored element and its travel stays easy to follow.
+- Contained tabs no longer change foreground or background color on hover, so the moving indicator remains the only selection cue and its travel stays easy to follow.
 - `<ws-switch>` keeps its thumb at full size when icons are present, so the glyph has the same room in both states.
 - Dark mode now overrides the accent roles instead of reusing the light ones, lightening the accent and its containers so they stay legible on near-black surfaces, and using shadows tuned for those surfaces.
 - The hero gradient and the brand mark's SVG gradients now derive from the accent instead of a fixed cyan-to-violet ramp.
@@ -36,6 +35,7 @@ All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components
 
 ### Fixed
 
+- Fixed standard `<ws-tab>` hover feedback being dropped in Firefox and Safari because it still relied on Chromium-only `:host-context()` styling.
 - Fixed contained and vertical tab styling being dropped in Firefox and Safari. It was applied through `:host-context()`, which only Chromium implements, so contained tabs fell back to the standard accent hover, along with the wrong padding, radius, and weight. `<ws-tabs>` now mirrors its `variant` and `orientation` onto each tab.
 - Fixed the `<ws-switch>` thumb sitting flush against the track's inner edge when checked while keeping padding at the top and bottom, which read as misaligned. The inset is now derived from the size tokens and is equal on every edge at both ends of the travel.
 - Fixed slotted `<ws-switch>` icons shrinking with the off-state thumb; an SVG's own `width` and `height` won over the counter-scaling, so the two icon treatments came out different sizes.

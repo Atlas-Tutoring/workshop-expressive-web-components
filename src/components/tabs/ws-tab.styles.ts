@@ -39,7 +39,8 @@ export const wsTabStyles = css`
     position: relative;
     text-align: center;
     text-decoration: none;
-    transition: background-color var(--ws-motion-duration-medium, 180ms)
+    transition:
+      background-color var(--ws-motion-duration-medium, 180ms)
         var(--ws-motion-easing-standard, ease),
       color var(--ws-motion-duration-medium, 180ms)
         var(--ws-motion-easing-standard, ease),
@@ -49,13 +50,14 @@ export const wsTabStyles = css`
   }
 
   .tab:focus-visible {
-    box-shadow: 0 0 0 var(--ws-focus-ring-inner-size, 2px)
+    box-shadow:
+      0 0 0 var(--ws-focus-ring-inner-size, 2px)
         var(--ws-color-surface, #ffffff),
       0 0 0 var(--ws-focus-ring-outer-size, 4px)
         var(--ws-color-primary, #7c5cff);
   }
 
-  :host-context(ws-tabs:not([variant='contained'])) .tab:hover {
+  :host([data-ws-variant='standard']) .tab:hover {
     background: var(
       --ws-tab-hover-background,
       var(--ws-color-primary-container, #f0ecff)
