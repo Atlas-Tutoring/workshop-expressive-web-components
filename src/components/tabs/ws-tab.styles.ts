@@ -117,7 +117,7 @@ export const wsTabStyles = css`
   :host([data-ws-variant='contained'][selected]) {
     color: var(
       --ws-tabs-contained-selected-color,
-      var(--ws-color-on-secondary-container)
+      var(--ws-color-on-primary-container)
     );
   }
 
