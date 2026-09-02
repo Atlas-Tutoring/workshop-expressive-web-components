@@ -138,7 +138,7 @@ All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components
 ### Added
 
 - Added the form-associated `<ws-text-field>` component with text, email, password, number, URL, telephone, and search input types.
-- Added native form submission, reset, validation, disabled-fieldset handling, state restoration, helper and error messages, icon slots, clear behavior, size and shape variants.
+- Added native form submission, reset, validation, disabled-fieldset handling, state restoration, helper and error messages, icon slots, clear behavior, and size and shape variants.
 - Added the `<ws-chip>` component with assist, filter, input, and status variants, semantic tones, selection, removal events, icon slots, and small and medium sizes.
 - Added the form-associated `<ws-date-picker>` component with the platform calendar, date constraints, validation, clear behavior, three sizes, and native form participation.
 - Added documentation pages, live examples, package exports, custom-element registration, and browser tests for the new components.
