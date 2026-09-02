@@ -2,11 +2,10 @@
 
 All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components` are documented in this file.
 
-## 0.3.3
+## 0.3.2
 
 ### Added
 
-- Added Herobrine.
 - Added C++ and Python syntax highlighting to `<ws-code-block>`, including built-in editable language choices and the `c++`, `cxx`, and `py` aliases.
 - Added `icon-transition` to `<ws-switch>`, choosing between the rotating icon swap (`rotate`, the default) and a straight cross-fade (`fade`).
 - Added `--ws-switch-icon-size`, applied to slotted icons so an inline SVG and an icon-font `<i>` render at the same size.
@@ -19,10 +18,15 @@ All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components
 - Added `data-ws-accent-scope`, which re-declares the accent-derived roles inside a subtree so a scoped `--ws-accent` actually takes effect. `<ws-color-picker>` sets it on any non-root target.
 - Added `target` to `<ws-color-picker>`, a CSS selector for the element to theme.
 - Added tokens that components referenced but the foundation never defined: `--ws-typography-display-large/medium/small`, `--ws-motion-duration-extra-slow`, `--ws-motion-easing-decelerate`, `--ws-focus-ring-*`, `--ws-color-warning`, and `--ws-color-success`.
+- Expanded `<ws-dropdown>` with `mode="menu"` for immediate commands that do not retain a selected value or participate in form submission.
+- Added composed `ws-dropdown-action` events, menu/menuitem semantics, keyboard navigation, outside-click and Escape dismissal, focus restoration, and viewport-safe popup positioning for command menus.
+- Added configurable dropdown checkmarks through `checkmark="auto|always|none"` and semantic destructive actions through `data-tone="danger"`.
+- Added `trigger-label` so command menus can use a visible text trigger instead of being limited to icon-only overflow buttons; text triggers can still use the default chevron or a custom trigger icon.
 - Added a Changelog section to the documentation site at `/changelog/`, generated at build time from this file so there is no second copy to drift.
 - Added a GitHub link to the documentation app bar.
 - Added `AGENTS.md`, documenting which version is in flight, the requirement that every user-visible change adds an `## Unreleased` entry here, and the project's component, color, and dismissal conventions.
 - Added themeable switch parts: `--ws-switch-track-off-background`, `--ws-switch-track-off-border`, `--ws-switch-handle-off-background`, `--ws-switch-handle-off-color`, `--ws-switch-track-on-background`, `--ws-switch-track-on-border`, `--ws-switch-handle-on-background`, `--ws-switch-handle-on-color`, `--ws-switch-handle-off-scale`, `--ws-switch-handle-pressed-scale`, `--ws-switch-state-layer-opacity`, and `--ws-switch-disabled-opacity`.
+- Added Herobrine.
 
 ### Changed
 
@@ -31,6 +35,9 @@ All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components
 - `<ws-switch>` keeps its thumb at full size when icons are present, so the glyph has the same room in both states.
 - Dark mode now overrides the accent roles instead of reusing the light ones, lightening the accent and its containers so they stay legible on near-black surfaces, and using shadows tuned for those surfaces.
 - The hero gradient and the brand mark's SVG gradients now derive from the accent instead of a fixed cyan-to-violet ramp.
+- Unified contextual action menus with `<ws-dropdown>` so selection dropdowns and command menus share trigger variants, sizes, popup animation, icon handling, and positioning behavior.
+- Added animated `<ws-dialog>` closing motion for both the dialog surface and backdrop while preserving reduced-motion behavior.
+- Expanded dropdown documentation with text-only choices, icon choices, destructive commands, icon-only command triggers, and labeled command triggers.
 - Syntax highlighting tokens moved into the foundation theme, so `<ws-code-block>` picks up the dark scheme through inherited custom properties.
 - Consolidated the documentation palette: `docs-src/palette.css` and the palette block in `docs-src/docs.css` both forked the token set with different values, and were removed in favour of `foundation/theme.css`.
 - Reworked `<ws-switch>`: the track fills with the primary color when on and the handle grows, so on and off differ in weight rather than only hue. The handle picks up a hover and focus halo and swells while pressed.
@@ -55,24 +62,6 @@ All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components
 - Fixed `<ws-color-picker>`'s popover closing when a drag that began inside it ended outside — selecting text in the panel dismissed it mid-gesture. Dismissal now keys off `pointerdown`, matching `<ws-dropdown>`.
 - Fixed `<ws-dialog>` dismissing when a text selection started on the dialog surface and was released over the backdrop. Dismissal now requires the press and the release to both land on the backdrop.
 - Component tests now load the foundation stylesheets, so token-dependent behavior is exercised against real values rather than resolving to nothing.
-
-## 0.3.2
-
-### Added
-
-- Expanded `<ws-dropdown>` with `mode="menu"` for immediate commands that do not retain a selected value or participate in form submission.
-- Added composed `ws-dropdown-action` events, menu/menuitem semantics, keyboard navigation, outside-click and Escape dismissal, focus restoration, and viewport-safe popup positioning for command menus.
-- Added configurable dropdown checkmarks through `checkmark="auto|always|none"` and semantic destructive actions through `data-tone="danger"`.
-- Added `trigger-label` so command menus can use a visible text trigger instead of being limited to icon-only overflow buttons; text triggers can still use the default chevron or a custom trigger icon.
-
-### Changed
-
-- Unified contextual action menus with `<ws-dropdown>` so selection dropdowns and command menus share trigger variants, sizes, popup animation, icon handling, and positioning behavior.
-- Added animated `<ws-dialog>` closing motion for both the dialog surface and backdrop while preserving reduced-motion behavior.
-- Expanded dropdown documentation with text-only choices, icon choices, destructive commands, icon-only command triggers, and labeled command triggers.
-
-### Fixed
-
 - Fixed dropdown choice icons supplied by global icon-font classes so their glyphs and font family remain visible after the choices are rendered inside the component shadow DOM.
 - Fixed dropdown option icons inheriting the browser's default italic `<i>` styling; reconstructed icon-font glyphs now render upright with normal font weight.
 
