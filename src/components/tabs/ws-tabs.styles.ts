@@ -55,7 +55,7 @@ export const wsTabsStyles = css`
       var(--ws-tabs-indicator-x),
       var(--ws-tabs-indicator-y)
     );
-    z-index: 1;
+    z-index: 2;
   }
 
   :host([variant='contained']) {
