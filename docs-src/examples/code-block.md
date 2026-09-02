@@ -29,7 +29,7 @@ console.log(greet('Workshop'));</ws-code-block>
 
 Use the language dropdown in the editor header to switch syntax highlighting. Try typing, selecting multiple lines, and pressing <kbd>Tab</kbd> or <kbd>Shift</kbd> + <kbd>Tab</kbd>. The highlighted layer, line-number gutter, and editor scroll position remain synchronized.
 
-The built-in language list contains Plain text, HTML, CSS, JavaScript, TypeScript, JSON, Markdown, XML, and SVG. Products can replace this list through the `languageOptions` property.
+The built-in language list contains Plain text, HTML, CSS, JavaScript, TypeScript, C++, Python, JSON, Markdown, XML, and SVG. Products can replace this list through the `languageOptions` property. C++ highlighting also recognizes `c++` and `cxx` language values, while Python recognizes `py`.
 
 ### Read-only
 
