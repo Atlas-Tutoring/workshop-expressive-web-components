@@ -36,6 +36,7 @@ All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components
 
 ### Fixed
 
+- Fixed standard `<ws-tab>` hover feedback being dropped in Firefox and Safari because it still relied on Chromium-only `:host-context()` styling.
 - Fixed contained and vertical tab styling being dropped in Firefox and Safari. It was applied through `:host-context()`, which only Chromium implements, so contained tabs fell back to the standard accent hover, along with the wrong padding, radius, and weight. `<ws-tabs>` now mirrors its `variant` and `orientation` onto each tab.
 - Fixed the `<ws-switch>` thumb sitting flush against the track's inner edge when checked while keeping padding at the top and bottom, which read as misaligned. The inset is now derived from the size tokens and is equal on every edge at both ends of the travel.
 - Fixed slotted `<ws-switch>` icons shrinking with the off-state thumb; an SVG's own `width` and `height` won over the counter-scaling, so the two icon treatments came out different sizes.
