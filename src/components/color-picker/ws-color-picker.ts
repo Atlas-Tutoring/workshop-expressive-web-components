@@ -283,19 +283,20 @@ export class WsColorPicker extends LitElement {
   }
 
   private handleCustomInput = (event: Event) => {
-    this.select((event.target as HTMLInputElement).value);
+    this.select((event.target as HTMLInputElement).value, {dismiss: false});
   };
 
-  private select(color: string) {
+  private select(color: string, options: {dismiss?: boolean} = {}) {
+    const dismiss = options.dismiss ?? true;
     const next = normalizeHex(color) ?? color;
     if (next === this.value) {
-      this.hide();
+      if (dismiss) this.hide();
       return;
     }
 
     this.value = next;
     this.storeAccent(next);
-    this.hide();
+    if (dismiss) this.hide();
 
     const detail: WsAccentChangeDetail = {value: next, onColor: this.onColor};
     this.dispatchEvent(
