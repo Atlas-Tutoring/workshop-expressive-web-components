@@ -156,6 +156,8 @@ suite('ws-code-block', () => {
         'css',
         'javascript',
         'typescript',
+        'cpp',
+        'python',
         'json',
         'markdown',
         'xml',
@@ -172,6 +174,36 @@ suite('ws-code-block', () => {
     assert.equal(el.language, 'html');
     assert.equal(event.detail.language, 'html');
     assert.exists(el.shadowRoot!.querySelector('.highlight-layer .token.tag'));
+  });
+
+  test('highlights C++ syntax and its common language aliases', async () => {
+    const code = '#include <iostream>\nint main() { return 0; } // done';
+
+    for (const language of ['cpp', 'c++', 'cxx']) {
+      const el = await fixture<WsCodeBlock>(
+        html`<ws-code-block .language=${language} .code=${code}></ws-code-block>`
+      );
+      const highlighted = el.shadowRoot!;
+
+      assert.equal(highlighted.querySelector('.token.keyword')!.textContent, '#include');
+      assert.equal(highlighted.querySelector('.token.number')!.textContent, '0');
+      assert.equal(highlighted.querySelector('.token.comment')!.textContent, '// done');
+    }
+  });
+
+  test('highlights Python syntax and its common language alias', async () => {
+    const code = 'def greet(name):\n    # Welcome\n    return f"Hello, {name}"';
+
+    for (const language of ['python', 'py']) {
+      const el = await fixture<WsCodeBlock>(
+        html`<ws-code-block .language=${language} .code=${code}></ws-code-block>`
+      );
+      const highlighted = el.shadowRoot!;
+
+      assert.equal(highlighted.querySelector('.token.keyword')!.textContent, 'def');
+      assert.equal(highlighted.querySelector('.token.comment')!.textContent, '# Welcome');
+      assert.include(highlighted.querySelector('.token.string')!.textContent, 'Hello');
+    }
   });
 
   test('supports product-defined language choices', async () => {

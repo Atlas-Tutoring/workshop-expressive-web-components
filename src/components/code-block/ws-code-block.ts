@@ -35,6 +35,8 @@ const DEFAULT_LANGUAGE_OPTIONS: readonly WsCodeLanguageOption[] = [
   {value: 'css', label: 'CSS'},
   {value: 'javascript', label: 'JavaScript'},
   {value: 'typescript', label: 'TypeScript'},
+  {value: 'cpp', label: 'C++'},
+  {value: 'python', label: 'Python'},
   {value: 'json', label: 'JSON'},
   {value: 'markdown', label: 'Markdown'},
   {value: 'xml', label: 'XML'},
@@ -468,6 +470,14 @@ export class WsCodeBlock extends LitElement {
       return this.tokenizeScript(code);
     }
 
+    if (['c++', 'cpp', 'cxx'].includes(this.language.toLowerCase())) {
+      return this.tokenizeCpp(code);
+    }
+
+    if (['py', 'python'].includes(this.language.toLowerCase())) {
+      return this.tokenizePython(code);
+    }
+
     return [{text: code}];
   }
 
@@ -519,6 +529,56 @@ export class WsCodeBlock extends LitElement {
       else if (/^[a-z]/.test(text)) kind = 'keyword';
 
       tokens.push({kind, text});
+      lastIndex = pattern.lastIndex;
+    }
+
+    if (lastIndex < code.length) tokens.push({text: code.slice(lastIndex)});
+    return tokens;
+  }
+
+  private tokenizeCpp(code: string): HighlightToken[] {
+    const pattern =
+      /(\/\*[\s\S]*?\*\/|\/\/.*|#\s*(?:include|define|if|ifdef|ifndef|else|elif|endif|pragma|undef)\b|"(?:\\.|[^"])*"|'(?:\\.|[^'])*'|\b(?:alignas|alignof|auto|bool|break|case|catch|char|class|const|constexpr|continue|default|delete|do|double|else|enum|explicit|export|extern|false|float|for|friend|if|inline|int|long|namespace|new|nullptr|operator|private|protected|public|return|short|signed|sizeof|static|struct|switch|template|this|throw|true|try|typedef|typename|union|unsigned|using|virtual|void|volatile|while)\b|\b\d+(?:\.\d+)?\b|[{}()[\].,;:]|[-+*/%=!<>|&?]+)/g;
+
+    return this.tokenizeWithPattern(code, pattern, (text) => {
+      if (text.startsWith('//') || text.startsWith('/*')) return 'comment';
+      if (/^["']/.test(text)) return 'string';
+      if (/^\d/.test(text)) return 'number';
+      if (/^[{}()[\].,;:]$/.test(text)) return 'punctuation';
+      if (text.startsWith('#') || /^[a-z]/.test(text)) return 'keyword';
+      return 'operator';
+    });
+  }
+
+  private tokenizePython(code: string): HighlightToken[] {
+    const pattern =
+      /("""[\s\S]*?"""|'''[\s\S]*?'''|#.*|"(?:\\.|[^"])*"|'(?:\\.|[^'])*'|\b(?:and|as|assert|async|await|break|class|continue|def|del|elif|else|except|False|finally|for|from|global|if|import|in|is|lambda|None|nonlocal|not|or|pass|raise|return|True|try|while|with|yield)\b|\b\d+(?:\.\d+)?\b|[{}()[\].,;:]|[-+*/%=!<>|&@^~]+)/g;
+
+    return this.tokenizeWithPattern(code, pattern, (text) => {
+      if (text.startsWith('#')) return 'comment';
+      if (/^["']/.test(text)) return 'string';
+      if (/^\d/.test(text)) return 'number';
+      if (/^[{}()[\].,;:]$/.test(text)) return 'punctuation';
+      if (/^[A-Za-z]/.test(text)) return 'keyword';
+      return 'operator';
+    });
+  }
+
+  private tokenizeWithPattern(
+    code: string,
+    pattern: RegExp,
+    classify: (text: string) => HighlightToken['kind']
+  ): HighlightToken[] {
+    const tokens: HighlightToken[] = [];
+    let lastIndex = 0;
+    let match: RegExpExecArray | null;
+
+    while ((match = pattern.exec(code))) {
+      if (match.index > lastIndex) {
+        tokens.push({text: code.slice(lastIndex, match.index)});
+      }
+
+      tokens.push({kind: classify(match[0]), text: match[0]});
       lastIndex = pattern.lastIndex;
     }
 

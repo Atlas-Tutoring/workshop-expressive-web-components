@@ -6,6 +6,7 @@ All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components
 
 ### Added
 
+- Added C++ and Python syntax highlighting to `<ws-code-block>`, including built-in editable language choices and the `c++`, `cxx`, and `py` aliases.
 - Added `icon-transition` to `<ws-switch>`, choosing between the rotating icon swap (`rotate`, the default) and a straight cross-fade (`fade`).
 - Added `--ws-switch-icon-size`, applied to slotted icons so an inline SVG and an icon-font `<i>` render at the same size.
 - Added a reflected `has-icon` attribute on `<ws-switch>`, set while either icon slot has content.
