@@ -33,7 +33,8 @@
     "checksize": "rollup -c ; cat ws-button.bundled.js | gzip -9 | wc -c ; rm ws-button.bundled.js",
     "docs:verify": "node scripts/verify-docs-structure.cjs",
     "pack:check": "npm pack --dry-run",
-    "ci": "npm run lint && npm run build && npm test && npm run docs && npm run docs:verify && npm run pack:check"
+    "security:audit": "npm audit",
+    "ci": "npm run security:audit && npm run lint && npm run build && npm test && npm run docs && npm run docs:verify && npm run pack:check"
   },
   "keywords": [
     "web-components",
