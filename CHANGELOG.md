@@ -36,6 +36,7 @@ All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components
 
 ### Fixed
 
+- Fixed contained `<ws-tab>` selected-state styles not matching in Chromium because the reflected `selected` attribute was placed outside `:host(...)`; contained tabs now keep their intended selected foreground and transparent tab surface before, during, and after hover.
 - Fixed standard `<ws-tabs>` hover surfaces painting over the active indicator; the standard indicator now stays above tab state layers while contained indicators remain behind their labels.
 - Fixed standard `<ws-tab>` hover feedback being dropped in Firefox and Safari because it still relied on Chromium-only `:host-context()` styling.
 - Fixed contained and vertical tab styling being dropped in Firefox and Safari. It was applied through `:host-context()`, which only Chromium implements, so contained tabs fell back to the standard accent hover, along with the wrong padding, radius, and weight. `<ws-tabs>` now mirrors its `variant` and `orientation` onto each tab.

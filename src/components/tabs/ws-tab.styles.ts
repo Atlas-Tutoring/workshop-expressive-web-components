@@ -114,14 +114,14 @@ export const wsTabStyles = css`
       var(--ws-motion-easing-standard, ease);
   }
 
-  :host([data-ws-variant='contained'])[selected] {
+  :host([data-ws-variant='contained'][selected]) {
     color: var(
       --ws-tabs-contained-selected-color,
       var(--ws-color-on-secondary-container)
     );
   }
 
-  :host([data-ws-variant='contained'])[selected] .tab {
+  :host([data-ws-variant='contained'][selected]) .tab {
     background: transparent;
   }
 
