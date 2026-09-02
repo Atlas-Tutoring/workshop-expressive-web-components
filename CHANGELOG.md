@@ -4,8 +4,11 @@ All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components
 
 ## Unreleased
 
+Target release: **0.3.3**.
+
 ### Added
 
+- Added Herobrine.
 - Added C++ and Python syntax highlighting to `<ws-code-block>`, including built-in editable language choices and the `c++`, `cxx`, and `py` aliases.
 - Added `icon-transition` to `<ws-switch>`, choosing between the rotating icon swap (`rotate`, the default) and a straight cross-fade (`fade`).
 - Added `--ws-switch-icon-size`, applied to slotted icons so an inline SVG and an icon-font `<i>` render at the same size.
@@ -25,6 +28,7 @@ All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components
 
 ### Changed
 
+- Contained tabs now derive their selected indicator and foreground from the primary accent roles, so changing `--ws-accent` recolors the selection surface with the rest of the UI.
 - Contained tabs no longer change foreground or background color on hover, so the moving indicator remains the only selection cue and its travel stays easy to follow.
 - `<ws-switch>` keeps its thumb at full size when icons are present, so the glyph has the same room in both states.
 - Dark mode now overrides the accent roles instead of reusing the light ones, lightening the accent and its containers so they stay legible on near-black surfaces, and using shadows tuned for those surfaces.
@@ -36,6 +40,7 @@ All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components
 
 ### Fixed
 
+- Fixed compact `<ws-color-picker>` closing its Workshop popover while the native custom-color chooser emitted live `input` updates; custom colors now preview continuously without dismissing the menu.
 - Fixed contained `<ws-tab>` selected-state styles not matching in Chromium because the reflected `selected` attribute was placed outside `:host(...)`; contained tabs now keep their intended selected foreground and transparent tab surface before, during, and after hover.
 - Fixed standard `<ws-tabs>` hover surfaces painting over the active indicator; the standard indicator now stays above tab state layers while contained indicators remain behind their labels.
 - Fixed standard `<ws-tab>` hover feedback being dropped in Firefox and Safari because it still relied on Chromium-only `:host-context()` styling.

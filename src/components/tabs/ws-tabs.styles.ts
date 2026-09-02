@@ -74,7 +74,7 @@ export const wsTabsStyles = css`
   :host([variant='contained']) .indicator {
     background-color: var(
       --ws-tabs-contained-indicator-background,
-      var(--ws-color-secondary-container)
+      var(--ws-color-primary-container)
     );
     border-radius: var(--ws-tabs-contained-indicator-radius, 8px);
     box-shadow: var(

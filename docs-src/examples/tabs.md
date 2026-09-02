@@ -165,14 +165,14 @@ Keyboard navigation wraps and skips disabled tabs.
 
 ## CSS custom properties
 
-The contained treatment uses semantic color tokens, so it follows the active light or dark Workshop theme without tab-specific overrides.
+The contained treatment uses semantic color tokens, so it follows both the active light or dark Workshop theme and the current `--ws-accent` palette without tab-specific overrides.
 
 ```css
 ws-tabs[variant='contained'] {
   --ws-tabs-contained-background: var(--ws-color-surface-variant);
-  --ws-tabs-contained-indicator-background: var(--ws-color-secondary-container);
+  --ws-tabs-contained-indicator-background: var(--ws-color-primary-container);
   --ws-tabs-contained-color: var(--ws-color-on-surface-variant);
-  --ws-tabs-contained-selected-color: var(--ws-color-on-secondary-container);
+  --ws-tabs-contained-selected-color: var(--ws-color-on-primary-container);
   --ws-tabs-contained-focus-color: var(--ws-color-primary);
   --ws-tabs-contained-radius: 11px;
   --ws-tabs-contained-indicator-radius: 8px;
@@ -184,7 +184,7 @@ ws-tabs[variant='contained'] {
 }
 ```
 
-The selected surface uses `--ws-elevation-sm` by default. Selection motion only changes the indicator position and size, so semantic foreground and surface colors stay stable in both light and dark themes. Motion comes from `--ws-motion-duration-slow` and `--ws-motion-easing-standard`, continues from the indicator's current visible position when selection changes quickly, and respects `prefers-reduced-motion`.
+The selected surface uses the accent-derived primary container and `--ws-elevation-sm` by default, so changing `--ws-accent` updates the contained indicator and its selected foreground along with the rest of the primary UI. Selection motion only changes the indicator position and size, so semantic foreground and surface colors stay stable in both light and dark themes. Motion comes from `--ws-motion-duration-slow` and `--ws-motion-easing-standard`, continues from the indicator's current visible position when selection changes quickly, and respects `prefers-reduced-motion`.
 
 ## Accessibility notes
 

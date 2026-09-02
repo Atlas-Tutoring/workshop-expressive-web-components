@@ -26,7 +26,7 @@ order: 2
   </div>
 
   <h3>Compact</h3>
-  <p>Compact mode renders a trigger button that opens the swatches in a popover — the form used in this site's top app bar.</p>
+  <p>Compact mode renders a trigger button that opens the swatches in a popover — the form used in this site's top app bar. Preset swatches close the popover after selection, while the custom color input keeps it open as the browser's native chooser streams live color updates.</p>
   <div class="button-row">
     <ws-color-picker apply="none" compact legend="Accent color" aria-label="Accent color"></ws-color-picker>
   </div>
@@ -151,6 +151,7 @@ Anything that should follow the accent reads the derived roles rather than the s
 
 - Prefer the derived roles (`--ws-color-primary`, `--ws-color-primary-hover`, `--ws-color-primary-container`) over the `--ws-accent` seed so light and dark schemes both adapt.
 - Dark mode lightens the accent automatically, so a color chosen in light mode stays legible after switching.
+- Native custom-color input updates are treated as live preview changes and do not dismiss a compact popover; outside presses, Escape, and preset selection still dismiss it normally.
 - Use `target` or `apply="self"` for previews and `apply="root"` for a real theme control; two pickers writing to the root will fight.
 - Retargeting a picker releases the accent it wrote to its previous target, so a preview does not keep a stale color.
 - Scoped targets get a `data-ws-accent-scope` attribute. Custom properties resolve where they are declared, so a subtree has to re-declare the derived roles rather than inherit the ones already computed at `:root`. Add the attribute yourself when setting `--ws-accent` on a subtree by hand.
