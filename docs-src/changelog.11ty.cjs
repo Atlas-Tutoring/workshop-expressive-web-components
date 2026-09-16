@@ -5,7 +5,7 @@ const page = require('./_includes/page.11ty.cjs');
 const {markdown} = require('./_includes/markdown.cjs');
 
 const repoUrl =
-  'https://github.com/MihaiCristianCondrea/workshop-expressive-web-components';
+  'https://github.com/Atlas-Tutoring/workshop-expressive-web-components';
 const changelogPath = path.join(__dirname, '..', 'CHANGELOG.md');
 
 const escapeHtml = (value) =>

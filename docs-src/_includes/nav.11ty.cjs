@@ -1,8 +1,8 @@
 const siteUrl =
-  'https://mihaicristiancondrea.github.io/workshop-expressive-web-components/';
+  'https://atlas-tutoring.github.io/workshop-expressive-web-components/';
 
 const repoUrl =
-  'https://github.com/MihaiCristianCondrea/workshop-expressive-web-components';
+  'https://github.com/Atlas-Tutoring/workshop-expressive-web-components';
 
 const items = [
   {url: siteUrl, route: '/', label: 'Home', icon: 'ri-home-5-line'},

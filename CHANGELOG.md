@@ -4,6 +4,10 @@ All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components
 
 ## Unreleased
 
+### Fixed
+
+- Fixed documentation navigation, GitHub links, and package repository metadata after moving the project to the Atlas-Tutoring organization.
+
 ## 0.3.2
 
 ### Added

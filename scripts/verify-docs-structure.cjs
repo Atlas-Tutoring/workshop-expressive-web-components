@@ -12,7 +12,7 @@ const read = (filePath) => {
     );
   }
 
-  return fs.readFileSync(fullPath, 'utf8');
+  return fs.readFileSync(fullPath, 'utf8').replace(/\r\n/g, '\n');
 };
 
 const checks = [];
@@ -138,9 +138,9 @@ const requiredNavTemplate = [
   '<ws-color-picker',
   'storage-key="ws-docs-accent"',
   'class="site-github"',
-  'https://github.com/MihaiCristianCondrea/workshop-expressive-web-components',
+  'https://github.com/Atlas-Tutoring/workshop-expressive-web-components',
   "label: 'Changelog'",
-  'https://mihaicristiancondrea.github.io/workshop-expressive-web-components/',
+  'https://atlas-tutoring.github.io/workshop-expressive-web-components/',
   "{url: siteUrl, route: '/', label: 'Home'",
   "url: new URL('examples/', siteUrl).href",
 ];
@@ -215,7 +215,7 @@ checks.push({
 });
 
 const siteUrl =
-  'https://mihaicristiancondrea.github.io/workshop-expressive-web-components/';
+  'https://atlas-tutoring.github.io/workshop-expressive-web-components/';
 const examplesUrl = new URL('examples/', siteUrl).href;
 for (const filePath of [
   'docs/index.html',

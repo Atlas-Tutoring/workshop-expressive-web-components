@@ -1,7 +1,7 @@
 const relative = require('./relative-path.cjs');
 
 const homeUrl =
-  'https://mihaicristiancondrea.github.io/workshop-expressive-web-components/';
+  'https://atlas-tutoring.github.io/workshop-expressive-web-components/';
 
 const sections = [
   {url: '/examples/', label: 'Examples'},

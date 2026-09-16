@@ -1,7 +1,7 @@
 const page = require('./page.11ty.cjs');
 
 const siteUrl =
-  'https://mihaicristiancondrea.github.io/workshop-expressive-web-components/';
+  'https://atlas-tutoring.github.io/workshop-expressive-web-components/';
 
 const deploymentUrl = (route) =>
   new URL(String(route).replace(/^\//, ''), siteUrl).href;

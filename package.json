@@ -44,12 +44,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MihaiCristianCondrea/workshop-expressive-web-components.git"
+    "url": "git+https://github.com/Atlas-Tutoring/workshop-expressive-web-components.git"
   },
   "bugs": {
-    "url": "https://github.com/MihaiCristianCondrea/workshop-expressive-web-components/issues"
+    "url": "https://github.com/Atlas-Tutoring/workshop-expressive-web-components/issues"
   },
-  "homepage": "https://github.com/MihaiCristianCondrea/workshop-expressive-web-components#readme",
+  "homepage": "https://github.com/Atlas-Tutoring/workshop-expressive-web-components#readme",
   "author": "Google LLC",
   "license": "BSD-3-Clause",
   "dependencies": {
