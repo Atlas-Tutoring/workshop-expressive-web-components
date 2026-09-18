@@ -24,3 +24,6 @@ my-element.d.ts.map
 my-element.bundled.js
 ws-button.bundled.js
 # GitHub Actions generates the docs site from docs-src; keep docs/ output untracked.
+
+# IDE
+.idea/
