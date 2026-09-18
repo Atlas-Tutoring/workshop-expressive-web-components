@@ -8,6 +8,7 @@ import './components/dialog/ws-dialog.js';
 import './components/brand/ws-brand-mark.js';
 import './components/tabs/ws-tabs.js';
 import './components/tabs/ws-tab.js';
+import './components/tabs/ws-tab-panel.js';
 import './components/breadcrumbs/ws-breadcrumbs.js';
 import './components/code-block/ws-code-block.js';
 import './components/switch/ws-switch.js';

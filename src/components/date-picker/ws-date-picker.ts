@@ -106,6 +106,9 @@ export class WsDatePicker extends LitElement {
   @state()
   private visibleMonth = this.startOfMonth(new Date());
 
+  @state()
+  private focusedDay = 1;
+
   private readonly internals = this.attachInternals();
   private readonly fieldId = `ws-date-picker-${WsDatePicker.nextId++}`;
   private readonly helperId = `${this.fieldId}-helper`;
@@ -125,7 +128,10 @@ export class WsDatePicker extends LitElement {
       this.capturedDefaultValue = true;
     }
     const selectedDate = this.parseDate(this.value);
-    if (selectedDate) this.visibleMonth = this.startOfMonth(selectedDate);
+    if (selectedDate) {
+      this.visibleMonth = this.startOfMonth(selectedDate);
+      this.focusedDay = selectedDate.getDate();
+    }
     document.addEventListener('pointerdown', this.handleDocumentPointerDown);
   }
 
@@ -202,6 +208,8 @@ export class WsDatePicker extends LitElement {
           class="picker-button"
           part="picker-button"
           type="button"
+          aria-haspopup="dialog"
+          aria-expanded=${this.calendarOpen ? 'true' : 'false'}
           aria-label=${this.pickerLabel}
           ?disabled=${isDisabled || this.readOnly}
           @click=${this.handlePickerClick}
@@ -260,7 +268,12 @@ export class WsDatePicker extends LitElement {
   showPicker() {
     if (this.isEffectivelyDisabled || this.readOnly) return;
     const selectedDate = this.parseDate(this.value);
-    if (selectedDate) this.visibleMonth = this.startOfMonth(selectedDate);
+    if (selectedDate) {
+      this.visibleMonth = this.startOfMonth(selectedDate);
+      this.focusedDay = selectedDate.getDate();
+    } else {
+      this.focusedDay = 1;
+    }
     this.calendarOpen = true;
     this.inputElement?.focus();
   }
@@ -345,7 +358,9 @@ export class WsDatePicker extends LitElement {
     return html` <section
       class="calendar"
       role="dialog"
+      aria-modal="true"
       aria-label="Choose date"
+      @keydown=${this.handleCalendarKeyDown}
     >
       <header class="calendar-header">
         ${this.renderMonthButton('previous')}
@@ -365,10 +380,13 @@ export class WsDatePicker extends LitElement {
             (this.max ? value > this.max : false);
           const isSelected = value === this.value;
           const isToday = value === this.formatDate(new Date());
+          const isFocused = day === this.focusedDay;
           return html`<button
             class="day ${isToday ? 'today' : ''}"
             type="button"
             role="gridcell"
+            data-day=${day}
+            tabindex=${isFocused ? '0' : '-1'}
             ?disabled=${unavailable}
             aria-selected=${isSelected ? 'true' : 'false'}
             @click=${() => this.selectDate(value)}
@@ -466,9 +484,8 @@ export class WsDatePicker extends LitElement {
     ).matches;
 
     try {
-      const currentGrid = this.shadowRoot?.querySelector<HTMLElement>(
-        '.calendar-grid'
-      );
+      const currentGrid =
+        this.shadowRoot?.querySelector<HTMLElement>('.calendar-grid');
       const currentLabel = this.shadowRoot?.querySelector<HTMLElement>(
         '.calendar-header strong'
       );
@@ -477,20 +494,22 @@ export class WsDatePicker extends LitElement {
         const exitAnimations = [currentGrid, currentLabel]
           .filter((element): element is HTMLElement => Boolean(element))
           .map((element) =>
-            element.animate(
-              [
-                {opacity: 1, transform: 'translateX(0)'},
+            element
+              .animate(
+                [
+                  {opacity: 1, transform: 'translateX(0)'},
+                  {
+                    opacity: 0,
+                    transform: `translateX(${direction * -14}px)`,
+                  },
+                ],
                 {
-                  opacity: 0,
-                  transform: `translateX(${direction * -14}px)`,
-                },
-              ],
-              {
-                duration: 100,
-                easing: 'cubic-bezier(0.4, 0, 1, 1)',
-                fill: 'forwards',
-              }
-            ).finished.catch(() => undefined)
+                  duration: 100,
+                  easing: 'cubic-bezier(0.4, 0, 1, 1)',
+                  fill: 'forwards',
+                }
+              )
+              .finished.catch(() => undefined)
           );
 
         await Promise.all(exitAnimations);
@@ -504,9 +523,8 @@ export class WsDatePicker extends LitElement {
       await this.updateComplete;
 
       if (!reducedMotion) {
-        const nextGrid = this.shadowRoot?.querySelector<HTMLElement>(
-          '.calendar-grid'
-        );
+        const nextGrid =
+          this.shadowRoot?.querySelector<HTMLElement>('.calendar-grid');
         const nextLabel = this.shadowRoot?.querySelector<HTMLElement>(
           '.calendar-header strong'
         );
@@ -555,6 +573,143 @@ export class WsDatePicker extends LitElement {
     if (!event.composedPath().includes(this)) this.calendarOpen = false;
   };
 
+  private moveFocusedDay(offset: number) {
+    const daysInMonth = new Date(
+      this.visibleMonth.getFullYear(),
+      this.visibleMonth.getMonth() + 1,
+      0
+    ).getDate();
+    const nextDay = this.focusedDay + offset;
+    if (nextDay < 1) {
+      this.changeMonth(-1).then(() => {
+        const prevMonthDays = new Date(
+          this.visibleMonth.getFullYear(),
+          this.visibleMonth.getMonth() + 1,
+          0
+        ).getDate();
+        this.focusedDay = Math.max(1, prevMonthDays + nextDay);
+        this.updateComplete.then(() => {
+          this.shadowRoot
+            ?.querySelector<HTMLButtonElement>(
+              `button.day[data-day="${this.focusedDay}"]`
+            )
+            ?.focus();
+        });
+      });
+      return;
+    }
+    if (nextDay > daysInMonth) {
+      const overflow = nextDay - daysInMonth;
+      this.changeMonth(1).then(() => {
+        this.focusedDay = Math.max(1, overflow);
+        this.updateComplete.then(() => {
+          this.shadowRoot
+            ?.querySelector<HTMLButtonElement>(
+              `button.day[data-day="${this.focusedDay}"]`
+            )
+            ?.focus();
+        });
+      });
+      return;
+    }
+    this.focusedDay = nextDay;
+    this.updateComplete.then(() => {
+      this.shadowRoot
+        ?.querySelector<HTMLButtonElement>(
+          `button.day[data-day="${this.focusedDay}"]`
+        )
+        ?.focus();
+    });
+  }
+
+  private handleCalendarKeyDown(event: KeyboardEvent) {
+    const daysInMonth = new Date(
+      this.visibleMonth.getFullYear(),
+      this.visibleMonth.getMonth() + 1,
+      0
+    ).getDate();
+
+    switch (event.key) {
+      case 'Escape':
+        event.preventDefault();
+        event.stopPropagation();
+        this.calendarOpen = false;
+        this.shadowRoot
+          ?.querySelector<HTMLButtonElement>('.picker-button')
+          ?.focus();
+        break;
+      case 'ArrowLeft':
+        event.preventDefault();
+        this.moveFocusedDay(-1);
+        break;
+      case 'ArrowRight':
+        event.preventDefault();
+        this.moveFocusedDay(1);
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        this.moveFocusedDay(-7);
+        break;
+      case 'ArrowDown':
+        event.preventDefault();
+        this.moveFocusedDay(7);
+        break;
+      case 'Home':
+        event.preventDefault();
+        this.focusedDay = 1;
+        this.updateComplete.then(() => {
+          this.shadowRoot
+            ?.querySelector<HTMLButtonElement>('button.day[data-day="1"]')
+            ?.focus();
+        });
+        break;
+      case 'End':
+        event.preventDefault();
+        this.focusedDay = daysInMonth;
+        this.updateComplete.then(() => {
+          this.shadowRoot
+            ?.querySelector<HTMLButtonElement>(
+              `button.day[data-day="${daysInMonth}"]`
+            )
+            ?.focus();
+        });
+        break;
+      case 'PageUp':
+        event.preventDefault();
+        this.changeMonth(-1).then(() => {
+          this.updateComplete.then(() => {
+            this.shadowRoot
+              ?.querySelector<HTMLButtonElement>(
+                `button.day[data-day="${this.focusedDay}"]`
+              )
+              ?.focus();
+          });
+        });
+        break;
+      case 'PageDown':
+        event.preventDefault();
+        this.changeMonth(1).then(() => {
+          this.updateComplete.then(() => {
+            this.shadowRoot
+              ?.querySelector<HTMLButtonElement>(
+                `button.day[data-day="${this.focusedDay}"]`
+              )
+              ?.focus();
+          });
+        });
+        break;
+      case 'Enter':
+      case ' ': {
+        const target = event.target as HTMLElement;
+        if (target && target.classList.contains('day')) {
+          event.preventDefault();
+          target.click();
+        }
+        break;
+      }
+    }
+  }
+
   private parseDate(value: string): Date | null {
     const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
     if (!match) return null;
@@ -597,8 +752,12 @@ export class WsDatePicker extends LitElement {
     const parsedValue = this.parseDate(this.value);
     const valueMissing = this.required && !this.value;
     const typeMismatch = Boolean(this.value) && !parsedValue;
-    const rangeUnderflow = Boolean(this.value && this.min && this.value < this.min);
-    const rangeOverflow = Boolean(this.value && this.max && this.value > this.max);
+    const rangeUnderflow = Boolean(
+      this.value && this.min && this.value < this.min
+    );
+    const rangeOverflow = Boolean(
+      this.value && this.max && this.value > this.max
+    );
     const flags: ValidityStateFlags = {};
 
     if (valueMissing) flags.valueMissing = true;
@@ -610,18 +769,16 @@ export class WsDatePicker extends LitElement {
     const message = this.customValidationMessage
       ? this.customValidationMessage
       : valueMissing
-        ? 'Please select a date.'
-        : typeMismatch
-          ? 'Enter a valid date in YYYY-MM-DD format.'
-          : rangeUnderflow
-            ? `Date must be on or after ${this.min}.`
-            : rangeOverflow
-              ? `Date must be on or before ${this.max}.`
-              : '';
+      ? 'Please select a date.'
+      : typeMismatch
+      ? 'Enter a valid date in YYYY-MM-DD format.'
+      : rangeUnderflow
+      ? `Date must be on or after ${this.min}.`
+      : rangeOverflow
+      ? `Date must be on or before ${this.max}.`
+      : '';
 
-    this.internals.setFormValue(
-      isDisabled || !parsedValue ? null : this.value
-    );
+    this.internals.setFormValue(isDisabled || !parsedValue ? null : this.value);
     this.internals.setValidity(flags, message, this.inputElement ?? undefined);
   }
 }

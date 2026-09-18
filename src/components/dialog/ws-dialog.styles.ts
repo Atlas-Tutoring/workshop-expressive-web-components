@@ -15,13 +15,16 @@ export const wsDialogStyles = css`
     margin: auto;
     overflow: hidden;
     border: 1px solid
-      var(--ws-dialog-border-color, var(--ws-color-outline-variant));
+      var(--ws-dialog-border-color, var(--ws-color-outline-variant, #e3e6ed));
     border-radius: var(--ws-dialog-radius, 26px);
     box-sizing: border-box;
     padding: 0;
-    color: var(--ws-dialog-color, var(--ws-color-on-surface));
-    background: var(--ws-dialog-background, var(--ws-color-surface));
-    box-shadow: var(--ws-dialog-shadow, var(--ws-elevation-md));
+    color: var(--ws-dialog-color, var(--ws-color-on-surface, #17171c));
+    background: var(--ws-dialog-background, var(--ws-color-surface, #ffffff));
+    box-shadow: var(
+      --ws-dialog-shadow,
+      var(--ws-elevation-md, 0 8px 24px rgb(15 23 42 / 12%))
+    );
     font-family: var(
       --ws-font-family,
       'Google Sans Flex',
@@ -85,10 +88,10 @@ export const wsDialogStyles = css`
     inline-size: 46px;
     block-size: 46px;
     border-radius: var(--ws-dialog-icon-radius, 15px);
-    color: var(--ws-dialog-icon-color, var(--ws-color-primary));
+    color: var(--ws-dialog-icon-color, var(--ws-color-primary, #7c5cff));
     background: var(
       --ws-dialog-icon-background,
-      var(--ws-color-primary-container)
+      var(--ws-color-primary-container, #f2efff)
     );
   }
 
@@ -107,7 +110,7 @@ export const wsDialogStyles = css`
 
   h2 {
     margin: 1px 0 0;
-    color: var(--ws-color-on-surface);
+    color: var(--ws-color-on-surface, #17171c);
     font: var(
       --ws-dialog-heading-font,
       650 1.35rem / 1.25 var(--ws-font-family, system-ui, sans-serif)
@@ -117,7 +120,7 @@ export const wsDialogStyles = css`
 
   p {
     margin: 5px 0 0;
-    color: var(--ws-color-on-surface-variant);
+    color: var(--ws-color-on-surface-variant, #626875);
     font: var(
       --ws-dialog-description-font,
       500 0.86rem / 1.45 var(--ws-font-family, system-ui, sans-serif)

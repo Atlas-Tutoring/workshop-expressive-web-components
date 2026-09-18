@@ -207,7 +207,9 @@ export class WsTimePicker extends LitElement {
             ?required=${this.required}
             ?disabled=${isDisabled}
             ?readonly=${this.readOnly}
-            aria-label=${ifDefined(this.label ? undefined : this.accessibleLabel)}
+            aria-label=${ifDefined(
+              this.label ? undefined : this.accessibleLabel
+            )}
             aria-describedby=${ifDefined(supportingId)}
             aria-errormessage=${ifDefined(isInvalid ? this.errorId : undefined)}
             aria-invalid=${isInvalid ? 'true' : 'false'}
@@ -225,6 +227,7 @@ export class WsTimePicker extends LitElement {
             part="picker-button"
             type="button"
             aria-label=${this.pickerLabel}
+            aria-haspopup="dialog"
             aria-controls=${this.pickerId}
             aria-expanded=${this.pickerOpen ? 'true' : 'false'}
             ?disabled=${isDisabled || this.readOnly}
@@ -392,9 +395,19 @@ export class WsTimePicker extends LitElement {
           ${this.draftValue}
         </div>
         <div class="picker-grid">
-          <section class="time-column" aria-labelledby="${this.pickerId}-hours-label">
-            <span id="${this.pickerId}-hours-label" class="column-label">Hour</span>
-            <div class="option-list" part="hour-list" role="listbox" aria-label="Hour">
+          <section
+            class="time-column"
+            aria-labelledby="${this.pickerId}-hours-label"
+          >
+            <span id="${this.pickerId}-hours-label" class="column-label"
+              >Hour</span
+            >
+            <div
+              class="option-list"
+              part="hour-list"
+              role="listbox"
+              aria-label="Hour"
+            >
               ${hours.map(
                 (hour) => html`
                   <button
@@ -403,6 +416,7 @@ export class WsTimePicker extends LitElement {
                     type="button"
                     role="option"
                     data-hour=${hour}
+                    tabindex=${hour === this.draftHour ? '0' : '-1'}
                     aria-selected=${hour === this.draftHour ? 'true' : 'false'}
                     @click=${() => this.selectHour(hour)}
                   >
@@ -412,9 +426,19 @@ export class WsTimePicker extends LitElement {
               )}
             </div>
           </section>
-          <section class="time-column" aria-labelledby="${this.pickerId}-minutes-label">
-            <span id="${this.pickerId}-minutes-label" class="column-label">Minute</span>
-            <div class="option-list" part="minute-list" role="listbox" aria-label="Minute">
+          <section
+            class="time-column"
+            aria-labelledby="${this.pickerId}-minutes-label"
+          >
+            <span id="${this.pickerId}-minutes-label" class="column-label"
+              >Minute</span
+            >
+            <div
+              class="option-list"
+              part="minute-list"
+              role="listbox"
+              aria-label="Minute"
+            >
               ${minutes.map(
                 (minute) => html`
                   <button
@@ -423,7 +447,10 @@ export class WsTimePicker extends LitElement {
                     type="button"
                     role="option"
                     data-minute=${minute}
-                    aria-selected=${minute === this.draftMinute ? 'true' : 'false'}
+                    tabindex=${minute === this.draftMinute ? '0' : '-1'}
+                    aria-selected=${minute === this.draftMinute
+                      ? 'true'
+                      : 'false'}
                     @click=${() => this.selectMinute(minute)}
                   >
                     ${String(minute).padStart(2, '0')}
@@ -508,10 +535,91 @@ export class WsTimePicker extends LitElement {
   }
 
   private handleKeydown = (event: KeyboardEvent) => {
-    if (event.key !== 'Escape' || !this.pickerOpen) return;
-    event.preventDefault();
-    event.stopPropagation();
-    this.cancelPicker();
+    if (event.key === 'Escape' && this.pickerOpen) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.cancelPicker();
+      return;
+    }
+
+    if (!this.pickerOpen) return;
+
+    const target = event.target as HTMLElement;
+    if (!target || !target.classList.contains('time-option')) return;
+
+    const isHour = target.hasAttribute('data-hour');
+    const isMinute = target.hasAttribute('data-minute');
+
+    if (isHour) {
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        const nextHour = (this.draftHour + 1) % 24;
+        this.selectHour(nextHour);
+        this.updateComplete.then(() => {
+          this.shadowRoot
+            ?.querySelector<HTMLButtonElement>(
+              `button.time-option[data-hour="${nextHour}"]`
+            )
+            ?.focus();
+        });
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        const prevHour = (this.draftHour + 23) % 24;
+        this.selectHour(prevHour);
+        this.updateComplete.then(() => {
+          this.shadowRoot
+            ?.querySelector<HTMLButtonElement>(
+              `button.time-option[data-hour="${prevHour}"]`
+            )
+            ?.focus();
+        });
+      } else if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        this.shadowRoot
+          ?.querySelector<HTMLButtonElement>(
+            `button.time-option[data-minute="${this.draftMinute}"]`
+          )
+          ?.focus();
+      }
+    } else if (isMinute) {
+      const minutes: number[] = [];
+      for (let m = 0; m < 60; m += this.effectiveMinuteStep) {
+        minutes.push(m);
+      }
+      const currentIndex = minutes.indexOf(this.draftMinute);
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        const nextIndex = (currentIndex + 1) % minutes.length;
+        const nextMinute = minutes[nextIndex];
+        this.selectMinute(nextMinute);
+        this.updateComplete.then(() => {
+          this.shadowRoot
+            ?.querySelector<HTMLButtonElement>(
+              `button.time-option[data-minute="${nextMinute}"]`
+            )
+            ?.focus();
+        });
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        const prevIndex = (currentIndex - 1 + minutes.length) % minutes.length;
+        const prevMinute = minutes[prevIndex];
+        this.selectMinute(prevMinute);
+        this.updateComplete.then(() => {
+          this.shadowRoot
+            ?.querySelector<HTMLButtonElement>(
+              `button.time-option[data-minute="${prevMinute}"]`
+            )
+            ?.focus();
+        });
+      } else if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        this.shadowRoot
+          ?.querySelector<HTMLButtonElement>(
+            `button.time-option[data-hour="${this.draftHour}"]`
+          )
+          ?.focus();
+      }
+    }
   };
 
   private selectHour(hour: number) {
@@ -607,7 +715,10 @@ export class WsTimePicker extends LitElement {
   }
 
   private formatTime(hour: number, minute: number): string {
-    return `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+    return `${String(hour).padStart(2, '0')}:${String(minute).padStart(
+      2,
+      '0'
+    )}`;
   }
 
   private syncFormAndValidity() {

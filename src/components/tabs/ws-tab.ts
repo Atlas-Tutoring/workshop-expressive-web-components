@@ -57,6 +57,13 @@ export class WsTab extends LitElement {
     this.control?.focus(options);
   }
 
+  private get computedTabIndex(): number {
+    if (this.disabled) return -1;
+    if (this.selected) return 0;
+    if (this.hasAttribute('data-ws-tab-lead')) return 0;
+    return -1;
+  }
+
   override render() {
     if (this.value) {
       return html`
@@ -68,7 +75,7 @@ export class WsTab extends LitElement {
           ?disabled=${this.disabled}
           aria-selected=${this.selected ? 'true' : 'false'}
           aria-controls=${ifDefined(this.controls)}
-          tabindex=${this.selected ? 0 : -1}
+          tabindex=${this.computedTabIndex}
         >
           <slot name="icon">${nothing}</slot>
           <slot></slot>
@@ -87,7 +94,7 @@ export class WsTab extends LitElement {
           this.selected ? this.currentWhenSelected : undefined
         )}
         aria-disabled=${this.disabled ? 'true' : 'false'}
-        tabindex=${this.disabled ? -1 : 0}
+        tabindex=${this.computedTabIndex}
         @click=${this.handleDisabledNavigation}
       >
         <slot name="icon">${nothing}</slot>

@@ -4,9 +4,34 @@ All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components
 
 ## Unreleased
 
+### Added
+
+- Added form association to `<ws-switch>` via `ElementInternals`, enabling participation in standard form submissions (`name`, `value`), form resets, and constraint validation (`required`).
+- Added button type handling to `<ws-button>` supporting `type="button|submit|reset"`, dispatching form submission and reset requests to ancestor forms.
+- Added public `spin-on-activate` property and `animateIcon()` method to `<ws-drawer-item>` to support custom spinner animations when items are activated.
+- Added individual component subpath exports in `package.json` (such as `@mihaicristiancondrea/workshop-expressive-web-components/button`, `/dialog`, `/switch`, etc.) to support tree-shakeable direct imports.
+- Added comprehensive documentation example pages for `<ws-app-bar>`, `<ws-brand-mark>`, and `<ws-page>` in the documentation site.
+- Added unit test suites for `<ws-card>` and `<ws-page>`.
+
+### Changed
+
+- Changed `<ws-breadcrumbs>` to use standard Lit `@property({type: Array})` with JSON parsing and semantic `<ol>`/`<li>` list items for improved navigation accessibility.
+- Changed `<ws-dropdown>` icon resolution to use a cached CSS style map, preventing heavy DOM insertions and layout reflow during option scanning.
+
 ### Fixed
 
 - Fixed documentation navigation, GitHub links, and package repository metadata after moving the project to the Atlas-Tutoring organization.
+- Fixed `<ws-color-picker>` triggering a Lit update lifecycle warning (`change-in-update`) during popover alignment adjustments.
+- Fixed `<ws-drawer-item>` and `<ws-button>` mutating host attributes and style properties during `render()`, moving mutations into `willUpdate()` to respect pure render lifecycle constraints.
+- Fixed missing `ElementInternals` API methods (`form`, `validity`, `validationMessage`, `willValidate`, `checkValidity`, `reportValidity`, `setCustomValidity`, `formDisabledCallback`, `formStateRestoreCallback`) on `<ws-dropdown>`.
+- Fixed keyboard accessibility on `<ws-date-picker>` by adding roving tabindex, grid arrow-key navigation (±1 day, ±7 days), PageUp/PageDown, Home/End, Escape calendar dismissal, and `aria-haspopup="dialog"`.
+- Fixed keyboard navigation on `<ws-time-picker>` by adding roving tabindex on hour and minute options, ArrowUp/ArrowDown cycling, and `aria-haspopup="dialog"`.
+- Fixed `<ws-tabs>` keyboard navigation ignoring anchor navigation tabs, enabling arrow-key and Home/End navigation across both panel tabs and navigation tabs.
+- Fixed `<ws-tab>` navigation anchors receiving `tabindex="0"` on all tabs, replacing with roving tabindex so only the selected tab acts as a focus stop.
+- Fixed SVG gradient ID collisions in `<ws-brand-mark>` by scoping gradient IDs uniquely per element instance.
+- Fixed missing foundation design token fallbacks in `<ws-dialog>`, `<ws-tabs>`, `<ws-tab>`, `<ws-breadcrumbs>`, and `<ws-date-picker>`.
+- Fixed cross-platform build script compatibility issues with Windows environments.
+- Fixed missing `<ws-tab-panel>` registration in documentation bundle entry `src/docs-entry.ts`.
 
 ## 0.3.2
 

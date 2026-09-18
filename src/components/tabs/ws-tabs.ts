@@ -68,6 +68,7 @@ export class WsTabs extends LitElement {
   private syncingValue = false;
 
   private readonly mutationObserver = new MutationObserver(() => {
+    this.syncTabPresentation();
     this.syncValueFromSelectedTab();
     this.syncPanels();
     this.scheduleIndicatorUpdate();
@@ -445,9 +446,17 @@ export class WsTabs extends LitElement {
    * accent hover.
    */
   private syncTabPresentation() {
+    const hasSelected = this.tabs.some((t) => t.selected);
+    let firstActiveSeen = false;
     for (const tab of this.tabs) {
       tab.setAttribute('data-ws-variant', this.variant);
       tab.setAttribute('data-ws-orientation', this.orientation);
+      if (!hasSelected && !tab.disabled && !firstActiveSeen) {
+        tab.setAttribute('data-ws-tab-lead', '');
+        firstActiveSeen = true;
+      } else {
+        tab.removeAttribute('data-ws-tab-lead');
+      }
     }
   }
 
@@ -477,15 +486,15 @@ export class WsTabs extends LitElement {
     const currentTab = event
       .composedPath()
       .find((target): target is WsTab => target instanceof WsTab);
-    if (!currentTab?.value || !this.tabs.includes(currentTab)) return;
+    if (!currentTab || !this.tabs.includes(currentTab)) return;
 
-    const panelTabs = this.tabs.filter((tab) => tab.value && !tab.disabled);
-    const currentIndex = panelTabs.indexOf(currentTab);
+    const activeTabs = this.tabs.filter((tab) => !tab.disabled);
+    const currentIndex = activeTabs.indexOf(currentTab);
     if (currentIndex < 0) return;
 
     let nextIndex: number | null = null;
     if (event.key === 'Home') nextIndex = 0;
-    if (event.key === 'End') nextIndex = panelTabs.length - 1;
+    if (event.key === 'End') nextIndex = activeTabs.length - 1;
 
     const previousKey =
       this.orientation === 'vertical' ? 'ArrowUp' : 'ArrowLeft';
@@ -493,15 +502,15 @@ export class WsTabs extends LitElement {
       this.orientation === 'vertical' ? 'ArrowDown' : 'ArrowRight';
 
     if (event.key === previousKey) {
-      nextIndex = (currentIndex - 1 + panelTabs.length) % panelTabs.length;
+      nextIndex = (currentIndex - 1 + activeTabs.length) % activeTabs.length;
     }
     if (event.key === nextKey) {
-      nextIndex = (currentIndex + 1) % panelTabs.length;
+      nextIndex = (currentIndex + 1) % activeTabs.length;
     }
 
     if (nextIndex === null) return;
     event.preventDefault();
-    const nextTab = panelTabs[nextIndex];
+    const nextTab = activeTabs[nextIndex];
     this.selectTab(nextTab);
     nextTab.focus();
   }
@@ -517,6 +526,7 @@ export class WsTabs extends LitElement {
     }
 
     this.syncPanels();
+    this.syncTabPresentation();
     this.scheduleIndicatorUpdate();
 
     if (options.emit === false) return;

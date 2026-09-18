@@ -39,8 +39,7 @@ export const wsTabStyles = css`
     position: relative;
     text-align: center;
     text-decoration: none;
-    transition:
-      background-color var(--ws-motion-duration-medium, 180ms)
+    transition: background-color var(--ws-motion-duration-medium, 180ms)
         var(--ws-motion-easing-standard, ease),
       color var(--ws-motion-duration-medium, 180ms)
         var(--ws-motion-easing-standard, ease),
@@ -50,8 +49,7 @@ export const wsTabStyles = css`
   }
 
   .tab:focus-visible {
-    box-shadow:
-      0 0 0 var(--ws-focus-ring-inner-size, 2px)
+    box-shadow: 0 0 0 var(--ws-focus-ring-inner-size, 2px)
         var(--ws-color-surface, #ffffff),
       0 0 0 var(--ws-focus-ring-outer-size, 4px)
         var(--ws-color-primary, #7c5cff);
@@ -60,7 +58,7 @@ export const wsTabStyles = css`
   :host([data-ws-variant='standard']) .tab:hover {
     background: var(
       --ws-tab-hover-background,
-      var(--ws-color-primary-container, #f0ecff)
+      var(--ws-color-primary-container, #f2efff)
     );
     color: var(--ws-tab-hover-color, var(--ws-color-primary, #7c5cff));
   }
@@ -99,7 +97,10 @@ export const wsTabStyles = css`
   }
 
   :host([data-ws-variant='contained']) {
-    color: var(--ws-tabs-contained-color, var(--ws-color-on-surface-variant));
+    color: var(
+      --ws-tabs-contained-color,
+      var(--ws-color-on-surface-variant, #626875)
+    );
   }
 
   :host([data-ws-variant='contained']) .tab {
@@ -117,7 +118,7 @@ export const wsTabStyles = css`
   :host([data-ws-variant='contained'][selected]) {
     color: var(
       --ws-tabs-contained-selected-color,
-      var(--ws-color-on-primary-container)
+      var(--ws-color-on-primary-container, #6049bf)
     );
   }
 
@@ -136,7 +137,7 @@ export const wsTabStyles = css`
   :host([data-ws-variant='contained']) .tab:focus-visible {
     box-shadow: none;
     outline: var(--ws-focus-ring-inner-size, 2px) solid
-      var(--ws-tabs-contained-focus-color, var(--ws-color-primary));
+      var(--ws-tabs-contained-focus-color, var(--ws-color-primary, #7c5cff));
     outline-offset: 2px;
   }
 

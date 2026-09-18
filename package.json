@@ -7,19 +7,19 @@
   "module": "dist/index.js",
   "type": "module",
   "scripts": {
-    "build": "rm -rf dist && tsc && node scripts/copy-foundation.cjs",
+    "build": "node scripts/clean.cjs dist && tsc && node scripts/copy-foundation.cjs",
     "build:watch": "tsc --watch",
-    "clean": "rm -rf dist custom-elements.json docs ws-button.bundled.js index.{d.ts,d.ts.map,js,js.map} docs-entry.{d.ts,d.ts.map,js,js.map} components foundation test",
+    "clean": "node scripts/clean.cjs dist custom-elements.json docs ws-button.bundled.js index.d.ts index.d.ts.map index.js index.js.map docs-entry.d.ts docs-entry.d.ts.map docs-entry.js docs-entry.js.map components foundation test",
     "lint": "npm run lint:lit-analyzer && npm run lint:eslint",
-    "lint:eslint": "eslint 'src/**/*.ts'",
+    "lint:eslint": "eslint \"src/**/*.ts\"",
     "lint:lit-analyzer": "lit-analyzer",
     "format": "prettier \"**/*.{cjs,html,js,json,md,ts,yml}\" --ignore-path ./.eslintignore --write",
     "docs": "npm run docs:clean && npm run build && npm run analyze && npm run docs:build && npm run docs:assets && npm run docs:gen",
-    "docs:clean": "rm -rf docs",
+    "docs:clean": "node scripts/clean.cjs docs",
     "docs:gen": "eleventy --config=.eleventy.cjs",
     "docs:gen:watch": "eleventy --config=.eleventy.cjs --watch",
     "docs:build": "rollup -c --file docs/ws-button.bundled.js",
-    "docs:assets": "cp node_modules/prismjs/themes/prism-okaidia.css docs/ && cp -R dist/foundation docs/foundation && if [ -d node_modules/remixicon/fonts ]; then mkdir -p docs/remixicon && cp -R node_modules/remixicon/fonts docs/remixicon/; else echo \"Skipping Remix Icon asset copy; run npm install to fetch remixicon.\"; fi",
+    "docs:assets": "node scripts/copy-docs-assets.cjs",
     "docs:serve": "wds --root-dir=docs --node-resolve --watch",
     "analyze": "cem analyze --litelement --globs \"src/**/*.ts\"",
     "analyze:watch": "cem analyze --litelement --globs \"src/**/*.ts\" --watch",
@@ -102,6 +102,82 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./app-bar": {
+      "types": "./dist/components/app-bar/index.d.ts",
+      "import": "./dist/components/app-bar/index.js"
+    },
+    "./badge": {
+      "types": "./dist/components/badge/index.d.ts",
+      "import": "./dist/components/badge/index.js"
+    },
+    "./brand": {
+      "types": "./dist/components/brand/index.d.ts",
+      "import": "./dist/components/brand/index.js"
+    },
+    "./breadcrumbs": {
+      "types": "./dist/components/breadcrumbs/index.d.ts",
+      "import": "./dist/components/breadcrumbs/index.js"
+    },
+    "./button": {
+      "types": "./dist/components/button/index.d.ts",
+      "import": "./dist/components/button/index.js"
+    },
+    "./card": {
+      "types": "./dist/components/card/index.d.ts",
+      "import": "./dist/components/card/index.js"
+    },
+    "./chip": {
+      "types": "./dist/components/chip/index.d.ts",
+      "import": "./dist/components/chip/index.js"
+    },
+    "./code-block": {
+      "types": "./dist/components/code-block/index.d.ts",
+      "import": "./dist/components/code-block/index.js"
+    },
+    "./color-picker": {
+      "types": "./dist/components/color-picker/index.d.ts",
+      "import": "./dist/components/color-picker/index.js"
+    },
+    "./date-picker": {
+      "types": "./dist/components/date-picker/index.d.ts",
+      "import": "./dist/components/date-picker/index.js"
+    },
+    "./dialog": {
+      "types": "./dist/components/dialog/index.d.ts",
+      "import": "./dist/components/dialog/index.js"
+    },
+    "./docs-shell": {
+      "types": "./dist/components/docs-shell/index.d.ts",
+      "import": "./dist/components/docs-shell/index.js"
+    },
+    "./drawer": {
+      "types": "./dist/components/drawer/index.d.ts",
+      "import": "./dist/components/drawer/index.js"
+    },
+    "./dropdown": {
+      "types": "./dist/components/dropdown/index.d.ts",
+      "import": "./dist/components/dropdown/index.js"
+    },
+    "./page": {
+      "types": "./dist/components/page/index.d.ts",
+      "import": "./dist/components/page/index.js"
+    },
+    "./switch": {
+      "types": "./dist/components/switch/index.d.ts",
+      "import": "./dist/components/switch/index.js"
+    },
+    "./tabs": {
+      "types": "./dist/components/tabs/index.d.ts",
+      "import": "./dist/components/tabs/index.js"
+    },
+    "./text-field": {
+      "types": "./dist/components/text-field/index.d.ts",
+      "import": "./dist/components/text-field/index.js"
+    },
+    "./time-picker": {
+      "types": "./dist/components/time-picker/index.d.ts",
+      "import": "./dist/components/time-picker/index.js"
     },
     "./foundation/theme.css": "./dist/foundation/theme.css",
     "./foundation/colors.css": "./dist/foundation/colors.css",

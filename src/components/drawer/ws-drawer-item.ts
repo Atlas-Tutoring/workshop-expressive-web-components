@@ -50,6 +50,10 @@ export class WsDrawerItem extends LitElement {
   @property({type: Boolean, reflect: true})
   selected = false;
 
+  /** Spins the icon momentarily when the item is activated. */
+  @property({type: Boolean, attribute: 'spin-on-activate'})
+  spinOnActivate = false;
+
   @state()
   private hasChildren = false;
 
@@ -58,12 +62,15 @@ export class WsDrawerItem extends LitElement {
     this.updateTreeState();
   }
 
-  override render() {
+  override willUpdate() {
     const level = this.getNestingLevel();
-    const progressValue = this.clampedProgress;
     this.toggleAttribute('data-nested', level > 0);
     this.toggleAttribute('data-has-children', this.hasChildren);
     this.style.setProperty('--ws-drawer-item-depth', String(level));
+  }
+
+  override render() {
+    const progressValue = this.clampedProgress;
 
     return html`
       <div
@@ -270,8 +277,8 @@ export class WsDrawerItem extends LitElement {
       return;
     }
 
-    if (this.itemId === 'settings') {
-      this.animateSettingsIcon();
+    if (this.spinOnActivate || this.itemId === 'settings') {
+      this.animateIcon();
     }
 
     this.dispatchEvent(
@@ -283,7 +290,8 @@ export class WsDrawerItem extends LitElement {
     );
   }
 
-  private animateSettingsIcon() {
+  /** Spins the item icon momentarily. */
+  animateIcon() {
     this.toggleAttribute('data-settings-spin', false);
 
     window.requestAnimationFrame(() => {
@@ -292,6 +300,11 @@ export class WsDrawerItem extends LitElement {
         this.toggleAttribute('data-settings-spin', false);
       }, 360);
     });
+  }
+
+  /** @deprecated Use `animateIcon()` instead. */
+  animateSettingsIcon() {
+    this.animateIcon();
   }
 
   private updateTreeState() {

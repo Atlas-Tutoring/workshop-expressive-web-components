@@ -99,7 +99,6 @@ export class WsColorPicker extends LitElement {
    * it anchors to the trigger's start instead. Without this a picker placed
    * anywhere but near the inline-end edge opens off-screen.
    */
-  @state()
   private alignStart = false;
 
   /** The readable foreground for the current accent. */
@@ -177,20 +176,29 @@ export class WsColorPicker extends LitElement {
   /** Flips the popover's anchor when it would open past the viewport edge. */
   private keepPopoverOnScreen() {
     const popover = this.renderRoot.querySelector<HTMLElement>('.popover');
-    if (!popover) return;
+    const trigger = this.renderRoot.querySelector<HTMLElement>('.trigger');
+    if (!popover || !trigger) return;
 
-    // Measure from the default anchor so the check is not self-reinforcing.
-    this.alignStart = false;
-    const bounds = popover.getBoundingClientRect();
+    const triggerBounds = trigger.getBoundingClientRect();
+    const popoverWidth = popover.offsetWidth;
+    const clientWidth =
+      this.ownerDocument?.documentElement?.clientWidth ?? window.innerWidth;
 
-    if (bounds.left < POPOVER_VIEWPORT_MARGIN) {
-      this.alignStart = true;
+    // By default (align-end), popover's right edge aligns with trigger's right edge.
+    const defaultLeft = triggerBounds.right - popoverWidth;
+    let nextAlignStart = false;
+
+    if (defaultLeft < POPOVER_VIEWPORT_MARGIN) {
+      nextAlignStart = true;
     } else if (
-      bounds.right >
-      this.ownerDocument.documentElement.clientWidth - POPOVER_VIEWPORT_MARGIN
+      triggerBounds.left + popoverWidth >
+      clientWidth - POPOVER_VIEWPORT_MARGIN
     ) {
-      this.alignStart = false;
+      nextAlignStart = false;
     }
+
+    this.alignStart = nextAlignStart;
+    popover.classList.toggle('align-start', nextAlignStart);
   }
 
   /** Opens the compact popover. No-op outside compact mode. */

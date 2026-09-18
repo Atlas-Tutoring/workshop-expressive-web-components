@@ -14,6 +14,11 @@ export interface WsDropdownActionDetail {
   option: HTMLOptionElement;
 }
 
+const ICON_STYLE_CACHE = new Map<
+  string,
+  {glyph: string; fontFamily: string} | undefined
+>();
+
 /** A selectable dropdown or command menu backed by native `option` elements. */
 @customElement('ws-dropdown')
 export class WsDropdown extends LitElement {
@@ -58,7 +63,67 @@ export class WsDropdown extends LitElement {
   private readonly internals = this.attachInternals();
   private readonly popupId = `ws-dropdown-popup-${WsDropdown.nextId++}`;
   private defaultValue = '';
+  private customValidationMessage = '';
   private static nextId = 1;
+
+  /** Associated form, when the field is inside one. */
+  get form(): HTMLFormElement | null {
+    return this.internals.form;
+  }
+
+  /** Labels associated with the custom element. */
+  get labels(): NodeList {
+    return this.internals.labels;
+  }
+
+  /** Current validity state. */
+  get validity(): ValidityState {
+    return this.internals.validity;
+  }
+
+  /** Current validation message. */
+  get validationMessage(): string {
+    return this.internals.validationMessage;
+  }
+
+  /** Whether the field participates in constraint validation. */
+  get willValidate(): boolean {
+    return this.internals.willValidate;
+  }
+
+  /** Runs constraint validation without displaying browser UI. */
+  checkValidity(): boolean {
+    return this.internals.checkValidity();
+  }
+
+  /** Runs constraint validation and makes the invalid state visible. */
+  reportValidity(): boolean {
+    return this.internals.reportValidity();
+  }
+
+  /** Applies a custom validity message. Pass an empty string to clear it. */
+  setCustomValidity(message: string) {
+    this.customValidationMessage = message;
+    const participates = this.mode === 'select' && !this.disabled;
+    const missing = participates && this.required && !this.value;
+    const flags: ValidityStateFlags = {};
+    if (message) flags.customError = true;
+    if (missing) flags.valueMissing = true;
+    this.internals.setValidity(
+      flags,
+      message || (missing ? 'Please select an option.' : '')
+    );
+  }
+
+  formDisabledCallback(disabled: boolean) {
+    this.disabled = disabled;
+  }
+
+  formStateRestoreCallback(state: string | File | FormData | null) {
+    if (typeof state === 'string' && this.mode === 'select') {
+      this.value = state;
+    }
+  }
 
   override connectedCallback() {
     super.connectedCallback();
@@ -130,9 +195,13 @@ export class WsDropdown extends LitElement {
       const participates = this.mode === 'select' && !this.disabled;
       this.internals.setFormValue(participates ? this.value : null);
       const missing = participates && this.required && !this.value;
+      const flags: ValidityStateFlags = {};
+      if (this.customValidationMessage) flags.customError = true;
+      if (missing) flags.valueMissing = true;
       this.internals.setValidity(
-        missing ? {valueMissing: true} : {},
-        missing ? 'Please select an option.' : ''
+        flags,
+        this.customValidationMessage ||
+          (missing ? 'Please select an option.' : '')
       );
     }
     if (changed.has('open')) {
@@ -338,6 +407,13 @@ export class WsDropdown extends LitElement {
       this.value = this.options[0].value;
   };
   private resolveIconStyle(icon: string) {
+    if (ICON_STYLE_CACHE.has(icon)) {
+      return ICON_STYLE_CACHE.get(icon);
+    }
+    if (typeof document === 'undefined' || !document.body) {
+      return undefined;
+    }
+
     // Icon libraries commonly supply glyphs through a global `::before` rule.
     // Shadow-root selectors cannot see that rule, so copy its computed glyph
     // and font onto the icon rendered inside the popup.
@@ -350,16 +426,21 @@ export class WsDropdown extends LitElement {
     const content = style.content;
     const fontFamily = style.fontFamily;
     probe.remove();
-    if (!content || content === 'none' || content === 'normal')
-      return undefined;
-    return {
-      glyph:
-        (content.startsWith('"') && content.endsWith('"')) ||
-        (content.startsWith("'") && content.endsWith("'"))
-          ? content.slice(1, -1)
-          : content,
-      fontFamily,
-    };
+
+    let result: {glyph: string; fontFamily: string} | undefined = undefined;
+    if (content && content !== 'none' && content !== 'normal') {
+      result = {
+        glyph:
+          (content.startsWith('"') && content.endsWith('"')) ||
+          (content.startsWith("'") && content.endsWith("'"))
+            ? content.slice(1, -1)
+            : content,
+        fontFamily,
+      };
+    }
+
+    ICON_STYLE_CACHE.set(icon, result);
+    return result;
   }
   private addPositionListeners() {
     window.addEventListener('resize', this.positionPopup);

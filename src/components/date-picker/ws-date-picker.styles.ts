@@ -273,7 +273,7 @@ export const wsDatePickerStyles = css`
 
   .day:hover:not(:disabled),
   .day:focus-visible {
-    background: var(--ws-color-primary-container, #f0ecff);
+    background: var(--ws-color-primary-container, #f2efff);
     color: var(--ws-color-primary, #7c5cff);
   }
 
@@ -318,7 +318,7 @@ export const wsDatePickerStyles = css`
 
   .clear-button:hover:not(:disabled),
   .picker-button:hover:not(:disabled) {
-    background: var(--ws-color-primary-container, #f0ecff);
+    background: var(--ws-color-primary-container, #f2efff);
     color: var(--ws-color-primary, #7c5cff);
   }
 

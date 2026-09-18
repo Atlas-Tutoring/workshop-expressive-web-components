@@ -531,4 +531,61 @@ suite('ws-tabs presentation sync', () => {
     assert.equal(containedHover!.style.background, 'transparent');
     assert.isEmpty(containedHover!.style.color);
   });
+
+  test('supports roving tabindex on navigation tabs', async () => {
+    const el = await fixture<WsTabs>(html`
+      <ws-tabs>
+        <ws-tab href="/overview" selected>Overview</ws-tab>
+        <ws-tab href="/settings">Settings</ws-tab>
+        <ws-tab href="/billing">Billing</ws-tab>
+      </ws-tabs>
+    `);
+    await el.updateComplete;
+
+    const tabs = Array.from(el.querySelectorAll<WsTab>('ws-tab'));
+    const [t1, t2, t3] = tabs;
+    await Promise.all(tabs.map((t) => t.updateComplete));
+
+    const a1 = t1.shadowRoot!.querySelector('a')!;
+    const a2 = t2.shadowRoot!.querySelector('a')!;
+    const a3 = t3.shadowRoot!.querySelector('a')!;
+
+    assert.equal(a1.tabIndex, 0);
+    assert.equal(a2.tabIndex, -1);
+    assert.equal(a3.tabIndex, -1);
+  });
+
+  test('navigates navigation tabs with arrow keys and updates selection', async () => {
+    const el = await fixture<WsTabs>(html`
+      <ws-tabs>
+        <ws-tab href="/overview" selected>Overview</ws-tab>
+        <ws-tab href="/settings">Settings</ws-tab>
+        <ws-tab href="/billing">Billing</ws-tab>
+      </ws-tabs>
+    `);
+    await el.updateComplete;
+
+    const tabs = Array.from(el.querySelectorAll<WsTab>('ws-tab'));
+    const [t1, t2, t3] = tabs;
+    await Promise.all(tabs.map((t) => t.updateComplete));
+
+    t1.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'ArrowRight',
+        bubbles: true,
+        composed: true,
+      })
+    );
+    await el.updateComplete;
+    await Promise.all(tabs.map((t) => t.updateComplete));
+
+    assert.isFalse(t1.selected);
+    assert.isTrue(t2.selected);
+    assert.isFalse(t3.selected);
+
+    const a1 = t1.shadowRoot!.querySelector('a')!;
+    const a2 = t2.shadowRoot!.querySelector('a')!;
+    assert.equal(a1.tabIndex, -1);
+    assert.equal(a2.tabIndex, 0);
+  });
 });

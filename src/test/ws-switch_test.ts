@@ -228,3 +228,66 @@ suite('ws-switch icons', () => {
     );
   });
 });
+
+suite('ws-switch form participation', () => {
+  test('submits value when checked in a form', async () => {
+    const form = await fixture<HTMLFormElement>(html`
+      <form>
+        <ws-switch name="notifications" checked></ws-switch>
+      </form>
+    `);
+    const switchEl = form.querySelector('ws-switch')!;
+    await switchEl.updateComplete;
+
+    let data = new FormData(form);
+    assert.equal(data.get('notifications'), 'on');
+
+    switchEl.checked = false;
+    await switchEl.updateComplete;
+    data = new FormData(form);
+    assert.isNull(data.get('notifications'));
+  });
+
+  test('submits custom value when checked', async () => {
+    const form = await fixture<HTMLFormElement>(html`
+      <form>
+        <ws-switch name="agree" value="accepted" checked></ws-switch>
+      </form>
+    `);
+    const data = new FormData(form);
+    assert.equal(data.get('agree'), 'accepted');
+  });
+
+  test('resets to default checked state on form reset', async () => {
+    const form = await fixture<HTMLFormElement>(html`
+      <form>
+        <ws-switch name="subscribe" checked></ws-switch>
+      </form>
+    `);
+    const switchEl = form.querySelector('ws-switch')!;
+    await switchEl.updateComplete;
+
+    switchEl.checked = false;
+    await switchEl.updateComplete;
+    assert.isFalse(switchEl.checked);
+
+    form.reset();
+    assert.isTrue(switchEl.checked);
+  });
+
+  test('validates required state', async () => {
+    const switchEl = await fixture<WsSwitch>(
+      html`<ws-switch required></ws-switch>`
+    );
+    await switchEl.updateComplete;
+
+    assert.isFalse(switchEl.checkValidity());
+    assert.isTrue(switchEl.validity.valueMissing);
+
+    switchEl.checked = true;
+    await switchEl.updateComplete;
+
+    assert.isTrue(switchEl.checkValidity());
+    assert.isFalse(switchEl.validity.valueMissing);
+  });
+});

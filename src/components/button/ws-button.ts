@@ -38,6 +38,10 @@ export class WsButton extends LitElement {
   @property({attribute: 'aria-label'})
   accessibleLabel?: string;
 
+  /** Native button type behavior. */
+  @property({reflect: true})
+  type: 'button' | 'submit' | 'reset' = 'button';
+
   @state()
   private hasIcon = false;
 
@@ -57,16 +61,21 @@ export class WsButton extends LitElement {
       subtree: true,
     });
     this.syncSlottedState();
+    this.addEventListener('click', this.handleClick);
   }
 
   override disconnectedCallback() {
+    this.removeEventListener('click', this.handleClick);
     this.contentObserver.disconnect();
     super.disconnectedCallback();
   }
 
+  override willUpdate() {
+    this.toggleAttribute('icon-only', this.hasIcon && !this.hasLabel);
+  }
+
   override render() {
     const isUnavailable = this.disabled || this.loading;
-    this.toggleAttribute('icon-only', this.hasIcon && !this.hasLabel);
 
     return html`
       <button
@@ -81,6 +90,28 @@ export class WsButton extends LitElement {
       </button>
     `;
   }
+
+  private handleClick = (event: MouseEvent) => {
+    if (this.disabled || this.loading) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      return;
+    }
+
+    if (this.type === 'submit') {
+      const form = this.closest('form');
+      if (form) {
+        if (typeof form.requestSubmit === 'function') {
+          form.requestSubmit();
+        } else {
+          form.submit();
+        }
+      }
+    } else if (this.type === 'reset') {
+      const form = this.closest('form');
+      form?.reset();
+    }
+  };
 
   private renderContent() {
     return html`

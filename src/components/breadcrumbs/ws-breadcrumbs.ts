@@ -22,27 +22,40 @@ export class WsBreadcrumbs extends LitElement {
   static override styles = wsBreadcrumbsStyles;
 
   /** Crumbs to render. Use the `crumbs` attribute with JSON or set this property. */
-  @property({attribute: false})
+  @property({
+    type: Array,
+    converter: {
+      fromAttribute: (value: string | null): WsCrumb[] => {
+        if (!value) return [];
+        try {
+          const parsed = JSON.parse(value) as unknown;
+          if (!Array.isArray(parsed)) return [];
+          return parsed
+            .filter(
+              (crumb): crumb is Record<string, unknown> =>
+                Boolean(crumb) && typeof crumb === 'object'
+            )
+            .filter(
+              (crumb) =>
+                typeof crumb.id === 'string' &&
+                typeof crumb.label === 'string' &&
+                (crumb.href === undefined || typeof crumb.href === 'string')
+            )
+            .map((crumb) => ({
+              id: crumb.id as string,
+              label: crumb.label as string,
+              href: crumb.href as string | undefined,
+            }));
+        } catch {
+          return [];
+        }
+      },
+    },
+  })
   crumbs: WsCrumb[] = [];
 
   @state()
   private activeCrumbId?: string;
-
-  static override get observedAttributes() {
-    return [...super.observedAttributes, 'crumbs'];
-  }
-
-  override attributeChangedCallback(
-    name: string,
-    oldValue: string | null,
-    value: string | null
-  ) {
-    super.attributeChangedCallback(name, oldValue, value);
-
-    if (name === 'crumbs' && oldValue !== value) {
-      this.crumbs = this.parseCrumbsAttribute(value);
-    }
-  }
 
   override render() {
     if (this.crumbs.length === 0) {
@@ -51,41 +64,17 @@ export class WsBreadcrumbs extends LitElement {
 
     return html`
       <nav class="breadcrumbs" part="nav" aria-label="Breadcrumb">
-        ${this.crumbs.map((crumb, index) => this.renderCrumb(crumb, index))}
+        <ol class="crumb-list" role="list">
+          ${this.crumbs.map(
+            (crumb, index) => html`
+              <li class="crumb-item" role="listitem">
+                ${this.renderCrumb(crumb, index)}
+              </li>
+            `
+          )}
+        </ol>
       </nav>
     `;
-  }
-
-  private parseCrumbsAttribute(value: string | null): WsCrumb[] {
-    if (!value) {
-      return [];
-    }
-
-    try {
-      const parsed = JSON.parse(value) as unknown;
-      if (!Array.isArray(parsed)) {
-        return [];
-      }
-
-      return parsed
-        .filter(
-          (crumb): crumb is Record<string, unknown> =>
-            Boolean(crumb) && typeof crumb === 'object'
-        )
-        .filter(
-          (crumb) =>
-            typeof crumb.id === 'string' &&
-            typeof crumb.label === 'string' &&
-            (crumb.href === undefined || typeof crumb.href === 'string')
-        )
-        .map((crumb) => ({
-          id: crumb.id as string,
-          label: crumb.label as string,
-          href: crumb.href as string | undefined,
-        }));
-    } catch {
-      return [];
-    }
   }
 
   private renderCrumb(crumb: WsCrumb, index: number) {

@@ -115,12 +115,12 @@ suite('ws-time-picker', () => {
     el.showPicker();
     await el.updateComplete;
 
-    el.shadowRoot!
-      .querySelector<HTMLButtonElement>('.time-option[data-hour="14"]')!
-      .click();
-    el.shadowRoot!
-      .querySelector<HTMLButtonElement>('.time-option[data-minute="45"]')!
-      .click();
+    el.shadowRoot!.querySelector<HTMLButtonElement>(
+      '.time-option[data-hour="14"]'
+    )!.click();
+    el.shadowRoot!.querySelector<HTMLButtonElement>(
+      '.time-option[data-minute="45"]'
+    )!.click();
     await el.updateComplete;
 
     const changed = oneEvent(el, 'change');
@@ -150,10 +150,7 @@ suite('ws-time-picker', () => {
 
     el.showPicker();
     await el.updateComplete;
-    assert.equal(
-      el.shadowRoot!.querySelectorAll('[data-minute]').length,
-      4
-    );
+    assert.equal(el.shadowRoot!.querySelectorAll('[data-minute]').length, 4);
   });
 
   test('participates in form submission and reset', async () => {
@@ -238,5 +235,57 @@ suite('ws-time-picker', () => {
 
     assert.isTrue(input.disabled);
     assert.isTrue(pickerButton.disabled);
+  });
+
+  test('picker button has dialog popup attribute and roving tabindex on options', async () => {
+    const el = await fixture<WsTimePicker>(html`
+      <ws-time-picker label="Start time" value="09:30"></ws-time-picker>
+    `);
+    const pickerButton =
+      el.shadowRoot!.querySelector<HTMLButtonElement>('.picker-button')!;
+    assert.equal(pickerButton.getAttribute('aria-haspopup'), 'dialog');
+
+    el.showPicker();
+    await el.updateComplete;
+
+    const hour9 = el.shadowRoot!.querySelector<HTMLButtonElement>(
+      'button.time-option[data-hour="9"]'
+    )!;
+    const hour10 = el.shadowRoot!.querySelector<HTMLButtonElement>(
+      'button.time-option[data-hour="10"]'
+    )!;
+    assert.equal(hour9.getAttribute('tabindex'), '0');
+    assert.equal(hour10.getAttribute('tabindex'), '-1');
+
+    const min30 = el.shadowRoot!.querySelector<HTMLButtonElement>(
+      'button.time-option[data-minute="30"]'
+    )!;
+    const min35 = el.shadowRoot!.querySelector<HTMLButtonElement>(
+      'button.time-option[data-minute="35"]'
+    )!;
+    assert.equal(min30.getAttribute('tabindex'), '0');
+    assert.equal(min35.getAttribute('tabindex'), '-1');
+  });
+
+  test('navigates time options with arrow keys', async () => {
+    const el = await fixture<WsTimePicker>(html`
+      <ws-time-picker label="Start time" value="09:30"></ws-time-picker>
+    `);
+    el.showPicker();
+    await el.updateComplete;
+
+    const hour9 = el.shadowRoot!.querySelector<HTMLButtonElement>(
+      'button.time-option[data-hour="9"]'
+    )!;
+    hour9.dispatchEvent(
+      new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true})
+    );
+    await el.updateComplete;
+
+    const hour10 = el.shadowRoot!.querySelector<HTMLButtonElement>(
+      'button.time-option[data-hour="10"]'
+    )!;
+    assert.equal(hour10.getAttribute('tabindex'), '0');
+    assert.equal(hour9.getAttribute('tabindex'), '-1');
   });
 });

@@ -78,10 +78,18 @@ export class WsBrandMark extends LitElement {
     this.toggleAttribute('animating', true);
   }
 
+  private static nextId = 1;
+  private readonly markId = `ws-mark-${WsBrandMark.nextId++}`;
+
   private renderDefaultMark() {
     if (this.markText !== 'W') {
       return this.markText;
     }
+
+    const wGradId = `${this.markId}-wGrad`;
+    const wGradLeftId = `${this.markId}-wGradLeft`;
+    const wGradRightId = `${this.markId}-wGradRight`;
+    const dotGradId = `${this.markId}-dotGrad`;
 
     return html`
       <svg
@@ -93,7 +101,7 @@ export class WsBrandMark extends LitElement {
       >
         <defs>
           <linearGradient
-            id="wGrad"
+            id=${wGradId}
             x1="18"
             y1="25"
             x2="82"
@@ -104,15 +112,21 @@ export class WsBrandMark extends LitElement {
             <stop offset="50%" stop-color="var(--ws-brand-mark-mid)"></stop>
             <stop offset="100%" stop-color="var(--ws-brand-mark-end)"></stop>
           </linearGradient>
-          <linearGradient id="wGradLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id=${wGradLeftId} x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stop-color="var(--ws-brand-mark-start)"></stop>
             <stop offset="100%" stop-color="var(--ws-brand-mark-mid)"></stop>
           </linearGradient>
-          <linearGradient id="wGradRight" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient
+            id=${wGradRightId}
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="100%"
+          >
             <stop offset="0%" stop-color="var(--ws-brand-mark-mid)"></stop>
             <stop offset="100%" stop-color="var(--ws-brand-mark-end)"></stop>
           </linearGradient>
-          <linearGradient id="dotGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id=${dotGradId} x1="0%" y1="0%" x2="100%" y2="100%">
             <stop
               offset="0%"
               stop-color="var(--ws-brand-mark-dot-start)"
@@ -128,48 +142,48 @@ export class WsBrandMark extends LitElement {
           cx="50"
           cy="45"
           r="2.5"
-          fill="url(#dotGrad)"
+          fill="url(#${dotGradId})"
         ></circle>
         <circle
           class="drop drop-2"
           cx="50"
           cy="45"
           r="3"
-          fill="url(#wGradRight)"
+          fill="url(#${wGradRightId})"
         ></circle>
         <circle
           class="drop drop-3"
           cx="50"
           cy="45"
           r="2"
-          fill="url(#dotGrad)"
+          fill="url(#${dotGradId})"
         ></circle>
         <circle
           class="drop drop-4"
           cx="50"
           cy="45"
           r="3.5"
-          fill="url(#wGradLeft)"
+          fill="url(#${wGradLeftId})"
         ></circle>
         <circle
           class="drop drop-5"
           cx="50"
           cy="45"
           r="2"
-          fill="url(#wGradLeft)"
+          fill="url(#${wGradLeftId})"
         ></circle>
         <circle
           class="drop drop-6"
           cx="50"
           cy="45"
           r="2.5"
-          fill="url(#dotGrad)"
+          fill="url(#${dotGradId})"
         ></circle>
         <path
           class="w-half"
           d="M 50 55 L 34 76 L 18 25"
           fill="none"
-          stroke="url(#wGrad)"
+          stroke="url(#${wGradId})"
           stroke-width="20"
           stroke-linecap="round"
           stroke-linejoin="round"
@@ -178,7 +192,7 @@ export class WsBrandMark extends LitElement {
           class="w-half"
           d="M 50 55 L 66 76 L 82 25"
           fill="none"
-          stroke="url(#wGrad)"
+          stroke="url(#${wGradId})"
           stroke-width="20"
           stroke-linecap="round"
           stroke-linejoin="round"
@@ -188,7 +202,7 @@ export class WsBrandMark extends LitElement {
           cx="50"
           cy="28"
           r="10"
-          fill="url(#dotGrad)"
+          fill="url(#${dotGradId})"
         ></circle>
       </svg>
     `;

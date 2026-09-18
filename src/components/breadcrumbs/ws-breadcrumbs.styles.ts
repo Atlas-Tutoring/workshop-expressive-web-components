@@ -19,17 +19,33 @@ export const wsBreadcrumbsStyles = css`
     display: none;
   }
 
-  .breadcrumbs {
+  .breadcrumbs,
+  .crumb-list {
     align-items: center;
     display: flex;
     flex-wrap: wrap;
     gap: var(--ws-spacing-xs, 4px);
   }
 
+  .crumb-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .crumb-item {
+    align-items: center;
+    display: inline-flex;
+    gap: var(--ws-spacing-xs, 4px);
+  }
+
   .crumb {
     border-radius: var(--ws-shape-extra-small, 4px);
     color: inherit;
-    font: var(--ws-typography-body-medium);
+    font: var(
+      --ws-typography-body-medium,
+      400 14px / 20px var(--ws-font-family, system-ui, sans-serif)
+    );
     font-weight: 500;
     padding: var(--ws-spacing-xs, 4px) var(--ws-spacing-sm, 8px);
     text-decoration: none;
@@ -48,7 +64,7 @@ export const wsBreadcrumbsStyles = css`
   a.crumb:hover,
   a.crumb:focus-visible,
   a.crumb.active {
-    background: var(--ws-color-primary-container, #f0ecff);
+    background: var(--ws-color-primary-container, #f2efff);
     color: var(--ws-color-primary, #7c5cff);
   }
 

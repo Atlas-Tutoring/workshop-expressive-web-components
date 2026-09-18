@@ -65,7 +65,7 @@ export const wsTabsStyles = css`
   :host([variant='contained']) .tabs {
     background-color: var(
       --ws-tabs-contained-background,
-      var(--ws-color-surface-variant)
+      var(--ws-color-surface-variant, #f0f2f7)
     );
     border-radius: var(--ws-tabs-contained-radius, 11px);
     padding: var(--ws-tabs-contained-padding, 3px);
@@ -74,12 +74,12 @@ export const wsTabsStyles = css`
   :host([variant='contained']) .indicator {
     background-color: var(
       --ws-tabs-contained-indicator-background,
-      var(--ws-color-primary-container)
+      var(--ws-color-primary-container, #f2efff)
     );
     border-radius: var(--ws-tabs-contained-indicator-radius, 8px);
     box-shadow: var(
       --ws-tabs-contained-indicator-shadow,
-      var(--ws-elevation-sm)
+      var(--ws-elevation-sm, 0 1px 2px rgb(15 23 42 / 8%))
     );
     inset-block-end: auto;
     inset-block-start: 0;

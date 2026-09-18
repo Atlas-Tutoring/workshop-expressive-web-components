@@ -20,10 +20,23 @@ export type WsSwitchIconTransition = 'rotate' | 'fade';
 @customElement('ws-switch')
 export class WsSwitch extends LitElement {
   static override styles = wsSwitchStyles;
+  static formAssociated = true;
 
   /** Whether the switch is on. */
   @property({type: Boolean, reflect: true})
   checked = false;
+
+  /** Form control name. */
+  @property({reflect: true})
+  name = '';
+
+  /** Form control submitted value when checked. Defaults to 'on'. */
+  @property()
+  value = 'on';
+
+  /** Whether the switch must be checked to submit a form. */
+  @property({type: Boolean, reflect: true})
+  required = false;
 
   /** Disables interaction. */
   @property({type: Boolean, reflect: true})
@@ -47,6 +60,109 @@ export class WsSwitch extends LitElement {
    */
   @state()
   private hasIcon = false;
+
+  private readonly internals = this.attachInternals();
+  private defaultChecked = false;
+  private customValidationMessage = '';
+
+  /** Associated form, when the field is inside one. */
+  get form(): HTMLFormElement | null {
+    return this.internals.form;
+  }
+
+  /** Labels associated with the custom element. */
+  get labels(): NodeList {
+    return this.internals.labels;
+  }
+
+  /** Current validity state. */
+  get validity(): ValidityState {
+    return this.internals.validity;
+  }
+
+  /** Current validation message. */
+  get validationMessage(): string {
+    return this.internals.validationMessage;
+  }
+
+  /** Whether the field participates in constraint validation. */
+  get willValidate(): boolean {
+    return this.internals.willValidate;
+  }
+
+  /** Runs constraint validation without displaying browser UI. */
+  checkValidity(): boolean {
+    return this.internals.checkValidity();
+  }
+
+  /** Runs constraint validation and makes the invalid state visible. */
+  reportValidity(): boolean {
+    return this.internals.reportValidity();
+  }
+
+  /** Applies a custom validity message. Pass an empty string to clear it. */
+  setCustomValidity(message: string) {
+    this.customValidationMessage = message;
+    this.syncFormState();
+  }
+
+  formDisabledCallback(disabled: boolean) {
+    this.disabled = disabled;
+  }
+
+  formResetCallback() {
+    this.checked = this.defaultChecked;
+    this.syncFormState();
+  }
+
+  formStateRestoreCallback(state: string | null) {
+    this.checked = state === 'checked' || state === 'on' || state === 'true';
+    this.syncFormState();
+  }
+
+  override connectedCallback() {
+    super.connectedCallback();
+    this.defaultChecked = this.hasAttribute('checked') || this.checked;
+    this.syncFormState();
+  }
+
+  override willUpdate(changedProperties: Map<string, unknown>) {
+    super.willUpdate(changedProperties);
+
+    if (
+      changedProperties.has('checked') ||
+      changedProperties.has('value') ||
+      changedProperties.has('required') ||
+      changedProperties.has('disabled')
+    ) {
+      this.syncFormState();
+    }
+  }
+
+  private syncFormState() {
+    this.internals.setFormValue(
+      this.checked ? this.value : null,
+      this.checked ? 'checked' : null
+    );
+
+    const participates = !this.disabled;
+    const missing = participates && this.required && !this.checked;
+    const flags: ValidityStateFlags = {};
+
+    if (this.customValidationMessage) {
+      flags.customError = true;
+    }
+    if (missing) {
+      flags.valueMissing = true;
+    }
+
+    const message =
+      this.customValidationMessage ||
+      (missing ? 'Please check this switch to proceed.' : '');
+
+    const anchor = this.renderRoot?.querySelector?.('button') ?? undefined;
+    this.internals.setValidity(flags, message, anchor);
+  }
 
   override render() {
     return html`
@@ -94,6 +210,7 @@ export class WsSwitch extends LitElement {
   private toggleChecked() {
     if (this.disabled) return;
     this.checked = !this.checked;
+    this.syncFormState();
     this.dispatchEvent(new Event('change', {bubbles: true, composed: true}));
   }
 }

@@ -28,8 +28,10 @@ suite('ws-date-picker', () => {
     await el.updateComplete;
     assert.exists(el.shadowRoot!.querySelector('[role="dialog"]'));
     assert.equal(
-      el.shadowRoot!
-        .querySelector<HTMLButtonElement>('.day[aria-selected="true"]')!
+      el
+        .shadowRoot!.querySelector<HTMLButtonElement>(
+          '.day[aria-selected="true"]'
+        )!
         .textContent!.trim(),
       '28'
     );
@@ -194,5 +196,72 @@ suite('ws-date-picker', () => {
     await changed;
     assert.equal(el.value, '2026-07-30');
     assert.notExists(el.shadowRoot!.querySelector('.calendar'));
+  });
+
+  test('picker button has dialog popup attributes and toggles expanded', async () => {
+    const el = await fixture<WsDatePicker>(html`
+      <ws-date-picker label="Date"></ws-date-picker>
+    `);
+    const pickerButton =
+      el.shadowRoot!.querySelector<HTMLButtonElement>('.picker-button')!;
+    assert.equal(pickerButton.getAttribute('aria-haspopup'), 'dialog');
+    assert.equal(pickerButton.getAttribute('aria-expanded'), 'false');
+
+    el.showPicker();
+    await el.updateComplete;
+    assert.equal(pickerButton.getAttribute('aria-expanded'), 'true');
+  });
+
+  test('closes calendar and restores focus on Escape key', async () => {
+    const el = await fixture<WsDatePicker>(html`
+      <ws-date-picker label="Date" value="2026-07-15"></ws-date-picker>
+    `);
+    el.showPicker();
+    await el.updateComplete;
+
+    const calendar = el.shadowRoot!.querySelector<HTMLElement>('.calendar')!;
+    assert.exists(calendar);
+
+    calendar.dispatchEvent(
+      new KeyboardEvent('keydown', {key: 'Escape', bubbles: true})
+    );
+    await el.updateComplete;
+
+    assert.notExists(el.shadowRoot!.querySelector('.calendar'));
+  });
+
+  test('navigates days in calendar grid with arrow keys', async () => {
+    const el = await fixture<WsDatePicker>(html`
+      <ws-date-picker label="Date" value="2026-07-15"></ws-date-picker>
+    `);
+    el.showPicker();
+    await el.updateComplete;
+
+    const calendar = el.shadowRoot!.querySelector<HTMLElement>('.calendar')!;
+    const day15 = el.shadowRoot!.querySelector<HTMLButtonElement>(
+      'button.day[data-day="15"]'
+    )!;
+    assert.equal(day15.getAttribute('tabindex'), '0');
+
+    calendar.dispatchEvent(
+      new KeyboardEvent('keydown', {key: 'ArrowRight', bubbles: true})
+    );
+    await el.updateComplete;
+
+    const day16 = el.shadowRoot!.querySelector<HTMLButtonElement>(
+      'button.day[data-day="16"]'
+    )!;
+    assert.equal(day16.getAttribute('tabindex'), '0');
+    assert.equal(day15.getAttribute('tabindex'), '-1');
+
+    calendar.dispatchEvent(
+      new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true})
+    );
+    await el.updateComplete;
+
+    const day23 = el.shadowRoot!.querySelector<HTMLButtonElement>(
+      'button.day[data-day="23"]'
+    )!;
+    assert.equal(day23.getAttribute('tabindex'), '0');
   });
 });
