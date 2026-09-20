@@ -44,17 +44,20 @@ export const wsButtonStyles = css`
     transform: scale(1);
     transform-origin: center;
     transition: background-color var(--ws-motion-duration-medium, 180ms)
-        var(--ws-motion-easing-standard, ease),
+        var(--ws-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
       border-color var(--ws-motion-duration-medium, 180ms)
-        var(--ws-motion-easing-standard, ease),
+        var(--ws-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
       box-shadow var(--ws-motion-duration-medium, 180ms)
-        var(--ws-motion-easing-standard, ease),
+        var(--ws-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
       color var(--ws-motion-duration-medium, 180ms)
-        var(--ws-motion-easing-standard, ease),
+        var(--ws-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
       opacity var(--ws-motion-duration-medium, 180ms)
-        var(--ws-motion-easing-standard, ease),
-      transform var(--ws-button-press-duration, 140ms)
-        var(--ws-motion-easing-standard, ease);
+        var(--ws-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
+      transform var(--ws-button-press-duration, var(--ws-motion-duration-slow, 240ms))
+        var(
+          --ws-button-press-easing,
+          var(--ws-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1.2))
+        );
     user-select: none;
     inline-size: 100%;
   }
@@ -71,7 +74,9 @@ export const wsButtonStyles = css`
   }
 
   .button:not(:disabled):active {
-    transform: translateY(0) scale(var(--ws-button-pressed-scale, 0.985));
+    transform: scale(var(--ws-button-pressed-scale, 0.94));
+    transition: transform var(--ws-motion-duration-fast, 100ms)
+      var(--ws-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
   }
 
   :host([variant='primary']) .button,
@@ -90,7 +95,6 @@ export const wsButtonStyles = css`
   :host([variant='primary']) .button:not(:disabled):hover,
   :host(:not([variant])) .button:not(:disabled):hover {
     background: var(--ws-color-primary-hover, #6547f5);
-    transform: translateY(-1px);
     box-shadow: inset 0 1px 0 0 rgb(255 255 255 / 24%),
       var(
         --ws-elevation-md,
@@ -112,7 +116,6 @@ export const wsButtonStyles = css`
       var(--ws-color-secondary, #2f80ff) 14%,
       var(--ws-color-secondary-container, #e2edff)
     );
-    transform: translateY(-1px);
     box-shadow: var(
       --ws-elevation-sm,
       0 1px 3px 0 rgb(15 23 42 / 8%),
@@ -130,7 +133,6 @@ export const wsButtonStyles = css`
   :host([variant='outlined']) .button:not(:disabled):hover {
     background: var(--ws-color-primary-container, #f0ecff);
     border-color: var(--ws-color-primary, #7c5cff);
-    transform: translateY(-1px);
   }
 
   :host([variant='text']) .button {

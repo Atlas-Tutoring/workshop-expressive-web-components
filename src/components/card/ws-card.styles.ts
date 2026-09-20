@@ -24,8 +24,8 @@ export const wsCardStyles = css`
       sans-serif
     );
     color: var(--ws-color-on-surface, #17171c);
-    transition: transform var(--ws-motion-duration-medium, 180ms)
-        var(--ws-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
+    transition: transform var(--ws-motion-duration-slow, 240ms)
+        var(--ws-motion-easing-emphasized, cubic-bezier(0.2, 0, 0, 1.2)),
       box-shadow var(--ws-motion-duration-medium, 180ms)
         var(--ws-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
       border-color var(--ws-motion-duration-medium, 180ms)
@@ -42,7 +42,6 @@ export const wsCardStyles = css`
   }
 
   :host([interactive]:hover) {
-    transform: translateY(-2px);
     box-shadow: var(
       --ws-elevation-md,
       0 4px 12px 0 rgb(15 23 42 / 8%),
@@ -56,7 +55,9 @@ export const wsCardStyles = css`
   }
 
   :host([interactive]:active) {
-    transform: translateY(0);
+    transform: scale(0.985);
+    transition: transform var(--ws-motion-duration-fast, 100ms)
+      var(--ws-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
     box-shadow: var(
       --ws-elevation-sm,
       0 1px 3px 0 rgb(15 23 42 / 8%),

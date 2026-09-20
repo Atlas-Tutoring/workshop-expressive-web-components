@@ -22,12 +22,14 @@ All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components
 
 - Changed `<ws-app-bar>` default styling to use a frosted transparent-gradient background with `backdrop-filter: blur(20px) saturate(180%)`, a 1px top specular highlight, and elevated sticky shadows matching modern Google application navigation.
 - Changed `--ws-elevation-*` foundation tokens to dual-stop ambient and key-light shadows matching Google Material 3 elevation guidelines.
-- Changed `<ws-button>` typography, active press transform, and primary specular highlight for an authoritative, professional Google aesthetic.
+- Changed `<ws-button>` typography with Google Sans letter-spacing and a crisp primary specular highlight line.
 - Changed `<ws-text-field>` focus states to use a crisp 2px primary border and soft ambient tint glow.
 - Changed `<ws-breadcrumbs>` to use standard Lit `@property({type: Array})` with JSON parsing and semantic `<ol>`/`<li>` list items for improved navigation accessibility.
 - Changed `<ws-dropdown>` icon resolution to use a cached CSS style map, preventing heavy DOM insertions and layout reflow during option scanning.
 
 ### Fixed
+
+- Fixed `<ws-button>` click interaction by restoring the signature expressive spring bounce effect with `--ws-motion-easing-emphasized` overshoot curve on release and snappy active compression.
 
 - Fixed documentation navigation, GitHub links, and package repository metadata after moving the project to the Atlas-Tutoring organization.
 - Fixed `<ws-color-picker>` triggering a Lit update lifecycle warning (`change-in-update`) during popover alignment adjustments.
