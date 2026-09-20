@@ -6,6 +6,9 @@ All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components
 
 ### Added
 
+- Added `<ws-checkbox>` form control with binary and `indeterminate` tri-state selection, `ElementInternals` form participation (`name`, `value`, `required`, form reset, and restore), density sizes (`small`, `medium`, `large`), and spring-animated stroke transitions.
+- Added `customElements` manifest declaration in `package.json` referencing `custom-elements.json` for IDE component and attribute IntelliSense.
+- Added subpath export `@mihaicristiancondrea/workshop-expressive-web-components/checkbox` in `package.json`.
 - Added form association to `<ws-switch>` via `ElementInternals`, enabling participation in standard form submissions (`name`, `value`), form resets, and constraint validation (`required`).
 - Added button type handling to `<ws-button>` supporting `type="button|submit|reset"`, dispatching form submission and reset requests to ancestor forms.
 - Added public `spin-on-activate` property and `animateIcon()` method to `<ws-drawer-item>` to support custom spinner animations when items are activated.

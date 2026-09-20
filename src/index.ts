@@ -14,6 +14,7 @@ import './components/card/ws-card.js';
 import './components/page/ws-page.js';
 import './components/code-block/ws-code-block.js';
 import './components/switch/ws-switch.js';
+import './components/checkbox/ws-checkbox.js';
 import './components/text-field/ws-text-field.js';
 import './components/date-picker/ws-date-picker.js';
 import './components/time-picker/ws-time-picker.js';
@@ -56,6 +57,8 @@ export {WsCodeBlock} from './components/code-block/index.js';
 export type {WsCodeLanguageOption} from './components/code-block/index.js';
 export {WsSwitch} from './components/switch/index.js';
 export type {WsSwitchIconTransition} from './components/switch/index.js';
+export {WsCheckbox} from './components/checkbox/index.js';
+export type {WsCheckboxSize} from './components/checkbox/index.js';
 
 export {WsTextField} from './components/text-field/index.js';
 export type {

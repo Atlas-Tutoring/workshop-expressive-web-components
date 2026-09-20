@@ -7,22 +7,27 @@ Workshop Expressive Web Components is a Lit-based design-system package that shi
 The package includes these custom elements:
 
 - `<ws-app-bar>`
+- `<ws-badge>`
 - `<ws-brand-mark>`
 - `<ws-breadcrumbs>`
 - `<ws-button>`
 - `<ws-card>`
+- `<ws-checkbox>`
 - `<ws-chip>`
 - `<ws-code-block>`
 - `<ws-color-picker>`
 - `<ws-date-picker>`
+- `<ws-dialog>`
 - `<ws-docs-shell>`
-- `<ws-drawer>` and `<ws-drawer-item>`
+- `<ws-drawer>`, `<ws-drawer-item>`, and `<ws-drawer-category>`
+- `<ws-dropdown>`
 - `<ws-footer>`
 - `<ws-hero>`
 - `<ws-page>`
 - `<ws-switch>`
-- `<ws-tabs>` and `<ws-tab>`
+- `<ws-tabs>`, `<ws-tab>`, and `<ws-tab-panel>`
 - `<ws-text-field>`
+- `<ws-time-picker>`
 
 It also includes foundation design tokens for color, elevation, motion, shape, spacing, typography, and the aggregate theme stylesheet.
 
@@ -90,6 +95,8 @@ Then use the elements in HTML, Lit templates, React JSX, Vue templates, or any f
 <ws-chip variant="status" tone="success">Published</ws-chip>
 
 <ws-switch checked>Enable notifications</ws-switch>
+<ws-checkbox checked>Remember credentials</ws-checkbox>
+<ws-checkbox indeterminate>Select all permissions</ws-checkbox>
 
 <ws-drawer selected-item-id="home">
   <div slot="header">Workshop</div>

@@ -12,6 +12,7 @@ import './components/tabs/ws-tab-panel.js';
 import './components/breadcrumbs/ws-breadcrumbs.js';
 import './components/code-block/ws-code-block.js';
 import './components/switch/ws-switch.js';
+import './components/checkbox/ws-checkbox.js';
 import './components/card/ws-card.js';
 import './components/page/ws-page.js';
 import './components/text-field/ws-text-field.js';

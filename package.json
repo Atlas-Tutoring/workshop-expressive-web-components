@@ -87,9 +87,11 @@
     "node": ">=24"
   },
   "types": "dist/index.d.ts",
+  "customElements": "custom-elements.json",
   "files": [
     "dist",
     "!dist/test",
+    "custom-elements.json",
     "README.md",
     "LICENSE",
     "CHANGELOG.md"
@@ -126,6 +128,10 @@
     "./card": {
       "types": "./dist/components/card/index.d.ts",
       "import": "./dist/components/card/index.js"
+    },
+    "./checkbox": {
+      "types": "./dist/components/checkbox/index.d.ts",
+      "import": "./dist/components/checkbox/index.js"
     },
     "./chip": {
       "types": "./dist/components/chip/index.d.ts",
