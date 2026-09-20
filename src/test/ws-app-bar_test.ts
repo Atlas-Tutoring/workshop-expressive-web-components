@@ -34,4 +34,19 @@ suite('ws-app-bar', () => {
     assert.isTrue(el.sticky);
     assert.isTrue(el.hasAttribute('sticky'));
   });
+
+  test('defaults to gradient variant and reflects changes', async () => {
+    const el = await fixture<WsAppBar>(html`<ws-app-bar></ws-app-bar>`);
+
+    assert.equal(el.variant, 'gradient');
+    assert.equal(el.getAttribute('variant'), 'gradient');
+
+    el.variant = 'transparent';
+    await el.updateComplete;
+    assert.equal(el.getAttribute('variant'), 'transparent');
+
+    el.variant = 'standard';
+    await el.updateComplete;
+    assert.equal(el.getAttribute('variant'), 'standard');
+  });
 });

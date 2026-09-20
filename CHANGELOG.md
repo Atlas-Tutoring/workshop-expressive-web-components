@@ -6,6 +6,8 @@ All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components
 
 ### Added
 
+- Added `variant` property to `<ws-app-bar>` supporting `'gradient'` (frosted vertical transparent-gradient with 20px blur and specular highlight), `'transparent'`, and `'standard'` opaque modes.
+- Added `variant` (`'elevated'`, `'outlined'`, `'filled'`) and `interactive` properties to `<ws-card>` with hover lift.
 - Added `<ws-checkbox>` form control with binary and `indeterminate` tri-state selection, `ElementInternals` form participation (`name`, `value`, `required`, form reset, and restore), density sizes (`small`, `medium`, `large`), and spring-animated stroke transitions.
 - Added `customElements` manifest declaration in `package.json` referencing `custom-elements.json` for IDE component and attribute IntelliSense.
 - Added subpath export `@mihaicristiancondrea/workshop-expressive-web-components/checkbox` in `package.json`.
@@ -18,6 +20,10 @@ All notable changes to `@mihaicristiancondrea/workshop-expressive-web-components
 
 ### Changed
 
+- Changed `<ws-app-bar>` default styling to use a frosted transparent-gradient background with `backdrop-filter: blur(20px) saturate(180%)`, a 1px top specular highlight, and elevated sticky shadows matching modern Google application navigation.
+- Changed `--ws-elevation-*` foundation tokens to dual-stop ambient and key-light shadows matching Google Material 3 elevation guidelines.
+- Changed `<ws-button>` typography, active press transform, and primary specular highlight for an authoritative, professional Google aesthetic.
+- Changed `<ws-text-field>` focus states to use a crisp 2px primary border and soft ambient tint glow.
 - Changed `<ws-breadcrumbs>` to use standard Lit `@property({type: Array})` with JSON parsing and semantic `<ol>`/`<li>` list items for improved navigation accessibility.
 - Changed `<ws-dropdown>` icon resolution to use a cached CSS style map, preventing heavy DOM insertions and layout reflow during option scanning.
 

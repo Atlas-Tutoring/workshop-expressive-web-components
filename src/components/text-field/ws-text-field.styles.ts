@@ -131,10 +131,9 @@ export const wsTextFieldStyles = css`
 
   .control:focus-within:not(.disabled) {
     border-color: var(--ws-color-primary, #7c5cff);
-    box-shadow: 0 0 0 var(--ws-focus-ring-inner-size, 2px)
-        var(--ws-color-background, #f8f9fc),
-      0 0 0 var(--ws-focus-ring-outer-size, 5px)
-        color-mix(in srgb, var(--ws-color-primary, #7c5cff) 42%, transparent);
+    box-shadow: 0 0 0 1px var(--ws-color-primary, #7c5cff),
+      0 0 0 var(--ws-focus-ring-outer-size, 4px)
+        color-mix(in srgb, var(--ws-color-primary, #7c5cff) 18%, transparent);
   }
 
   .control.invalid {
@@ -142,10 +141,9 @@ export const wsTextFieldStyles = css`
   }
 
   .control.invalid:focus-within {
-    box-shadow: 0 0 0 var(--ws-focus-ring-inner-size, 2px)
-        var(--ws-color-background, #f8f9fc),
-      0 0 0 var(--ws-focus-ring-outer-size, 5px)
-        color-mix(in srgb, var(--ws-color-error, #ff4d5e) 42%, transparent);
+    box-shadow: 0 0 0 1px var(--ws-color-error, #ff4d5e),
+      0 0 0 var(--ws-focus-ring-outer-size, 4px)
+        color-mix(in srgb, var(--ws-color-error, #ff4d5e) 18%, transparent);
   }
 
   .control.disabled {

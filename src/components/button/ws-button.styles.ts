@@ -36,6 +36,7 @@ export const wsButtonStyles = css`
     );
     gap: var(--ws-button-icon-spacing, var(--ws-spacing-sm, 8px));
     justify-content: center;
+    letter-spacing: 0.015em;
     min-inline-size: var(--ws-button-min-width, 64px);
     outline: none;
     position: relative;
@@ -61,7 +62,7 @@ export const wsButtonStyles = css`
   .button:focus-visible {
     box-shadow: 0 0 0 var(--ws-focus-ring-inner-size, 2px)
         var(--ws-color-background, #f8f9fc),
-      0 0 0 var(--ws-focus-ring-outer-size, 5px)
+      0 0 0 var(--ws-focus-ring-outer-size, 4px)
         color-mix(
           in srgb,
           var(--ws-button-focus-color, var(--ws-color-primary, #7c5cff)) 45%,
@@ -70,27 +71,38 @@ export const wsButtonStyles = css`
   }
 
   .button:not(:disabled):active {
-    transform: scale(var(--ws-button-pressed-scale, 0.985));
+    transform: translateY(0) scale(var(--ws-button-pressed-scale, 0.985));
   }
 
   :host([variant='primary']) .button,
   :host(:not([variant])) .button {
     --ws-button-focus-color: var(--ws-color-primary, #7c5cff);
     background: var(--ws-color-primary, #7c5cff);
-    box-shadow: var(--ws-elevation-sm, 0 1px 2px rgb(15 23 42 / 8%));
+    box-shadow: inset 0 1px 0 0 rgb(255 255 255 / 20%),
+      var(
+        --ws-elevation-sm,
+        0 1px 3px 0 rgb(15 23 42 / 8%),
+        0 1px 2px -1px rgb(15 23 42 / 6%)
+      );
     color: var(--ws-color-on-primary, #f7f7fa);
   }
 
   :host([variant='primary']) .button:not(:disabled):hover,
   :host(:not([variant])) .button:not(:disabled):hover {
     background: var(--ws-color-primary-hover, #6547f5);
-    box-shadow: var(--ws-elevation-md, 0 8px 24px rgb(15 23 42 / 12%));
+    transform: translateY(-1px);
+    box-shadow: inset 0 1px 0 0 rgb(255 255 255 / 24%),
+      var(
+        --ws-elevation-md,
+        0 4px 12px 0 rgb(15 23 42 / 8%),
+        0 2px 4px -1px rgb(15 23 42 / 6%)
+      );
   }
 
   :host([variant='secondary']) .button {
     --ws-button-focus-color: var(--ws-color-secondary, #2f80ff);
     background: var(--ws-color-secondary-container, #e2edff);
-    border-color: var(--ws-color-outline-variant, #e3e6ed);
+    border-color: transparent;
     color: var(--ws-color-on-secondary-container, #17171c);
   }
 
@@ -100,10 +112,11 @@ export const wsButtonStyles = css`
       var(--ws-color-secondary, #2f80ff) 14%,
       var(--ws-color-secondary-container, #e2edff)
     );
-    border-color: color-mix(
-      in srgb,
-      var(--ws-color-secondary, #2f80ff) 26%,
-      var(--ws-color-outline-variant, #e3e6ed)
+    transform: translateY(-1px);
+    box-shadow: var(
+      --ws-elevation-sm,
+      0 1px 3px 0 rgb(15 23 42 / 8%),
+      0 1px 2px -1px rgb(15 23 42 / 6%)
     );
   }
 
@@ -117,6 +130,7 @@ export const wsButtonStyles = css`
   :host([variant='outlined']) .button:not(:disabled):hover {
     background: var(--ws-color-primary-container, #f0ecff);
     border-color: var(--ws-color-primary, #7c5cff);
+    transform: translateY(-1px);
   }
 
   :host([variant='text']) .button {

@@ -27,6 +27,7 @@ import './components/docs-shell/ws-hero.js';
 import './components/docs-shell/ws-footer.js';
 
 export {WsAppBar} from './components/app-bar/index.js';
+export type {WsAppBarVariant} from './components/app-bar/index.js';
 
 export {WsButton} from './components/button/index.js';
 export type {WsButtonSize, WsButtonVariant} from './components/button/index.js';

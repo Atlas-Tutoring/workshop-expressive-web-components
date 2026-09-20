@@ -66,9 +66,9 @@
   --ws-color-code-token-operator: #e7a8ff;
 
   /* Drop shadows tuned for near-black surfaces. */
-  --ws-elevation-sm: 0 1px 2px rgb(0 0 0 / 56%);
-  --ws-elevation-md: 0 8px 24px rgb(0 0 0 / 64%);
-  --ws-elevation-lg: 0 16px 48px rgb(0 0 0 / 72%);
+  --ws-elevation-sm: 0 1px 3px 0 rgb(0 0 0 / 48%), 0 1px 2px -1px rgb(0 0 0 / 36%);
+  --ws-elevation-md: 0 4px 12px 0 rgb(0 0 0 / 56%), 0 2px 4px -1px rgb(0 0 0 / 40%);
+  --ws-elevation-lg: 0 12px 32px -4px rgb(0 0 0 / 64%), 0 4px 12px -2px rgb(0 0 0 / 48%);
 }
 
 :root[data-ws-theme='dark'],
@@ -144,9 +144,9 @@
   --ws-color-code-token-punctuation: #4a505d;
   --ws-color-code-token-operator: #9333d6;
 
-  --ws-elevation-sm: 0 1px 2px rgb(15 23 42 / 8%);
-  --ws-elevation-md: 0 8px 24px rgb(15 23 42 / 12%);
-  --ws-elevation-lg: 0 16px 48px rgb(15 23 42 / 16%);
+  --ws-elevation-sm: 0 1px 3px 0 rgb(15 23 42 / 8%), 0 1px 2px -1px rgb(15 23 42 / 6%);
+  --ws-elevation-md: 0 4px 12px 0 rgb(15 23 42 / 8%), 0 2px 4px -1px rgb(15 23 42 / 6%);
+  --ws-elevation-lg: 0 12px 32px -4px rgb(15 23 42 / 12%), 0 4px 12px -2px rgb(15 23 42 / 8%);
 }
 
 :root[data-ws-theme='light'],
@@ -218,9 +218,9 @@
     --ws-color-code-token-punctuation: #b8b8c2;
     --ws-color-code-token-operator: #e7a8ff;
 
-    --ws-elevation-sm: 0 1px 2px rgb(0 0 0 / 56%);
-    --ws-elevation-md: 0 8px 24px rgb(0 0 0 / 64%);
-    --ws-elevation-lg: 0 16px 48px rgb(0 0 0 / 72%);
+    --ws-elevation-sm: 0 1px 3px 0 rgb(0 0 0 / 48%), 0 1px 2px -1px rgb(0 0 0 / 36%);
+    --ws-elevation-md: 0 4px 12px 0 rgb(0 0 0 / 56%), 0 2px 4px -1px rgb(0 0 0 / 40%);
+    --ws-elevation-lg: 0 12px 32px -4px rgb(0 0 0 / 64%), 0 4px 12px -2px rgb(0 0 0 / 48%);
   }
 
   :root:not([data-ws-theme='light']),

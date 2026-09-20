@@ -3,6 +3,8 @@ import {customElement, property} from 'lit/decorators.js';
 
 import {wsAppBarStyles} from './ws-app-bar.styles.js';
 
+export type WsAppBarVariant = 'standard' | 'gradient' | 'transparent';
+
 /**
  * A translucent top app bar with slots for navigation, content, and actions.
  */
@@ -17,6 +19,10 @@ export class WsAppBar extends LitElement {
   /** Keeps the app bar pinned to the top of its scroll container. */
   @property({type: Boolean, reflect: true})
   sticky = false;
+
+  /** Visual variant: gradient (frosted transparent-gradient), transparent, or standard. */
+  @property({reflect: true})
+  variant: WsAppBarVariant = 'gradient';
 
   override render() {
     return html`
